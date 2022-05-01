@@ -1,0 +1,40 @@
+/** Powered by Anderson Arruda and Sysborg - sysborg.com.br | andersonarruda.com.br **/
+.slogan{
+    color: #bdbdbd; 
+    font-style: italic; 
+    letter-spacing: 2px;
+    font-weight: lighter;
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+.mt25{
+    margin-top: 25px;
+}
+
+.card{
+    margin-bottom: 50px;
+}
+
+.comments .card{
+    margin-bottom: 30px !important;
+}
+
+.comments .card .card-title{
+    margin-bottom: 0!important;
+}
+
+.comments .card .card-text{
+    margin-top: 20px !important;
+}
+
+.banner-bottom{
+    text-align: center; 
+    margin-bottom: 50px;
+}
+
+@media screen and (max-width: 800px){
+    .banner-bottom{
+        display: none;
+    }
+}
