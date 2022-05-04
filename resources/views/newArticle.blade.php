@@ -47,6 +47,11 @@
     @include('utils.comboActive', ['active' => $article->active ?? NULL])
 
     <div class="mb-3">
+        <label for="description" class="form-label">Descrição curta <small>até 200 caracteres</small></label>
+        <input type="text" id="description" name="description" maxlength="200" required>
+    </div>
+
+    <div class="mb-3">
         <label for="article" class="form-label">Artigo</label>
         <div id="article" style="min-height:200px;"></div>
     </div>
@@ -81,13 +86,24 @@
     </div>
 </form>
 
-<link rel="stylesheet" href="{{asset('css/quill.snow.css')}}">
-<script src="{{asset('js/quill.min.js')}}"></script>
 <script>
     var quillArticle;
 
     document.addEventListener('DOMContentLoaded', () => {
         quillArticle = new Quill('#article', {
+            modules: {
+                'syntax': true,
+                'toolbar': [
+                [ 'bold', 'italic', 'underline', 'strike' ],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'script': 'super' }, { 'script': 'sub' }],
+                [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block' ],
+                [{ 'list': 'ordered' }, { 'list': 'bullet'}, { 'indent': '-1' }, { 'indent': '+1' }],
+                [ {'direction': 'rtl'}, { 'align': [] }],
+                [ 'link', 'image', 'video', 'formula' ],
+                [ 'clean' ]
+                ],
+            },
             theme: 'snow'
         });
 

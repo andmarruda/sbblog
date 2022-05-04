@@ -1,4 +1,4 @@
-@extends('templates.publicTemplate', ['category' => $category])
+@extends('templates.publicTemplate', ['category' => $category, 'title' => $article->title, 'metatag' => $article->stringTags()])
 
 @section('page')
 
@@ -25,7 +25,11 @@
             <small>{{date('d/m/Y H:i', strtotime($article->created_at))}}</small><hr>
         </div>
         <p class="card-text">
-            {!!$article->article!!}
+            <div class="ql-snow">
+                <div class="ql-editor">
+                    {!!$article->article!!}
+                </div>
+            </div>
         </p>
     </div>
 </div>

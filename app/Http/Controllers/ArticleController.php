@@ -338,7 +338,8 @@ class ArticleController extends Controller
             'user_id' => $_SESSION['sbblog']['user_id'], 
             'url_friendly' => $this->titleToFriendlyUrl($req->input('articleName')), 
             'active' => $req->input('active'),
-            'article_color' => is_null($req->input('id')) ? $this->generatesRandomColor() : $a->article_color
+            'article_color' => is_null($req->input('id')) ? $this->generatesRandomColor() : $a->article_color,
+            'description' => $req->input('description')
         ]);
 
         $saved = $a->save();

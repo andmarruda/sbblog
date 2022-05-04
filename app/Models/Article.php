@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class Article extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'cover_path', 'category_id', 'article', 'user_id', 'url_friendly', 'active', 'article_color'];
+    protected $fillable = ['title', 'cover_path', 'category_id', 'article', 'user_id', 'url_friendly', 'active', 'article_color', 'description'];
 
     /**
      * Get all tags for selected article
@@ -21,6 +21,18 @@ class Article extends Model
     public function tags() : \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(ArticleTags::class);
+    }
+
+    /**
+     * Get all tags and implode it separating by ,
+     * @version     1.0.0
+     * @author      Anderson Arruda < andmarruda@gmail.com >
+     * @param       
+     * @return      string
+     */
+    public function stringTags() : string
+    {
+        return implode(',', array_column($this->tags()->get()->toArray(), 'tag'));
     }
 
     /**

@@ -5,6 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{config('app.name')}} - Painel administrativo</title>
         <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+        @if(in_array(Route::current()->getName(), ['admin.newArticle', 'admin.newArticlePost']))
+        <link rel="stylesheet" href="{{asset('css/monokai-sublime.min.css')}}">
+        <link rel="stylesheet" href="{{asset('css/quill.snow.css')}}">
+        <script src="{{asset('js/highlight.min.js')}}"></script>
+        <script src="{{asset('js/quill.min.js')}}"></script>
+        @endif
     </head>
     <body>
         <div class="container-md">
@@ -53,6 +59,19 @@
             </div>
 
             @yield('page')
+
+            <div class="row mt25">
+                <div class="col-md-4 offset-md-3" style="padding-bottom: 20px;">
+                    Todos os direitos reservados. © 2021-2031
+                </div>
+                <div class="col-md-5" style="text-align: right;">
+                    SBBlog Powered By <a href="https://sysborg.com.br" target="_blank" title="https://sysborg.com.br">
+                        <img src="{{asset('images/poweredby.png')}}" alt="Powered By Sysborg">
+                    </a> <span style="margin-left:10px; margin-right:10px;">|</span> <a href="https://andersonarruda.com.br" target="_blank" title="https://andersonarruda.com.br">
+                        <img src="{{asset('images/poweredby2.png')}}" alt="Powered By Anderson Arruda">
+                    </a>
+                </div>
+            </div>
         </div>
 
         <div class="modal" id="modalLogout" tabindex="-1">
