@@ -21,7 +21,11 @@
                         </ul>
                     </p>
 
+                    @if(!is_null($article->description))
+                    <p class="card-text">{!!substr($article->description, 0, 200)!!}</p>
+                    @else
                     <p class="card-text">{!!substr($article->article, 0, 200)!!}</p>
+                    @endif
                     <p><a href="{{route('admin.newArticle')}}/{{$article->id}}" class="btn btn-primary">Alterar</a></p>
                 </div>
             </div>

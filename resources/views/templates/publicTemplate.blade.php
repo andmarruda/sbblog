@@ -3,16 +3,34 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        @if(isset($metatag) && strlen($metatag) > 0)
-        <meta name="keywords" content="{{$metatag}}">
+
+        @if(Route::current()->getName()=='article')
+            <meta name="keywords" content="{{$article->stringTags()}}">
+            <meta name="description" content="{{$article->description}}">
+            <meta property="og:title" content="{{$article->title. ' '. config('app.name')}}" />
+            <meta property="og:description" content="{{$article->description}}" />
+            <meta property="og:type" content="article" />
+            <meta property="article:published_time" content="{{$article->created_at}}" />
+            <meta property="article:modified_time" content="{{$article->updated_at}}" />
+            <meta property="article:author" content="{{$article->user()->get()->first()->name}}" />
+            <meta property="article:section" content="{{$article->category()->first()->category}}" /> <!-- adicionar após a inserção do tipo de blog nas configurações gerais -->
+            <meta property="article:tag" content="{{$article->stringTags()}}" />
+            <meta property="og:url" content="{{url('/')}}" />
+            <meta property="og:image" content="{{asset('storage/'. $article->cover_path)}}" />
+            <title>{{$article->title. ' '. config('app.name')}}</title>
+            <link rel="stylesheet" href="{{asset('css/monokai-sublime.min.css')}}">
+            <link rel="stylesheet" href="{{asset('css/quill.snow.css')}}">
+        @else
+            <meta property="og:title" content="{{config('app.name')}}" />
+            <meta property="og:type" content="article" />
+            <meta property="og:url" content="{{url('/')}}" />
+            <meta property="og:image" content="{{url('/')}}" /> <!-- adicionar url da imagem de logo após o sistema de configuração -->
+            <meta property="article:section" content="teste" /> <!-- adicionar após a inserção do tipo de blog nas configurações gerais -->
+            <title>{{config('app.name')}}</title>
         @endif
-        <title>{{isset($title) ? $title. ' '. config('app.name') : config('app.name')}}</title>
+
         <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
         <link href="{{asset('css/main.css')}}" rel="stylesheet">
-        @if(Route::current()->getName()=='article')
-        <link rel="stylesheet" href="{{asset('css/monokai-sublime.min.css')}}">
-        <link rel="stylesheet" href="{{asset('css/quill.snow.css')}}">
-        @endif
     </head>
     <body>
         <div class="container-md">

@@ -1,4 +1,4 @@
-@extends('templates.publicTemplate', ['category' => $category, 'title' => $article->title, 'metatag' => $article->stringTags()])
+@extends('templates.publicTemplate', ['category' => $category, 'article' => $article])
 
 @section('page')
 

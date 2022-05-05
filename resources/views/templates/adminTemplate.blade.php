@@ -28,24 +28,26 @@
                                         <a class="nav-link" aria-current="page" href="{{route('admin.dashboard')}}">Dashboard</a>
                                     </li>
 
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route('admin.articleList')}}">Listar artigos</a>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarArticleDropDownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Artigo
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarArticleDropDownMenu">
+                                            <li><a class="dropdown-item" href="{{route('admin.newArticle')}}">Novo</a></li>
+                                            <li><a class="dropdown-item" href="{{route('admin.articleList')}}">Listar</a></li>
+                                            <li><a class="dropdown-item" href="{{route('admin.category')}}">Categoria</a></li>
+                                        </ul>
                                     </li>
 
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route('admin.newArticle')}}">Novo artigo</a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route('admin.category')}}">Categoria</a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route('admin.user')}}">Usuario</a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="javascript: void(0);" data-bs-toggle="modal" data-bs-target="#modalAlterarSenha">Alterar senha</a>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarConfiguration" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Configurações
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarConfiguration">
+                                            <li><a class="dropdown-item" href="{{route('admin.user')}}">Usuario</a></li>
+                                            <li><a class="dropdown-item" href="javascript: void(0);" data-bs-toggle="modal" data-bs-target="#modalAlterarSenha">Alterar senha</a></li>
+                                            <li><a class="dropdown-item" href="{{route('admin.general')}}">Geral</a></li>
+                                        </ul>
                                     </li>
 
                                     <li class="nav-item">

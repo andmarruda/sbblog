@@ -48,7 +48,7 @@
 
     <div class="mb-3">
         <label for="description" class="form-label">Descrição curta <small>até 200 caracteres</small></label>
-        <input type="text" id="description" name="description" maxlength="200" required>
+        <input type="text" class="form-control" id="description" name="description" maxlength="200" value="{{$article->description ?? ''}}" required>
     </div>
 
     <div class="mb-3">

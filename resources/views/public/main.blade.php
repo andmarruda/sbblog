@@ -27,8 +27,11 @@
                 @endforeach
             </div>
             @endif
-
+            @if(!is_null($article->description))
+            <p class="card-text">{{$article->description}}</p>
+            @else
             <p class="card-text">{!!mb_substr($article->article, 0, 300, 'UTF-8').'...'!!}</p>
+            @endif
             <div class="row">
                 <div class="col-md-6">
                     <a href="{{route('article', ['friendly' => $article->url_friendly, 'id' => $article->id])}}" class="btn btn-outline-primary">Ler artigo completo</a>
