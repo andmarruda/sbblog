@@ -55,6 +55,18 @@
                                     </li>
                                 </ul>
                             </div>
+
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarArticleDropDownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="{{asset('images/lang/en.png')}}" alt="English">
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarArticleDropDownMenu">
+                                        <li><a class="dropdown-item" href="#"><img src="{{asset('images/lang/en.png')}}" alt="English"> English</a></li>
+                                        <li><a class="dropdown-item" href="#"><img src="{{asset('images/lang/pt.png')}}" alt="Português"> Português</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
                     </nav>
                 </div>
