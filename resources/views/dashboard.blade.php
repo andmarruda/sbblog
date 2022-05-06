@@ -19,16 +19,16 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    10 Categorias mais acessadas
+                    {{__('adminTemplate.dashboard.stat.category.title')}}
                 </div>
                 <div class="card-body">
                     <canvas id="categoryChart" width="250" height="250" style="margin: 20px auto;"></canvas>
                     <table class="table table-bordered table-striped table-hover" id="gridCategoryStatistis">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Categoria</th>
-                                <th>Número de visitas</th>
+                                <th>{{__('adminTemplate.dashboard.stat.category.id')}}</th>
+                                <th>{{__('adminTemplate.dashboard.stat.category.label')}}</th>
+                                <th>{{__('adminTemplate.dashboard.stat.category.visits')}}</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -40,19 +40,19 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    Artigos com maior tempo de permanência
+                    {{__('adminTemplate.dashboard.stat.article.title')}}
                 </div>
                 <div class="card-body">
                     <canvas id="articlesChart" width="250" height="250" style="margin: 20px auto;"></canvas>
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Artigo</th>
-                                <th>Tempo médio</th>
-                                <th>Menor tempo</th>
-                                <th>Maior tempo</th>
-                                <th>Nº visitas</th>
+                                <th>{{__('adminTemplate.dashboard.stat.article.id')}}</th>
+                                <th>{{__('adminTemplate.dashboard.stat.article.label')}}</th>
+                                <th>{{__('adminTemplate.dashboard.stat.article.avgtime')}}</th>
+                                <th>{{__('adminTemplate.dashboard.stat.article.mintime')}}</th>
+                                <th>{{__('adminTemplate.dashboard.stat.article.maxtime')}}</th>
+                                <th>{{__('adminTemplate.dashboard.stat.article.visits')}}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -75,7 +75,7 @@
 
     <div class="row">
         <div class="col-md-12" style="margin-top:20px;">
-            <h5>Últimos artigos</h5>
+            <h5>{{__('adminTemplate.dashboard.article.latest')}}</h5>
         </div>
 
         @include('utils.articleCard', ['articles' => $articles])

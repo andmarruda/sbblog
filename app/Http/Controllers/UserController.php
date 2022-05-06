@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -115,8 +116,12 @@ class UserController extends Controller
             $_SESSION['sbblog'] = [
                 'user_id' => $g->id,
                 'name'    => $g->name,
-                'email'   => $g->email
+                'email'   => $g->email,
+                'lang'    => 'pt'
             ];
+
+            App::setlocale($_SESSION['sbblog']['lang']);
+
             return redirect()->route('admin.dashboard');
         }
 
@@ -204,18 +209,18 @@ class UserController extends Controller
         header('Content-Type: application/json; charset=utf-8');
 
         if(!preg_match($this->regExPass, $req->input('newPassword'))){
-            echo json_encode(['error' => true, 'message' => 'Aumente a segurança da sua senha! Sua senha deve conter pelo menos 1 letra, 1 número e pelo menos 8 caracteres.']);
+            echo json_encode(['error' => true, 'message' => __('adminTemplate.password.safetyMessage')]);
             return;
         }
 
         if($req->input('newPassword') != $req->input('checkPassword')){
-            echo json_encode(['error' => true, 'message' => 'Nova senha e confirmação da nova senha não é correspondente!']);
+            echo json_encode(['error' => true, 'message' => __('adminTemplate.password.diffPassword')]);
             return;
         }
 
         $u = User::where('id', '=', $_SESSION['sbblog']['user_id'])->where('password', '=', md5($req->input('oldPassword')));
         if($u->count() == 0){
-            echo json_encode(['error' => true, 'message' => 'Senha antiga não corresponde com o usuário logado!']);
+            echo json_encode(['error' => true, 'message' => __('adminTemplate.password.verifyCurrentErr')]);
             return;
         }
 
@@ -223,7 +228,7 @@ class UserController extends Controller
         $ug->password = md5($req->input('newPassword'));
         $saved = $ug->save();
         
-        echo json_encode(['error' => (!$saved), 'message' => 'Senha alterada com sucesso!']);
+        echo json_encode(['error' => (!$saved), 'message' => __('adminTemplate.password.verifyCurrentErr')]);
     }
 
     /**
