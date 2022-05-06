@@ -1,7 +1,8 @@
 @extends('templates.adminTemplate')
 
 @section('page')
-<form method="post" action="{{route('admin.generalPost')}}" style="margin-top:30px;" autocomplete="off">
+<form method="post" action="{{route('admin.generalPost')}}" style="margin-top:30px;" autocomplete="off" enctype="multipart/form-data">
+    <input type="hidden" name="registered_file" id="registered_file" value="{{$gen->brand_image}}">
     @csrf
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -11,12 +12,12 @@
 
     <div class="mb-3">
         <label for="slogan" class="form-label">Slogan</label>
-        <input type="text" maxlength="200" class="form-control" id="slogan" name="slogan" placeholder="Slogan" required value="">
+        <input type="text" maxlength="200" class="form-control" id="slogan" name="slogan" placeholder="Slogan" required value="{{$gen->slogan}}">
     </div>
 
     <div class="mb-3">
         <label for="section" class="form-label">Nicho do Blog <small>"Ex.:Tecnologia, esporte, etc..."</small></label>
-        <input type="text" maxlength="200" class="form-control" id="section" name="section" placeholder="Nicho do Blog" required value="">
+        <input type="text" maxlength="200" class="form-control" id="section" name="section" placeholder="Nicho do Blog" required value="{{$gen->section}}">
     </div>
 
     <div class="mb-3">

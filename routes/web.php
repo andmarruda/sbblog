@@ -38,8 +38,8 @@ Route::prefix('/admin')->group(function() {
     Route::get('/logout', '\App\Http\Controllers\UserController@logout')->name('admin.logout');
 
     //general configuration
-    Route::get('/general', '\App\Http\Controllers\GeneralController@generalInterface')->name('admin.general');
-    Route::post('/generalPost', '\App\Http\Controllers\GeneralController@generalSave')->name('admin.generalPost');
+    Route::get('/general', '\App\Http\Controllers\GeneralController@generalInterface')->name('admin.general')->middleware('sbauth');;
+    Route::post('/generalPost', '\App\Http\Controllers\GeneralController@generalSave')->name('admin.generalPost')->middleware('sbauth');;
 
     //With sbauth middleware
     Route::get('/dashboard', '\App\Http\Controllers\AdminController@dashboardInterface')->name('admin.dashboard')->middleware('sbauth');

@@ -10,13 +10,19 @@
             <meta property="og:title" content="{{$article->title. ' '. config('app.name')}}" />
             <meta property="og:description" content="{{$article->description}}" />
             <meta property="og:type" content="article" />
-            <meta property="article:published_time" content="{{$article->created_at}}" />
-            <meta property="article:modified_time" content="{{$article->updated_at}}" />
-            <meta property="article:author" content="{{$article->user()->get()->first()->name}}" />
-            <meta property="article:section" content="{{$article->category()->first()->category}}" /> <!-- adicionar após a inserção do tipo de blog nas configurações gerais -->
-            <meta property="article:tag" content="{{$article->stringTags()}}" />
+            <meta property="og:article:published_time" content="{{$article->created_at}}" />
+            <meta property="og:article:modified_time" content="{{$article->updated_at}}" />
+            <meta property="og:article:author" content="{{$article->user()->get()->first()->name}}" />
+            <meta property="og:article:section" content="{{$gen->section}}" />
+            <meta property="og:article:tag" content="{{$article->stringTags()}}" />
             <meta property="og:url" content="{{url('/')}}" />
             <meta property="og:image" content="{{asset('storage/'. $article->cover_path)}}" />
+            <meta name="twitter:card" content="summary_large_image">
+            <meta property="twitter:domain" content="{{request()->getHttpHost();}}">
+            <meta property="twitter:url" content="{{url('/')}}">
+            <meta name="twitter:title" content="{{$article->title. ' '. config('app.name')}}">
+            <meta name="twitter:description" content="{{$article->description}}">
+            <meta name="twitter:image" content="{{asset('storage/'. $article->cover_path)}}">
             <title>{{$article->title. ' '. config('app.name')}}</title>
             <link rel="stylesheet" href="{{asset('css/monokai-sublime.min.css')}}">
             <link rel="stylesheet" href="{{asset('css/quill.snow.css')}}">
@@ -24,8 +30,13 @@
             <meta property="og:title" content="{{config('app.name')}}" />
             <meta property="og:type" content="article" />
             <meta property="og:url" content="{{url('/')}}" />
-            <meta property="og:image" content="{{url('/')}}" /> <!-- adicionar url da imagem de logo após o sistema de configuração -->
-            <meta property="article:section" content="teste" /> <!-- adicionar após a inserção do tipo de blog nas configurações gerais -->
+            <meta property="og:image" content="{{$gen->brand_image=='default' || !Storage::disk('public')->exists($gen->brand_image) ? asset('images/sbblog.png') : asset('storage/'. $gen->brand_image)}}" />
+            <meta property="og:article:section" content="{{$gen->section}}" />
+            <meta name="twitter:card" content="summary_large_image">
+            <meta property="twitter:domain" content="{{request()->getHttpHost();}}">
+            <meta property="twitter:url" content="{{url('/')}}">
+            <meta name="twitter:title" content="{{config('app.name')}}">
+            <meta name="twitter:image" content="{{$gen->brand_image=='default' || !Storage::disk('public')->exists($gen->brand_image) ? asset('images/sbblog.png') : asset('storage/'. $gen->brand_image)}}">
             <title>{{config('app.name')}}</title>
         @endif
 
@@ -37,9 +48,9 @@
             <div class="row">
                 <div class="col-md-12" style="text-align:center;">
                     <a href="{{route('latestPage')}}">
-                        <img src="{{asset('images/sbblog.png')}}" alt="SBBlog">
+                        <img src="{{$gen->brand_image=='default' || !Storage::disk('public')->exists($gen->brand_image) ? asset('images/sbblog.png') : asset('storage/'. $gen->brand_image)}}" alt="{{config('app.name')}}">
                     </a>
-                    <p class="slogan">Compartilhando conhecimento através dos Blogs</p>
+                    <p class="slogan">{{$gen->slogan}}</p>
                 </div>
                 <hr>
             </div>
