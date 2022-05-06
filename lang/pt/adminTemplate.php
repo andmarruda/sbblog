@@ -40,6 +40,11 @@ return [
     'password.verifyCurrentErr'     => 'Senha antiga não corresponde com o usuário logado!',
     'password.changed'              => 'Senha alterada com sucesso!',
 
+    'form.btn.save'			        => 'Salvar',
+    'form.btn.search'		        => 'Pesquisar',
+    'form.load.advice'		        => 'Clique 2x no(a) :desired desejado(a) para carregá-lo(a) no formulário.',
+    'form.active'		            => 'Ativo?',
+
     'dashboard.stat.category.title' => 'Top 10 - Categorias acessadas',
     'dashboard.stat.category.id'    => '#',
     'dashboard.stat.category.label' => 'Categoria',
@@ -51,5 +56,13 @@ return [
     'dashboard.stat.article.mintime'=> 'Menor tempo',
     'dashboard.stat.article.maxtime'=> 'Maior tempo',
     'dashboard.stat.article.visits' => 'Nº de visitas',
-    'dashboard.article.latest' => 'Últimos artigos'
+    'dashboard.article.latest'      => 'Últimos artigos',
+
+    'category.title'		        => 'Categoria',
+    'category.form.label'		    => 'Categoria',
+    'category.okmessage'		    => 'Categoria salva com sucesso!',
+    'category.errmessage'		    => 'Erro ao salvar a categoria!',
+    'category.modal.title'		    => 'Pesquisar categoria',
+    'category.modal.input'		    => 'Categoria',
+    'category.modal.tab.label'      => 'Categoria',
 ];

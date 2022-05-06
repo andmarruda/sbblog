@@ -40,6 +40,11 @@ return [
     'password.verifyCurrentErr'     => 'Old password doesn\'t match with the logged user!',
     'password.changed'              => 'Password changed successfully!',
 
+    'form.btn.save'			        => 'Save',
+    'form.btn.search'		        => 'Search',
+    'form.load.advice'		        => '2x Click on the desired :desired to load it into the form.',
+    'form.active'		            => 'Active?',
+
     'dashboard.stat.category.title' => 'Top 10 - Categories Accessed',
     'dashboard.stat.category.id'    => '#',
     'dashboard.stat.category.label' => 'Category',
@@ -51,5 +56,13 @@ return [
     'dashboard.stat.article.mintime'=> 'Min time',
     'dashboard.stat.article.maxtime'=> 'Max time',
     'dashboard.stat.article.visits' => 'No. visits',
-    'dashboard.article.latest' => 'Latest Articles'
+    'dashboard.article.latest'      => 'Latest Articles',
+
+    'category.title'		        => 'Category',
+    'category.form.label'		    => 'Category',
+    'category.okmessage'		    => 'Category saved successfully!',
+    'category.errmessage'		    => 'Error saving category!',
+    'category.modal.title'		    => 'Search category',
+    'category.modal.input'		    => 'Category',
+    'category.modal.tab.label'      => 'Category',
 ];

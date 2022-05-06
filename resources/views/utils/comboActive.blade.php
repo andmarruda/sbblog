@@ -1,5 +1,5 @@
 <div class="mb-3">
-    <label for="active">Ativo?</label>
+    <label for="active">{{__('adminTemplate.form.active')}}</label>
     <select class="form-control" id="active" name="active" required>
         <option value="">Selecione...</option>
         @if(isset($active) && $active)
