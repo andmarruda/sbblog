@@ -99,6 +99,39 @@ class UserController extends Controller
     }
 
     /**
+     * Setting the user preferred language
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @param           int $user_id
+     * @return          void
+     */
+    public function loadPreferredLang(\App\Models\User $user) : void
+    {
+        $lang = $user->language()->get()->first();
+        $_SESSION['sbblog']['lang'] = [
+            'label' => $lang->label, 
+            'icon' => $lang->icon, 
+            'lang_id' => $lang->lang_id
+        ];
+    }
+
+    /**
+     * Change preferred user's language
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @param           int $language_id
+     * @return          view
+     */
+    public function setPreferredLang(int $language_id)
+    {
+        $u = User::find($_SESSION['sbblog']['user_id']);
+        $u->language_id = $language_id;
+        $u->save();
+        $this->loadPreferredLang($u);
+        return redirect()->route('admin.dashboard');
+    }
+
+    /**
      * Verify if the user are correct to Login
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
@@ -117,11 +150,9 @@ class UserController extends Controller
                 'user_id' => $g->id,
                 'name'    => $g->name,
                 'email'   => $g->email,
-                'lang'    => 'pt'
             ];
 
-            App::setlocale($_SESSION['sbblog']['lang']);
-
+            $this->loadPreferredLang($g);
             return redirect()->route('admin.dashboard');
         }
 

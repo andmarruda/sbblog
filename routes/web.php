@@ -29,7 +29,8 @@ Route::prefix('/admin')->group(function() {
 
     //user
     Route::get('/user/{id?}', '\App\Http\Controllers\UserController@userInterface')->where('id', '[0-9]+')->name('admin.user');
-    Route::post('/user', '\App\Http\Controllers\UserController@userFormPost')->name('admin.userPost'); //User Form Submit
+    Route::get('/changeLang/{id}', '\App\Http\Controllers\UserController@setPreferredLang')->where('id', '[0-9]+')->name('admin.changeLang');
+    Route::post('/user', '\App\Http\Controllers\UserController@userFormPost')->name('admin.userPost');
     Route::post('/userSearch', '\App\Http\Controllers\UserController@userSearch')->name('admin.userSearch')->middleware('sbauth');
     Route::post('/userAlterPass', '\App\Http\Controllers\UserController@alterPassword')->name('admin.userAlterPass')->middleware('sbauth');
 

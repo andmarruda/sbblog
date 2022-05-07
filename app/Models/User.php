@@ -17,7 +17,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'email', 'password', 'active'];
+    protected $fillable = ['name', 'email', 'password', 'active', 'language_id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -47,6 +47,6 @@ class User extends Authenticatable
      */
     public function language() : \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Language::class);
+        return $this->belongsTo(\App\Models\Language::class);
     }
 }
