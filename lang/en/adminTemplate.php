@@ -75,10 +75,18 @@ return [
     'user.form.user'                => 'User "Email"',
     'user.form.pass'                => 'Password',
     'user.form.confirmPass'         => 'Confirm password',
-    'user.okmessage'           => 'User saved successfully!',
-    'user.errmessage'          => 'Error saving user!',
+    'user.okmessage'                => 'User saved successfully!',
+    'user.errmessage'               => 'Error saving user!',
     'user.modal.title'              => 'Search User',
     'user.modal.input'              => 'User',
     'user.modal.grid.user'          => 'User',
     'user.modal.grid.name'          => 'Name',
+
+    'general.title'                 => 'General Settings',
+    'general.form.slogan'           => 'Slogan',
+    'general.form.niche'            => 'Blog Niche',
+    'general.form.niche.small'      => '"Ex.:Tecnology, sport, etc..."',
+    'general.brandImage'            => 'Brand image',
+    'general.okmessage'             => 'General setting saved successfully!',
+    'general.errmessage'            => 'Error saving general settings!'
 ];

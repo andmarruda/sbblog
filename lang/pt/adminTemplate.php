@@ -81,4 +81,12 @@ return [
     'user.modal.input'              => 'Usuário',
     'user.modal.grid.user'          => 'Usuário',
     'user.modal.grid.name'          => 'Nome',
+
+    'general.title'                 => 'Configuração Geral',
+    'general.form.slogan'           => 'Slogan',
+    'general.form.niche'            => 'Nicho do Blog',
+    'general.form.niche.small'      => '"Ex.:Tecnologia, esporte, etc..."',
+    'general.brandImage'            => 'Logotipo',
+    'general.okmessage'             => 'Configuração geral salva com sucesso!',
+    'general.errmessage'            => 'Erro ao salvar configuração geral!'
 ];
