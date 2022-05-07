@@ -94,6 +94,7 @@ return [
     'general.brandImage'            => 'Brand image',
     'general.okmessage'             => 'General setting saved successfully!',
     'general.errmessage'            => 'Error saving general settings!',
+    'general.imageError'            => 'File are not allowed. Check image\'s extension and image size.',
 
     'articleCard.createdBy'         => 'Created by',
     'articleCard.createdTime'       => 'at',
@@ -123,4 +124,8 @@ return [
     'article.require.cover'         => 'Choose a cover to your article!',
     'article.tag.duplicate1'        => 'Tag',
     'article.tab.duplicate2'        => 'already exists',
+    'article.form.imageNotNull'     => 'Send a cover to your article!',
+    'article.form.imageNotValid'    => 'Error when trying to send the file, please try it again!',
+    'article.form.extensionErr'     => 'Extension :extension are not allowed!',
+    'article.form.sizeErr'          => 'Cover file exceeds file size limit of :mbyte Mb',
 ];

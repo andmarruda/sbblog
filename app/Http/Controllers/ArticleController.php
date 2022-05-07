@@ -313,18 +313,18 @@ class ArticleController extends Controller
     {
         $saved = false;
         if(!$req->hasFile('articleCover') && $req->input('articleCoverPath') == '')
-            return $this->prepareFormInterface($saved, 'Envie uma capa para o seu artigo!');
+            return $this->prepareFormInterface($saved, __('adminTemplate.article.form.imageNotNull'));
 
         $filepath = $req->input('articleCoverPath');
         if($req->hasFile('articleCover')){
             if(!$req->file('articleCover')->isValid())
-                return $this->prepareFormInterface($saved, 'Ocorreu um problema ao enviar o arquivo, por favor tente novamente!');
+                return $this->prepareFormInterface($saved, __('adminTemplate.article.form.imageNotValid'));
 
             if(!in_array($req->file('articleCover')->extension(), self::ALLOWED_EXTENSION))
-                return $this->prepareFormInterface($saved, 'A extensão '. $req->file('articleCover')->extension(). ' não é permitida!');
+                return $this->prepareFormInterface($saved, __('adminTemplate.article.form.extensionErr', ['extension' => $req->file('articleCover')->extension()]));
 
             if($req->file('articleCover')->getSize() > self::ALLOWED_SIZE)
-                return $this->prepareFormInterface($saved, 'O arquivo de capa excede o limite de '. self::byteToMb() .' Mb');
+                return $this->prepareFormInterface($saved, __('adminTemplate.article.form.sizeErr', ['mbyte' => self::byteToMb()]));
 
             $filepath = basename($req->file('articleCover')->store('public'));
         }

@@ -156,7 +156,7 @@ class UserController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
-        return redirect()->route('admin.login')->with('message', 'Usuário ou senha inválidos!');
+        return redirect()->route('admin.login')->with('message', __('sbblog.auth.loginInvalid'));
     }
 
     /**
@@ -203,13 +203,13 @@ class UserController extends Controller
             return $this->redirectLoginAdmin();
 
         if($this->emailIsRegistered($req->input('username'), $req->input('id')))
-            return view('users', ['saved' => false, 'message' => 'O email '. $req->input('username'). ' já está registrado!']);
+            return view('users', ['saved' => false, 'message' => __('sbblog.auth.userExists', ['email' => $req->input('username')])]);
 
         if($req->input('pass') != '' && !preg_match($this->regExPass, $req->input('pass')))
-            return view('users', ['saved' => false, 'message' => 'Aumente a segurança da sua senha! Sua senha deve conter pelo menos 1 letra, 1 número e pelo menos 8 caracteres.']);
+            return view('users', ['saved' => false, 'message' => __('sbblog.auth.passwordStrong')]);
 
         if($req->input('pass') != $req->input('confirmPass'))
-            return view('users', ['saved' => false, 'message' => 'Senha e confirmação de senha não são correspondentes!']);
+            return view('users', ['saved' => false, 'message' => __('sbblog.auth.errPassConfirm')]);
 
         $userModel = (is_null($req->input('id'))) ? new User() : User::find($req->input('id'));
         $values = [

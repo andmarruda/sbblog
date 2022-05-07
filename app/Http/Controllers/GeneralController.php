@@ -50,7 +50,7 @@ class GeneralController extends Controller
         $filepath = $req->input('registered_file');
         if($req->hasFile('brand_image')){
             if(!$req->file('brand_image')->isValid() || !in_array($req->file('brand_image')->extension(), self::ALLOWED_EXTENSION) || $req->file('brand_image')->getSize() > self::ALLOWED_SIZE)
-                return $this->generalInterface('Imagem fora dos padrões permitidos. Verifique a extensão da imagem, se ela é válida e o tamanho da imagem.', false);
+                return $this->generalInterface(__('adminTemplate.general.imageError'), false);
 
             $filepath = basename($req->file('brand_image')->store('public'));
         }
