@@ -44,6 +44,9 @@ return [
     'form.btn.search'		        => 'Search',
     'form.load.advice'		        => '2x Click on the desired :desired to load it into the form.',
     'form.active'		            => 'Active?',
+    'form.active.select'            => 'Select...',
+    'form.active.true'              => 'Active',
+    'form.active.false'             => 'Inactive',
 
     'dashboard.stat.category.title' => 'Top 10 - Categories Accessed',
     'dashboard.stat.category.id'    => '#',
@@ -65,4 +68,17 @@ return [
     'category.modal.title'		    => 'Search category',
     'category.modal.input'		    => 'Category',
     'category.modal.tab.label'      => 'Category',
+
+    'user.title'                    => 'User',
+    'user.firstUser.advice'         => 'To increase system\'s security, create a new user! After this the system will disable the configuration user!',
+    'user.form.name'                => 'Name',
+    'user.form.user'                => 'User "Email"',
+    'user.form.pass'                => 'Password',
+    'user.form.confirmPass'         => 'Confirm password',
+    'user.okmessage'           => 'User saved successfully!',
+    'user.errmessage'          => 'Error saving user!',
+    'user.modal.title'              => 'Search User',
+    'user.modal.input'              => 'User',
+    'user.modal.grid.user'          => 'User',
+    'user.modal.grid.name'          => 'Name',
 ];

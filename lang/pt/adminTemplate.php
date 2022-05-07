@@ -44,6 +44,9 @@ return [
     'form.btn.search'		        => 'Pesquisar',
     'form.load.advice'		        => 'Clique 2x no(a) :desired desejado(a) para carregá-lo(a) no formulário.',
     'form.active'		            => 'Ativo?',
+    'form.active.select'            => 'Selecione...',
+    'form.active.true'              => 'Ativo',
+    'form.active.false'             => 'Inativo',
 
     'dashboard.stat.category.title' => 'Top 10 - Categorias acessadas',
     'dashboard.stat.category.id'    => '#',
@@ -65,4 +68,17 @@ return [
     'category.modal.title'		    => 'Pesquisar categoria',
     'category.modal.input'		    => 'Categoria',
     'category.modal.tab.label'      => 'Categoria',
+
+    'user.title'                    => 'Usuário',
+    'user.firstUser.advice'         => 'Para maior segurança do sistema, crie um novo usuário! Após isso o sistema irá desativar o usuário de configuração!',
+    'user.form.name'                => 'Nome',
+    'user.form.user'                => 'Usuário "Email"',
+    'user.form.pass'                => 'Senha',
+    'user.form.confirmPass'         => 'Confirmação de senha',
+    'user.okmessage'                => 'Usuário salvo com sucesso!',
+    'user.errmessage'               => 'Erro ao salvar o usuário!',
+    'user.modal.title'              => 'Pesquisar usuário',
+    'user.modal.input'              => 'Usuário',
+    'user.modal.grid.user'          => 'Usuário',
+    'user.modal.grid.name'          => 'Nome',
 ];
