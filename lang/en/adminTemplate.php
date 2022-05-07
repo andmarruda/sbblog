@@ -42,6 +42,9 @@ return [
 
     'form.btn.save'			        => 'Save',
     'form.btn.search'		        => 'Search',
+    'form.btn.change'               => 'Edit',
+    'form.btn.cleanFilter'          => 'Reset filter',
+    'form.btn.addArticle'           => 'Add Article',
     'form.load.advice'		        => '2x Click on the desired :desired to load it into the form.',
     'form.active'		            => 'Active?',
     'form.active.select'            => 'Select...',
@@ -88,5 +91,18 @@ return [
     'general.form.niche.small'      => '"Ex.:Tecnology, sport, etc..."',
     'general.brandImage'            => 'Brand image',
     'general.okmessage'             => 'General setting saved successfully!',
-    'general.errmessage'            => 'Error saving general settings!'
+    'general.errmessage'            => 'Error saving general settings!',
+
+    'articleCard.createdBy'         => 'Created by',
+    'articleCard.createdTime'       => 'at',
+    'articleCard.category'          => 'Category:',
+    'articleCard.lastUpdate'        => 'Last update:',
+    'articleCard.views'             => 'views',
+    'articleCard.avgStayTime'       => 'Average stay time:',
+    'articleCard.noArticle'         => 'No article found!',
+
+    'articleList.title'             => 'Article\'s list',
+    'articleList.latest'            => 'Latest Articles',
+    'articleList.searchInput'       => 'Search by',
+    'articleList.searchInput.small' => 'Title or content'
 ];

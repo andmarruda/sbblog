@@ -42,6 +42,9 @@ return [
 
     'form.btn.save'			        => 'Salvar',
     'form.btn.search'		        => 'Pesquisar',
+    'form.btn.change'               => 'Editar',
+    'form.btn.cleanFilter'          => 'Limpar filtro',
+    'form.btn.addArticle'           => 'Adicionar Artigo',
     'form.load.advice'		        => 'Clique 2x no(a) :desired desejado(a) para carregá-lo(a) no formulário.',
     'form.active'		            => 'Ativo?',
     'form.active.select'            => 'Selecione...',
@@ -88,5 +91,18 @@ return [
     'general.form.niche.small'      => '"Ex.:Tecnologia, esporte, etc..."',
     'general.brandImage'            => 'Logotipo',
     'general.okmessage'             => 'Configuração geral salva com sucesso!',
-    'general.errmessage'            => 'Erro ao salvar configuração geral!'
+    'general.errmessage'            => 'Erro ao salvar configuração geral!',
+
+    'articleCard.createdBy'         => 'Criado por',
+    'articleCard.createdTime'       => 'em',
+    'articleCard.category'          => 'Categoria:',
+    'articleCard.lastUpdate'        => 'Último update:',
+    'articleCard.views'             => 'visualizações',
+    'articleCard.avgStayTime'       => 'Tempo médio permanência:',
+    'articleCard.noArticle'         => 'Nenhum artigo cadastrado!',
+
+    'articleList.title'             => 'Listagem de artigo',
+    'articleList.latest'            => 'Últimos artigos',
+    'articleList.searchInput'       => 'Pesquisar por',
+    'articleList.searchInput.small' => 'Título ou conteúdo'
 ];
