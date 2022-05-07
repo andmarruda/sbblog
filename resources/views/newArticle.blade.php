@@ -4,7 +4,7 @@
 <form method="post" id="formArticleSave" action="{{route('admin.newArticlePost')}}" style="margin-top:30px;" autocomplete="off" enctype="multipart/form-data">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">Cadastro de artigo</li>
+            <li class="breadcrumb-item active" aria-current="page">{{(__('adminTemplate.article.title'))}}</li>
         </ol>
     </nav>
 
@@ -16,26 +16,26 @@
     <input type="hidden" id="articleCoverPath" name="articleCoverPath" value="{{$article->cover_path ?? ''}}">
 
     <div class="mb-3">
-        <label for="articleName" class="form-label">Título</label>
-        <input type="text" maxlength="150" class="form-control" id="articleName" name="articleName" placeholder="Título" required value="{{$article->title ?? ''}}">
+        <label for="articleName" class="form-label">{{__('adminTemplate.article.form.title')}}</label>
+        <input type="text" maxlength="150" class="form-control" id="articleName" name="articleName" placeholder="{{__('adminTemplate.article.form.title')}}" required value="{{$article->title ?? ''}}">
     </div>
 
     @isset($article->cover_path)
     <div class="mb-3">
-        <label for="articleCoverPreview" class="form-lable">Pré visualização da capa</label><br>
+        <label for="articleCoverPreview" class="form-lable">{{__('adminTemplate.article.form.previewFolder')}}</label><br>
         <img src="{{asset('storage/'.$article->cover_path)}}" alt="{{$article->title ?? ''}}" class="img-fluid">
     </div>
     @endisset
 
     <div class="mb-3">
-        <label for="articleCover" class="form-label">Capa</label>
+        <label for="articleCover" class="form-label">{{__('adminTemplate.article.form.cover')}}</label>
         <input type="file" class="form-control" id="articleCover" name="articleCover">
     </div>
 
     <div class="mb-3">
-        <label for="category" class="form-label">Categoria</label>
+        <label for="category" class="form-label">{{__('adminTemplate.article.form.category')}}</label>
         <select class="form-control" id="category" name="category" required>
-            <option value="">Selecione...</option>
+            <option value="">{{__('adminTemplate.article.form.category.select')}}</option>
             @if($categories->count() > 0)
             @foreach($categories as $cat)
                 <option value="{{$cat->id}}"{{($cat->id == ($article->category_id ?? -1)) ? ' selected="selected"' : ''}}>{{$cat->category}}</option>
@@ -47,19 +47,19 @@
     @include('utils.comboActive', ['active' => $article->active ?? NULL])
 
     <div class="mb-3">
-        <label for="description" class="form-label">Descrição curta <small>até 200 caracteres</small></label>
+        <label for="description" class="form-label">{{__('adminTemplate.article.form.meta')}} <small>{{__('adminTemplate.article.form.meta.small')}}</small></label>
         <input type="text" class="form-control" id="description" name="description" maxlength="200" value="{{$article->description ?? ''}}" required>
     </div>
 
     <div class="mb-3">
-        <label for="article" class="form-label">Artigo</label>
+        <label for="article" class="form-label">{{__('adminTemplate.article.form.article')}}</label>
         <div id="article" style="min-height:200px;"></div>
     </div>
 
     <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="Meta tag" id="metatagInput" name="metatagInput">
-        <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="javascript: addTag();">Adicionar Tag</button>
-        <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="javascript: removeTag();">Remover Tag</button>
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="javascript: addTag();">{{__('adminTemplate.form.btn.addTag')}}</button>
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="javascript: removeTag();">{{__('adminTemplate.form.btn.removeTag')}}</button>
     </div>
 
     <div class="mb-3">
@@ -74,15 +74,15 @@
 
     @isset($saved)
         @if($saved)
-            @include('utils.alertSuccess', ['message' => 'Artigo salvo com sucesso!'])
+            @include('utils.alertSuccess', ['message' => __('adminTemplate.article.okmessage')])
         @else
-            @include('utils.alertDanger', ['message' => $message ?? 'Erro ao salvar o usuário!'])
+            @include('utils.alertDanger', ['message' => $message ?? __('adminTemplate.article.errmessage')])
         @endif
     @endisset
 
     <div class="mb-3">
-        <button type="submit" class="btn btn-primary">Salvar</button>
-        <a href="{{route('admin.articleList')}}" role="button" class="btn btn-outline-primary">Pesquisar</a>
+        <button type="submit" class="btn btn-primary">{{__('adminTemplate.form.btn.save')}}</button>
+        <a href="{{route('admin.articleList')}}" role="button" class="btn btn-outline-primary">{{__('adminTemplate.form.btn.search')}}</a>
     </div>
 </form>
 
@@ -114,13 +114,13 @@
             
             if(document.getElementById('articleText').value.length == 0){
                 event.preventDefault();
-                alert('Preencha um artigo para poder salvá-lo!');
+                alert("{{__('adminTemplate.article.require.article')}}");
                 return false;
             }
 
             if(document.getElementById('articleCoverPath').value == '' && document.getElementById('articleCover').files.length == 0){
                 event.preventDefault();
-                alert('Escolha a capa para o seu artigo!');
+                alert("{{__('adminTemplate.article.require.cover')}}");
                 return false;
             }
 
@@ -144,7 +144,7 @@
             return;
         
         if(addedTags.indexOf(inputVal.value) > -1){
-            alert('A tag '+ inputVal.value + ' já foi inserida');
+            alert("{{__('adminTemplate.article.tag.duplicate1')}} "+ inputVal.value + " {{__('adminTemplate.article.tab.duplicate2')}}");
             inputVal.value = '';
             return;
         }
