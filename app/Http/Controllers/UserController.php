@@ -116,6 +116,18 @@ class UserController extends Controller
     }
 
     /**
+     * Get locale from logged user
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @param           
+     * @return          ?string
+     */
+    public function getLocale() : ?string
+    {
+        return $this->isLogged() ? $_SESSION['sbblog']['lang']['lang_id'] : NULL;
+    }
+
+    /**
      * Change preferred user's language
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
