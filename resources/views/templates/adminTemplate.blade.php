@@ -144,6 +144,7 @@
         </div>
 
         <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+        <script src="{{asset('js/fontawesome/all.min.js')}}"></script>
         <script src="{{asset('js/sbblog.js')}}"></script>
         <script>
             const alterPassword = async () => {
