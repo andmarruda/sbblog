@@ -95,6 +95,8 @@ return [
     'general.okmessage'             => 'General setting saved successfully!',
     'general.errmessage'            => 'Error saving general settings!',
     'general.imageError'            => 'File are not allowed. Check image\'s extension and image size.',
+    'general.generalTab'            => 'General',
+    'general.socialTab'             => 'Social Network',
 
     'articleCard.createdBy'         => 'Created by',
     'articleCard.createdTime'       => 'at',

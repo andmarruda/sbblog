@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\SocialNetwork;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(GeneralSeeder::class);
         $this->call(LanguageSeeder::class);
+        $this->call(SocialNetworkSeeder::class);
     }
 }

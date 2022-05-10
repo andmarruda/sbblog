@@ -95,6 +95,8 @@ return [
     'general.okmessage'             => 'Configuração geral salva com sucesso!',
     'general.errmessage'            => 'Erro ao salvar configuração geral!',
     'general.imageError'            => 'Arquivo fora dos padrões permitidos. Verifique a extensão da imagem e o tamanho da imagem.',
+    'general.generalTab'            => 'Geral',
+    'general.socialTab'             => 'Redes sociais',
 
     'articleCard.createdBy'         => 'Criado por',
     'articleCard.createdTime'       => 'em',
