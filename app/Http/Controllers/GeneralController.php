@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\General;
+use App\Models\SocialNetwork;
+use App\Models\SocialNetworkUrl;
 
 class GeneralController extends Controller
 {
@@ -39,6 +41,43 @@ class GeneralController extends Controller
     }
 
     /**
+     * Saves all the URL passed for social networks
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @param           array $socialNetwork
+     * @param           int $general_id
+     * @return          void
+     */
+    private function saveSocialNetwork(array $socialNetwork, int $general_id) : void
+    {
+        foreach($socialNetwork as $id => $url){
+            $sn = SocialNetworkUrl::where('social_network_id', '=', $id)->where('general_id', '=', $general_id);
+            if($sn->count() > 0){
+                if(is_null($url)){
+                    $sn->first()->delete();
+                    continue;
+                }
+
+                $sn = $sn->first();
+                $sn->url = $url;
+                $sn->save();
+                continue;
+            }
+
+            if(is_null($url))
+                continue;
+
+            $sn = new SocialNetworkUrl();
+            $sn->fill([
+                'general_id' => $general_id,
+                'social_network_id' => $id,
+                'url' => $url
+            ]);
+            $sn->save();
+        }
+    }
+
+    /**
      * Saves the general configuration
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
@@ -63,6 +102,8 @@ class GeneralController extends Controller
             'active' => true
         ]);
         $saved = $gen->save();
+
+        $this->saveSocialNetwork($req->input('socialnetwork'), $gen->id);
         return $this->generalInterface(saved: $saved);
     }
 }
