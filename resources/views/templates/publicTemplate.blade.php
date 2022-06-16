@@ -46,6 +46,20 @@
     <body>
         <div class="container-md">
             <div class="row">
+                <div class="col-md-12" style="text-align:right;">
+                    <ul class="list-inline">
+                        @foreach ($gen->socialNetworkUrls()->get() as $url)
+                            <li class="list-inline-item">
+                                <a href="{{$url->url}}" target="_blank">
+                                    <img src="{{asset($url->socialNetwork()->get()->first()->icon)}}" alt="{{$url->socialNetwork->get()->first()->name}}" title="{{$url->socialNetwork->get()->first()->name}}">
+                                </a>
+                            </li>
+                        @endforeach
+                        <li class="list-inline-item"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12" style="text-align:center;">
                     <a href="{{route('latestPage')}}">
                         <img src="{{$gen->brand_image=='default' || !Storage::disk('public')->exists($gen->brand_image) ? asset('images/sbblog.png') : asset('storage/'. $gen->brand_image)}}" alt="{{config('app.name')}}">
