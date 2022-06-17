@@ -41,8 +41,8 @@
     @endisset
 
     <div class="mb-3">
-        <button type="submit" class="btn btn-primary">{{__('adminTemplate.form.btn.save')}}</button>
-        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalSearchUsers">{{__('adminTemplate.form.btn.search')}}</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> {{__('adminTemplate.form.btn.save')}}</button>
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalSearchUsers"><i class="fa fa-search"></i> {{__('adminTemplate.form.btn.search')}}</button>
     </div>
 </form>
 
@@ -60,7 +60,7 @@
                         <input type="text" class="form-control" id="userSearch" name="userSearch" placeholder="{{__('adminTemplate.user.modal.input')}}" required>
                     </div>
                     <div class="col-auto">
-                        <button type="submit" class="btn btn-primary mb-3">{{__('adminTemplate.form.btn.search')}}</button>
+                        <button type="submit" class="btn btn-primary mb-3"><i class="fa fa-search"></i> {{__('adminTemplate.form.btn.search')}}</button>
                     </div>
                 </form>
 

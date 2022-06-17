@@ -19,9 +19,9 @@
                 <input type="text" class="form-control" id="search" name="search" placeholder="{{__('adminTemplate.articleList.searchInput')}}" required>
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary mb-3">{{__('adminTemplate.form.btn.search')}}</button>
-                <a href="{{route('admin.newArticle')}}" role="button" class="btn btn-outline-primary mb-3">{{__('adminTemplate.form.btn.addArticle')}}</a>
-                <a href="{{route('admin.articleList')}}" role="button" class="btn btn-outline-primary mb-3">{{__('adminTemplate.form.btn.cleanFilter')}}</a>
+                <button type="submit" class="btn btn-primary mb-3"><i class="fa fa-search"></i> {{__('adminTemplate.form.btn.search')}}</button>
+                <a href="{{route('admin.newArticle')}}" role="button" class="btn btn-outline-primary mb-3"><i class="fa fa-file-circle-plus"></i> {{__('adminTemplate.form.btn.addArticle')}}</a>
+                <a href="{{route('admin.articleList')}}" role="button" class="btn btn-outline-primary mb-3"><i class="fa fa-magnifying-glass-minus"></i> {{__('adminTemplate.form.btn.cleanFilter')}}</a>
             </div>
         </form>
     </div>

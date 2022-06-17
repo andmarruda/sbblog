@@ -15,9 +15,9 @@
                             <li class="list-inline-item"><small class="text-muted"> | </small></li>
                             <li class="list-inline-item"><small class="text-muted">{{__('adminTemplate.articleCard.lastUpdate')}} {{date('d/m/Y H:i', strtotime($article->updated_at))}}</small></li>
                             <li class="list-inline-item"><small class="text-muted"> | </small></li>
-                            <li class="list-inline-item"><small class="text-muted">{{$article->numberUniqueVisits()}} {{__('adminTemplate.articleCard.views')}}</small></li>
+                            <li class="list-inline-item"><small class="text-muted">{{$article->numberUniqueVisits()}} <i class="fa-solid fa-eye" title="{{__('adminTemplate.articleCard.views')}}"></i></small></li>
                             <li class="list-inline-item"><small class="text-muted"> | </small></li>
-                            <li class="list-inline-item"><small class="text-muted">{{__('adminTemplate.articleCard.avgStayTime')}} {{$article->avgVisitsTime()}}</small></li>
+                            <li class="list-inline-item"><small class="text-muted"><i class="fa-regular fa-clock" title="{{__('adminTemplate.articleCard.avgStayTime')}}"></i> {{$article->avgVisitsTime()}}</small></li>
                         </ul>
                     </p>
 
@@ -26,7 +26,7 @@
                     @else
                     <p class="card-text">{!!substr($article->article, 0, 200)!!}</p>
                     @endif
-                    <p><a href="{{route('admin.newArticle')}}/{{$article->id}}" class="btn btn-primary">{{__('adminTemplate.form.btn.change')}}</a></p>
+                    <p><a href="{{route('admin.newArticle')}}/{{$article->id}}" class="btn btn-primary"><i class="fa-regular fa-pen-to-square"></i> {{__('adminTemplate.form.btn.change')}}</a></p>
                 </div>
             </div>
         </div>

@@ -54,7 +54,7 @@
     @endisset
 
     <div class="mb-3">
-        <button type="submit" class="btn btn-primary">{{__('adminTemplate.form.btn.save')}}</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> {{__('adminTemplate.form.btn.save')}}</button>
     </div>
 </form>
 @endsection

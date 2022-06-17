@@ -30,7 +30,7 @@
                                     @include('utils.alertDanger', ['message' => session('message')])
                                 </div>
                                 @endif
-                                <button type="submit" class="btn btn-primary">Entrar</button>
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-arrow-right-to-bracket"></i> Entrar</button>
                             </form>
                         </div>
                         <div class="card-footer" style="text-align:right;">
@@ -46,5 +46,6 @@
         </div>
 
         <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+        <script src="{{asset('js/fontawesome/all.min.js')}}"></script>
     </body>
 </html>
