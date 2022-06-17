@@ -34,11 +34,11 @@
             @endif
             <div class="row">
                 <div class="col-md-6">
-                    <a href="{{route('article', ['friendly' => $article->url_friendly, 'id' => $article->id])}}" class="btn btn-outline-primary">Ler artigo completo</a>
+                    <a href="{{route('article', ['friendly' => $article->url_friendly, 'id' => $article->id])}}" class="btn btn-outline-primary"><i class="fa-solid fa-eye"></i> Ler artigo completo</a>
                 </div>
 
                 <div class="col-md-6" style="text-align:right;">
-                    Nº de comentário(s): {{$article->comments()->get()->count()}}
+                    <i class="fa-regular fa-message" title="Nº de comentário(s):"></i> {{$article->comments()->get()->count()}}
                 </div>
             </div>
         </div>

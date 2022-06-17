@@ -77,7 +77,7 @@
         <label for="comment" class="form-label">* Comentário <small>Máximo de 350 dígitos</small></label>
         <textarea class="form-control" rows="3" id="text" name="text" required maxlength="350" placeholder="*Comentário"></textarea>
     </div>
-    <button type="submit" class="btn btn-outline-primary">Comentar</button>
+    <button type="submit" class="btn btn-outline-primary"><i class="fa-regular fa-message"></i> Comentar</button>
 </form>
 
 <script src="{{asset('js/collectSbblog.js')}}"></script>
