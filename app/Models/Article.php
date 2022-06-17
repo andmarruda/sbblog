@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class Article extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'cover_path', 'category_id', 'article', 'user_id', 'url_friendly', 'active', 'article_color', 'description'];
+    protected $fillable = ['title', 'cover_path', 'category_id', 'article', 'user_id', 'url_friendly', 'active', 'article_color', 'description', 'premiere_date'];
 
     /**
      * Get all tags for selected article

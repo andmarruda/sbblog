@@ -8,6 +8,8 @@ use App\Models\ArticleComments;
 use App\Models\ArticleTags;
 use App\Models\ArticleVisits;
 use App\Models\Util;
+use DateTime;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 if(session_status() != PHP_SESSION_ACTIVE)
     session_start();
@@ -329,6 +331,13 @@ class ArticleController extends Controller
             $filepath = basename($req->file('articleCover')->store('public'));
         }
 
+        //premiere_date treatment
+        $premiere_date = NULL;
+        if($req->input('premiereDate') != ''){
+            $d = DateTime::createFromFormat('Y-m-d H:i', $req->input('premiereDate'). ' '. (is_null($req->input('premiereTime')) ? '00:00' : $req->input('premiereTime')));
+            $premiere_date = $d->format(DateTime::ATOM);
+        }
+
         $a = is_null($req->input('id')) ? new Article() : Article::find($req->input('id'));
         $a->fill([
             'title' => $req->input('articleName'), 
@@ -339,7 +348,8 @@ class ArticleController extends Controller
             'url_friendly' => $this->titleToFriendlyUrl($req->input('articleName')), 
             'active' => $req->input('active'),
             'article_color' => is_null($req->input('id')) ? $this->generatesRandomColor() : $a->article_color,
-            'description' => $req->input('description')
+            'description' => $req->input('description'),
+            'premiere_date' => $premiere_date
         ]);
 
         $saved = $a->save();
