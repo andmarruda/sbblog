@@ -31,7 +31,7 @@ class PublicController extends Controller
     {
         $infos = $this->basicInfo();
         $ac = new ArticleController();
-        $infos['articles'] = $ac->searchArticle($req->input('searchArticle'));
+        $infos['articles'] = $ac->searchArticle($req->input('searchArticle'), true);
 
         return view('public.main', $infos);
     }
@@ -48,7 +48,7 @@ class PublicController extends Controller
     {
         $infos = $this->basicInfo();
         $ac = new ArticleController();
-        $infos['articles'] = (is_null($category) || is_null($id)) ? $ac->getLasts(true) : $ac->getByCategory($id);
+        $infos['articles'] = (is_null($category) || is_null($id)) ? $ac->getLasts(true) : $ac->getByCategory($id, true);
 
         return view('public.main', $infos);
     }

@@ -68,8 +68,15 @@ class ArticleController extends Controller
      * @param       int $category_id
      * @return      Object
      */
-    public function getByCategory(int $category_id)
+    public function getByCategory(int $category_id, bool $usesPremiereDate=false)
     {
+        if($usesPremiereDate){
+            return Article::where(function($q){
+                $q->where('premiere_date', '<=', date('Y-m-d H:i:s'));
+                $q->orWhereNull('premiere_date');
+            })->where('category_id', '=', $category_id)->orderBy('created_at', 'DESC')->paginate(20);
+        }
+
         return Article::where('category_id', '=', $category_id)->orderBy('created_at', 'DESC')->paginate(20);
     }
 
@@ -80,8 +87,18 @@ class ArticleController extends Controller
      * @param       string $search
      * @return      Object
      */
-    public function searchArticle(string $search)
+    public function searchArticle(string $search, bool $usesPremiereDate=false)
     {
+        if($usesPremiereDate){
+            return Article::where(function($q){
+                $q->where('premiere_date', '<=', date('Y-m-d H:i:s'));
+                $q->orWhereNull('premiere_date');
+            })->where(function($q) use($search){
+                $q->where('title', 'ILIKE', '%'. $search. '%');
+                $q->orWhere('article', 'ILIKE', '%'. $search. '%');
+            })->orderBy('created_at', 'DESC')->paginate(20);
+        }
+
         return Article::where('title', 'ILIKE', '%'. $search. '%')->orWhere('article', 'ILIKE', '%'. $search. '%')->orderBy('created_at', 'DESC')->paginate(20);
     }
 
