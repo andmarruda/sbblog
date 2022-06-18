@@ -107,7 +107,7 @@ class ArticleController extends Controller
     public function getLasts(bool $usesPremiereDate=false)
     {
         if($usesPremiereDate)
-            return Article::where('premiere_date', '<=', date('Y-m-d'))->orderBy('premiere_date', 'DESC')->orderBy('created_at', 'DESC')->paginate(20);
+            return Article::where('premiere_date', '<=', date('Y-m-d H:i:s'))->orWhereNull('premiere_date')->orderBy('created_at', 'DESC')->paginate(20);
         
         return Article::orderBy('created_at', 'DESC')->paginate(20);
     }

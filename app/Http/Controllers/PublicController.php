@@ -48,7 +48,7 @@ class PublicController extends Controller
     {
         $infos = $this->basicInfo();
         $ac = new ArticleController();
-        $infos['articles'] = (is_null($category) || is_null($id)) ? $ac->getLasts() : $ac->getByCategory($id);
+        $infos['articles'] = (is_null($category) || is_null($id)) ? $ac->getLasts(true) : $ac->getByCategory($id);
 
         return view('public.main', $infos);
     }
