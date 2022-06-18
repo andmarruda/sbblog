@@ -101,11 +101,14 @@ class ArticleController extends Controller
      * Get last 20 articles created_at desc
      * @version     1.0.0
      * @author      Anderson Arruda < andmarruda@gmail.com >
-     * @param       
+     * @param       bool $usesPremiereDate=false
      * @return      Object
      */
-    public function getLasts()
+    public function getLasts(bool $usesPremiereDate=false)
     {
+        if($usesPremiereDate)
+            return Article::where('premiere_date', '<=', date('Y-m-d'))->orderBy('premiere_date', 'DESC')->orderBy('created_at', 'DESC')->paginate(20);
+        
         return Article::orderBy('created_at', 'DESC')->paginate(20);
     }
 

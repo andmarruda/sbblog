@@ -110,6 +110,7 @@ return [
     'articleList.latest'            => 'Latest Articles',
     'articleList.searchInput'       => 'Search by',
     'articleList.searchInput.small' => 'Title or content',
+    'articleList.commentNumber'     => 'Amout of comments',
 
     'article.title'                 => 'Article',
     'article.form.title'            => 'Title',

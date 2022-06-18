@@ -18,6 +18,8 @@
                             <li class="list-inline-item"><small class="text-muted">{{$article->numberUniqueVisits()}} <i class="fa-solid fa-eye" title="{{__('adminTemplate.articleCard.views')}}"></i></small></li>
                             <li class="list-inline-item"><small class="text-muted"> | </small></li>
                             <li class="list-inline-item"><small class="text-muted"><i class="fa-regular fa-clock" title="{{__('adminTemplate.articleCard.avgStayTime')}}"></i> {{$article->avgVisitsTime()}}</small></li>
+                            <li class="list-inline-item"><small class="text-muted"> | </small></li>
+                            <li class="list-inline-item"><small class="text-muted"><i class="fa-regular fa-message" title="{{__('adminTemplate.articleList.commentNumber')}}"></i> {{$article->comments()->get()->count()}}</small></li>
                         </ul>
                     </p>
 

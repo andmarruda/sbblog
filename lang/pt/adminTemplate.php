@@ -110,6 +110,7 @@ return [
     'articleList.latest'            => 'Últimos artigos',
     'articleList.searchInput'       => 'Pesquisar por',
     'articleList.searchInput.small' => 'Título ou conteúdo',
+    'articleList.commentNumber'     => 'Nº de comentário(s)',
 
     'article.title'                 => 'Artigo',
     'article.form.title'            => 'Título',

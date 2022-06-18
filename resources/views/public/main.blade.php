@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="col-md-6" style="text-align:right;">
-                    <i class="fa-regular fa-message" title="Nº de comentário(s):"></i> {{$article->comments()->get()->count()}}
+                    <i class="fa-regular fa-message" title="Nº de comentário(s)"></i> {{$article->comments()->get()->count()}}
                 </div>
             </div>
         </div>
