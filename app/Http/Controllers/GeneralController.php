@@ -99,7 +99,8 @@ class GeneralController extends Controller
             'brand_image' => $filepath,
             'slogan' => $req->input('slogan'),
             'section' => $req->input('section'),
-            'active' => true
+            'active' => true,
+            'google_analytics' => $req->input('google_analytics')
         ]);
         $saved = $gen->save();
 

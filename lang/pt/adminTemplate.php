@@ -97,6 +97,7 @@ return [
     'general.imageError'            => 'Arquivo fora dos padrões permitidos. Verifique a extensão da imagem e o tamanho da imagem.',
     'general.generalTab'            => 'Geral',
     'general.socialTab'             => 'Redes sociais',
+    'general.googleAnalytics'       => 'Google Analytics ID',
 
     'articleCard.createdBy'         => 'Criado por',
     'articleCard.createdTime'       => 'em',

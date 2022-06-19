@@ -97,6 +97,7 @@ return [
     'general.imageError'            => 'File are not allowed. Check image\'s extension and image size.',
     'general.generalTab'            => 'General',
     'general.socialTab'             => 'Social Network',
+    'general.googleAnalytics'       => 'Google Analytics ID',
 
     'articleCard.createdBy'         => 'Created by',
     'articleCard.createdTime'       => 'at',

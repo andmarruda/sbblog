@@ -112,5 +112,16 @@
 
         <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
         <script src="{{asset('js/fontawesome/all.min.js')}}"></script>
+        @isset($gen->google_analytics)
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{$gen->google_analytics}}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '{{$gen->google_analytics}}');
+        </script>
+        @endisset
     </body>
 </html>

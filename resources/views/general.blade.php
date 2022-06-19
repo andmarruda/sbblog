@@ -34,6 +34,11 @@
                 <label for="brand_image" class="form-label">{{__('adminTemplate.general.brandImage')}}</label>
                 <input type="file" class="form-control" id="brand_image" name="brand_image">
             </div>
+
+            <div class="mb-3">
+                <label for="google_analytics" class="form-label">{{__('adminTemplate.general.googleAnalytics')}}</label>
+                <input type="text" maxlength="15" class="form-control" id="google_analytics" name="google_analytics" placeholder="{{__('adminTemplate.general.googleAnalytics')}}" value="{{$gen->google_analytics}}">
+            </div>
         </div>
         <div class="tab-pane fade" id="social" role="tabpanel" aria-labelledby="social-tab">
             @foreach(\App\Models\SocialNetwork::all() as $sn)
