@@ -46,19 +46,9 @@
 
 <div class="comments">
     @forelse($artComm as $comm)
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">{{$comm->comment_name}}</h5>
-            <small>{{date('d/m/Y H:i', strtotime($comm->created_at))}}</small>
-            <p class="card-text">{{$comm->comment_text}}</p>
-        </div>
-    </div>
+    @include('utils.commentCard', ['name' => $comm->comment_name, 'comment' => $comm->comment_text, 'created_at' => $comm->created_at])
     @empty
-    <div class="card">
-        <div class="card-body">
-            <h6 style="margin-bottom:0;">Seja o primeiro a comentar o nosso artigo!</h6>
-        </div>
-    </div>
+    @include('utils.commentCardNotFounded', ['advice' => 'Seja o primeiro a comentar o nosso artigo!'])
     @endforelse
     <div style="text-align: center;">
         {{$artComm->links()}}
