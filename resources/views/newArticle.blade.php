@@ -111,7 +111,7 @@
         @include('utils.commentCardNotFounded', ['advice' => __('adminTemplate.article.commentList.none')])
     @else
         @foreach($article->comments()->orderBy('created_at', 'desc')->get() as $comm)
-            @include('utils.commentCard', ['name' => $comm->comment_name, 'comment' => $comm->comment_text, 'created_at' => $comm->created_at])
+            @include('utils.commentCard', ['name' => $comm->comment_name, 'comment' => $comm->comment_text, 'created_at' => $comm->created_at, 'admin' => true, 'id' => $comm->id, 'active' => $comm->active])
         @endforeach
     @endif
   </div>
@@ -217,6 +217,39 @@
         if(at.value.length > 0){
             let d = quillArticle.clipboard.convert(at.value);
             quillArticle.setContents(d, 'silent');
+        }
+    };
+
+    //enable disable comments
+    const enableText = '{{__('adminTemplate.article.commentList.enable')}}';
+    const disableText = '{{__('adminTemplate.article.commentList.disable')}}';
+    const commentAction = async (event, id) => {
+        let header = new Headers();
+        header.append('X-CSRF-Token', '{{csrf_token()}}');
+
+        let fd = new FormData();
+        fd.append('id', id);
+
+        let f = await fetch("{{URL::to('/')}}/admin/article/comment/enable-disable", {
+            method: 'post',
+            headers: header,
+            body: fd
+        });
+
+        let j = await f.json();
+        if(!j.success){
+            alert(j.message);
+            return;
+        }
+
+        if(event.target.classList.contains('btn-danger')){
+            event.target.classList.remove('btn-danger');
+            event.target.classList.add('btn-success');
+            event.target.innerText = enableText;
+        } else{
+            event.target.classList.remove('btn-success');
+            event.target.classList.add('btn-danger');
+            event.target.innerText = disableText;
         }
     };
 </script>

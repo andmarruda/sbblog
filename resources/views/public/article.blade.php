@@ -41,7 +41,7 @@
 </div>
 
 <div>
-    <h5>{{($artComm = $article->comments()->paginate(20))->count()}} Comentário(s)</h5>
+    <h5>{{($artComm = $article->comments()->where('active', '=', true)->paginate(20))->count()}} Comentário(s)</h5>
 </div>
 
 <div class="comments">

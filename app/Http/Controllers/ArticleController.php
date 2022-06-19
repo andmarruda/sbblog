@@ -283,6 +283,23 @@ class ArticleController extends Controller
     }
 
     /**
+     * Enable / disable comment at article by id
+     * @version     1.0.0
+     * @author      Anderson Arruda < andmarruda@gmail.com >
+     * @param       int $id
+     * @return      void
+     */
+    public function enableDisableComment(Request $req)
+    {
+        $comm = ArticleComments::find($req->input('id'));
+        $comm->active = !$comm->active;
+        if($comm->save())
+            return response()->json(['success' => true, 'message' => '']);
+
+        return response()->json(['success' => true, 'message' => __('adminTemplate.article.commentList.error')]);
+    }
+
+    /**
      * Receive data to init the visit data
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
