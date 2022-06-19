@@ -124,6 +124,7 @@ return [
     'article.form.article'          => 'Artigo',
     'article.tab.form'              => 'Formulário',
     'article.tab.comment'           => 'Comentários',
+    'article.commentList.none'      => 'Nenhum comentário encontrado!',
     'article.okmessage'             => 'Artigo salvo com sucesso!',
     'article.errmessage'            => 'Erro ao salvar o usuário!',
     'article.require.article'       => 'Preencha um artigo para poder salvá-lo!',

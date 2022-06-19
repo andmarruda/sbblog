@@ -1,7 +1,7 @@
 @extends('templates.adminTemplate')
 
 @section('page')
-<nav aria-label="breadcrumb">
+<nav aria-label="breadcrumb" style="margin-top:30px;">
     <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">{{(__('adminTemplate.article.title'))}}</li>
     </ol>
@@ -13,9 +13,9 @@
     <button class="nav-link" id="nav-comment-tab" data-bs-toggle="tab" data-bs-target="#nav-comment" type="button" role="tab" aria-controls="nav-comment" aria-selected="false">{{__('adminTemplate.article.tab.comment')}}</button>
   </div>
 </nav>
-<div class="tab-content" id="nav-tabContent">
+<div class="tab-content" id="nav-tabContent" style="margin-bottom:20px;">
   <div class="tab-pane fade show active" id="nav-form" role="tabpanel" aria-labelledby="nav-form-tab">
-    <form method="post" id="formArticleSave" action="{{route('admin.newArticlePost')}}" style="margin-top:30px;" autocomplete="off" enctype="multipart/form-data">
+    <form method="post" id="formArticleSave" action="{{route('admin.newArticlePost')}}" style="margin-top:20px;" autocomplete="off" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="id" id="id" value="{{$article->id ?? ''}}">
         <input type="hidden" name="addedTags" id="addedTags" value="">
@@ -106,8 +106,14 @@
         </div>
     </form>
   </div>
-  <div class="tab-pane fade" id="nav-comment" role="tabpanel" aria-labelledby="nav-comment-tab">
-  
+  <div class="tab-pane fade" id="nav-comment" role="tabpanel" aria-labelledby="nav-comment-tab" style="padding-top:20px;">
+    @if(!isset($article) || $article->comments()->count() == 0)
+        @include('utils.commentCardNotFounded', ['advice' => __('adminTemplate.article.commentList.none')])
+    @else
+        @foreach($article->comments()->orderBy('created_at', 'desc')->get() as $comm)
+            @include('utils.commentCard', ['name' => $comm->comment_name, 'comment' => $comm->comment_text, 'created_at' => $comm->created_at])
+        @endforeach
+    @endif
   </div>
 </div>
 

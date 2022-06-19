@@ -124,6 +124,7 @@ return [
     'article.form.article'          => 'Article',
     'article.tab.form'              => 'Form',
     'article.tab.comment'           => 'Comments',
+    'article.commentList.none'      => 'No comments found!',
     'article.okmessage'             => 'Article saved successfully!',
     'article.errmessage'            => 'Error saving article!',
     'article.require.article'       => 'Fill an article to save it!',
