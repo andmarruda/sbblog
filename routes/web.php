@@ -24,8 +24,6 @@ Route::post('/article', '\App\Http\Controllers\PublicController@articlePageComme
 Route::post('/visitInit', '\App\Http\Controllers\ArticleController@articleVisitInit')->name('visitInit');
 Route::post('/visitEnd', '\App\Http\Controllers\ArticleController@articleVisitEnd')->name('visitEnd');
 
-Route::get('/site-map', [ArticleController::class, 'siteMap'])->name('siteMap');
-
 Route::prefix('/admin')->group(function() {
     //Navigation
     Route::get('/', '\App\Http\Controllers\AdminController@loginInterface')->name('admin.login');

@@ -30,4 +30,16 @@ class Category extends Model
             ->orderBy('total_visits', 'DESC')
             ->get();
     }
+
+    /**
+     * Get all article from this category
+     * @version     1.0.0
+     * @author      Anderson Arruda < andmarruda@gmail.com >
+     * @param       
+     * @return      \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function article() : \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Article::class);
+    }
 }

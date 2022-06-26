@@ -84,6 +84,11 @@ class CategoryController extends Controller
         ]);
 
         $saved = $c->save();
+
+        //generates and send site map to google
+        $sm = new SiteMapController();
+        $sm->generate();
+
         return view('category', ['saved' => $saved]);
     }
 

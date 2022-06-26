@@ -9,6 +9,7 @@ use App\Models\ArticleTags;
 use App\Models\ArticleVisits;
 use App\Models\Util;
 use DateTime;
+use DOMDocument;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 if(session_status() != PHP_SESSION_ACTIVE)
@@ -46,7 +47,6 @@ class ArticleController extends Controller
 
         return $rand;
     }
-
 
     /**
      * Remove accents and prepare the title to a friendly URL
@@ -127,6 +127,18 @@ class ArticleController extends Controller
             return Article::where('premiere_date', '<=', date('Y-m-d H:i:s'))->orWhereNull('premiere_date')->orderBy('created_at', 'DESC')->paginate(20);
         
         return Article::orderBy('created_at', 'DESC')->paginate(20);
+    }
+
+    /**
+     * Get all active article
+     * @version     1.0.0
+     * @author      Anderson Arruda < andmarruda@gmail.com >
+     * @param       
+     * @return      Collection of Article
+     */
+    public function getAllActive()
+    {
+        return Article::where('active', '=', true)->orderBy('updated_at', 'DESC')->get();
     }
 
     /**
@@ -400,6 +412,10 @@ class ArticleController extends Controller
             $removeTags = json_decode($req->input('removedTags'), true);
             $this->articleRemoveTags($removeTags, $article_id);
         }
+
+        //generates and send site map to google
+        $sm = new SiteMapController();
+        $sm->generate();
 
         return $this->prepareFormInterface($saved, '');
     }
