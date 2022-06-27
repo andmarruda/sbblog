@@ -92,7 +92,7 @@ class Article extends Model
      */
     public function numberUniqueVisits() : int
     {
-        return $this->visits()->groupBy(['created_at', 'visit_hash'])->count();
+        return $this->visits()->groupBy(['visit_hash'])->where('created_at', '>=', date('Y-m-d H:i:s', strtotime('- 6 month')))->get(['visit_hash'])->count();
     }
 
     /**
@@ -137,7 +137,6 @@ class Article extends Model
         return DB::table('article_visits', 'av')
             ->join('articles AS art', 'art.id', '=', 'av.article_id')
             ->select(DB::raw('art.id, art.title, art.article_color, COUNT(DISTINCT av.visit_hash) AS total_visits, extract(EPOCH from AVG(unload_datetime - load_datetime)) AS avg_sec, extract(EPOCH from MIN(unload_datetime - load_datetime)) min_sec, extract(EPOCH from MAX(unload_datetime - load_datetime)) max_sec'))
-            ->whereNotNull('unload_datetime')
             ->where('av.created_at', '>=', date('Y-m-d H:i:s', strtotime('- 6 month')))
             ->groupBy('art.id')
             ->orderBy('avg_sec', 'DESC')
