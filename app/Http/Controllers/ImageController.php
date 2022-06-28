@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
+use SplFileInfo;
 
 class ImageController extends Controller
 {
@@ -46,11 +47,14 @@ class ImageController extends Controller
      * Set uploaded file and check if it's valid after this converts to webp format
      * @version     1.0.0
      * @author      Anderson Arruda < andmarruda@gmail.com >
-     * @param       private \Illuminate\Http\UploadedFile $file
+     * @param       private ?\Illuminate\Http\UploadedFile $file
      * @return      void
      */
-    public function __construct(private UploadedFile $file)
+    public function __construct(private ?UploadedFile $file)
     {
+        if(is_null($file))
+            return;
+
         $this->vars['file'] = $file;
 
         if(!$file->isValid()){
@@ -80,6 +84,19 @@ class ImageController extends Controller
             Storage::delete($uploaded);
             $this->vars['name'] = $name;
         }
+    }
+
+    /**
+     * Get extension for a stored file
+     * @version     1.0.0
+     * @author      Anderson Arruda < andmarruda@gmail.com >
+     * @param       string $file
+     * @return      string
+     */
+    public function getExtension(string $file) : string
+    {
+        $info = new SplFileInfo(Storage::path($file));
+        return $info->getExtension();
     }
 
     /**

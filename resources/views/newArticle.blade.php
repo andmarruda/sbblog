@@ -32,6 +32,10 @@
         <div class="mb-3">
             <label for="articleCoverPreview" class="form-lable">{{__('adminTemplate.article.form.previewFolder')}}</label><br>
             <img src="{{asset('storage/'.$article->cover_path)}}" alt="{{$article->title ?? ''}}" class="img-fluid">
+            
+            @if((new \App\Http\Controllers\ImageController(NULL))->getExtension('public/'. $article->cover_path) != 'webp')
+            <a href="{{route('admin.article.convertWebp', ['id' => $article->id ?? -1])}}" class="btn btn-outline-primary" role="button">{{__('adminTemplate.article.form.convertWebp')}}</a>
+            @endif
         </div>
         @endisset
 

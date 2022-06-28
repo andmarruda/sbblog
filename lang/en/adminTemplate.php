@@ -123,6 +123,7 @@ return [
     'article.form.meta'             => 'Short description',
     'article.form.meta.small'       => 'max 200 characters',
     'article.form.article'          => 'Article',
+    'article.form.convertWebp'      => 'Convert to WEBP',
     'article.tab.form'              => 'Form',
     'article.tab.comment'           => 'Comments',
     'article.commentList.none'      => 'No comments found!',

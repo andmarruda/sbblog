@@ -123,6 +123,7 @@ return [
     'article.form.meta'             => 'Descrição curta',
     'article.form.meta.small'       => 'até 200 caracteres',
     'article.form.article'          => 'Artigo',
+    'article.form.convertWebp'      => 'Converter para WEBP',
     'article.tab.form'              => 'Formulário',
     'article.tab.comment'           => 'Comentários',
     'article.commentList.none'      => 'Nenhum comentário encontrado!',

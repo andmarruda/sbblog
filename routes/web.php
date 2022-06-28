@@ -52,6 +52,7 @@ Route::prefix('/admin')->group(function() {
     Route::get('/newArticle/{id?}', '\App\Http\Controllers\ArticleController@articleFormInterface')->where('id', '[0-9]+')->name('admin.newArticle')->middleware('sbauth');
     Route::post('/newArticle', '\App\Http\Controllers\ArticleController@articleFormPost')->name('admin.newArticlePost')->middleware('sbauth');
     Route::post('/article/comment/enable-disable', [ArticleController::class, 'enableDisableComment'])->name('admin.article.comment.action')->middleware('sbauth');
+    Route::get('/article/convertWebp/{id}', [ArticleController::class, 'convertWebp'])->name('admin.article.convertWebp')->middleware('sbauth');
 
     //Category
     Route::get('/category/{id?}', '\App\Http\Controllers\CategoryController@categoryInterface')->where('id', '[0-9]+')->name('admin.category')->middleware('sbauth');
