@@ -330,6 +330,26 @@ class ArticleController extends Controller
     }
 
     /**
+     * Get article by id, verify if image is diferently of webp and trys to convert it to webp
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @param           int $id
+     * @return          view
+     */
+    public function convertWebp(int $id)
+    {
+        $art = $this->getById($id);
+        $ic = new ImageController(NULL);
+        if($ic->getExtension('public/'. $art->cover_path) != 'webp'){
+            $ic->convertWebp('public/'. $art->cover_path);
+            $art->cover_path = $ic->name;
+            $art->save();
+        }
+
+        return redirect()->route('admin.newArticle', ['id' => $id]);
+    }
+
+    /**
      * Saves the article informations
      * @version     1.0.0
      * @author      Anderson Arruda < andmarruda@gmail.com >

@@ -74,14 +74,27 @@ class ImageController extends Controller
 
         $uploaded = $file->store($this->store);
         $this->vars['name'] = basename($uploaded);
-        $func = $this->gdLibrary[$file->extension()];
+        $this->convertWebp($uploaded);
+    }
+
+    /**
+     * Convert any image to webp except webp
+     * @version     1.0.0
+     * @author      Anderson Arruda < andmarruda@gmail.com >
+     * @param       string $file
+     * @return      void
+     */
+    public function convertWebp(string $file) : void
+    {
+        $ext=$this->getExtension($file);
+        $func = $this->gdLibrary[$ext];
         if(!is_null($func)){
-            $image = $this->gdLibrary[$file->extension()](Storage::path($uploaded));
-            $dir = dirname(Storage::path($uploaded));
-            $name = str_replace($file->extension(), 'webp', $this->name);
+            $image = $func(Storage::path($file));
+            $dir = dirname(Storage::path($file));
+            $name = str_replace($ext, 'webp', basename($file));
             imagewebp($image, $dir.'/'.$name);
             imagedestroy($image);
-            Storage::delete($uploaded);
+            Storage::delete($file);
             $this->vars['name'] = $name;
         }
     }
