@@ -18,18 +18,6 @@ if(session_status() != PHP_SESSION_ACTIVE)
 class ArticleController extends Controller
 {
     /**
-     * Allowed file extension
-     * @var             array
-     */
-    CONST ALLOWED_EXTENSION = ['jpg', 'jpeg', 'bmp', 'gif', 'png', 'webp'];
-
-    /**
-     * Allowd max file size
-     * @var             int
-     */
-    CONST ALLOWED_SIZE = 2000000;
-
-    /**
      * Generates a random color to the article
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
@@ -263,18 +251,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Returns the allowed size in Megabytes
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          float
-     */
-    public static function byteToMb() : float
-    {
-        return self::ALLOWED_SIZE * 0.000001;
-    }
-
-    /**
      * Save the comment for an article
      * @version     1.0.0
      * @author      Anderson Arruda < andmarruda@gmail.com >
@@ -368,16 +344,17 @@ class ArticleController extends Controller
 
         $filepath = $req->input('articleCoverPath');
         if($req->hasFile('articleCover')){
-            if(!$req->file('articleCover')->isValid())
+            $ic = new ImageController($req->file('articleCover'));
+            if(isset($ic->error) && $ic->error == 'INVALID_FILE')
                 return $this->prepareFormInterface($saved, __('adminTemplate.article.form.imageNotValid'));
 
-            if(!in_array($req->file('articleCover')->extension(), self::ALLOWED_EXTENSION))
-                return $this->prepareFormInterface($saved, __('adminTemplate.article.form.extensionErr', ['extension' => $req->file('articleCover')->extension()]));
+            if(isset($ic->error) && $ic->error == 'EXTENSION_ERROR')
+                return $this->prepareFormInterface($saved, __('adminTemplate.article.form.extensionErr', ['extension' => $ic->file->extension()]));
 
-            if($req->file('articleCover')->getSize() > self::ALLOWED_SIZE)
-                return $this->prepareFormInterface($saved, __('adminTemplate.article.form.sizeErr', ['mbyte' => self::byteToMb()]));
+            if(isset($ic->error) && $ic->error == 'SIZE_ERROR')
+                return $this->prepareFormInterface($saved, __('adminTemplate.article.form.sizeErr', ['mbyte' => $ic->byteToMb()]));
 
-            $filepath = basename($req->file('articleCover')->store('public'));
+            $filepath = $ic->name;
         }
 
         //premiere_date treatment
