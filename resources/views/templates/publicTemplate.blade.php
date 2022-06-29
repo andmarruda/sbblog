@@ -123,5 +123,9 @@
             gtag('config', '{{$gen->google_analytics}}');
         </script>
         @endisset
+
+        @isset($gen->google_ads_script)
+        {{$gen->google_ads_script}}
+        @endisset
     </body>
 </html>
