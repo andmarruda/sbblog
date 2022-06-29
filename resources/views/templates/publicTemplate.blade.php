@@ -125,7 +125,7 @@
         @endisset
 
         @isset($gen->google_ads_script)
-        {{$gen->google_ads_script}}
+        {!!$gen->google_ads_script!!}
         @endisset
     </body>
 </html>
