@@ -105,7 +105,9 @@ class GeneralController extends Controller
         ]);
         $saved = $gen->save();
 
-        $this->saveSocialNetwork($req->input('socialnetwork'), $gen->id);
+        if(!is_null($req->input('socialnetwork')))
+            $this->saveSocialNetwork($req->input('socialnetwork'), $gen->id);
+
         return $this->generalInterface(saved: $saved);
     }
 }
