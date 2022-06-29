@@ -69,7 +69,7 @@ class SiteMapController extends Controller
         $all = (new ArticleController())->getAllActive();
         foreach($all as $art)
         {
-            $this->urlTag(route('article', ['friendly' => $art->url_friendly, 'id' => $art->id]), $art->updated_at, $urlset);
+            $this->urlTag(route('article', ['friendly' => $art->url_friendly, 'id' => $art->id]), date('Y-m-d', strtotime($art->updated_at)), $urlset);
         }
     }
 
@@ -84,7 +84,7 @@ class SiteMapController extends Controller
     {
         $all = (new CategoryController())->getAllActivated();
         foreach($all as $cat){
-            $this->urlTag(route('latestPageCategory', ['category' => $cat->category, 'id' => $cat->id]), $cat->article()->max('updated_at'), $urlset);
+            $this->urlTag(route('latestPageCategory', ['category' => $cat->category, 'id' => $cat->id]), date('Y-m-d', strtotime($cat->article()->max('updated_at'))), $urlset);
         }
     }
 
