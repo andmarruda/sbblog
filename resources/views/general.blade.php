@@ -2,7 +2,7 @@
 
 @section('page')
 <form method="post" action="{{route('admin.generalPost')}}" style="margin-top:30px;" autocomplete="off" enctype="multipart/form-data">
-    <input type="hidden" name="registered_file" id="registered_file" value="{{$gen->brand_image}}">
+    <input type="hidden" name="registered_file" id="registered_file" value="{{$gen->brand_image ?? ''}}">
     @csrf
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -22,12 +22,12 @@
         <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
             <div class="mb-3">
                 <label for="slogan" class="form-label">{{__('adminTemplate.general.form.slogan')}}</label>
-                <input type="text" maxlength="200" class="form-control" id="slogan" name="slogan" placeholder="{{__('adminTemplate.general.form.slogan')}}" required value="{{$gen->slogan}}">
+                <input type="text" maxlength="200" class="form-control" id="slogan" name="slogan" placeholder="{{__('adminTemplate.general.form.slogan')}}" required value="{{$gen->slogan ?? ''}}">
             </div>
 
             <div class="mb-3">
                 <label for="section" class="form-label">{{__('adminTemplate.general.form.niche')}} <small>{{__('adminTemplate.general.form.niche.small')}}</small></label>
-                <input type="text" maxlength="200" class="form-control" id="section" name="section" placeholder="{{__('adminTemplate.general.form.niche')}}" required value="{{$gen->section}}">
+                <input type="text" maxlength="200" class="form-control" id="section" name="section" placeholder="{{__('adminTemplate.general.form.niche')}}" required value="{{$gen->section ?? ''}}">
             </div>
 
             <div class="mb-3">
@@ -37,7 +37,7 @@
 
             <div class="mb-3">
                 <label for="google_analytics" class="form-label">{{__('adminTemplate.general.googleAnalytics')}}</label>
-                <input type="text" maxlength="15" class="form-control" id="google_analytics" name="google_analytics" placeholder="{{__('adminTemplate.general.googleAnalytics')}}" value="{{$gen->google_analytics}}">
+                <input type="text" maxlength="15" class="form-control" id="google_analytics" name="google_analytics" placeholder="{{__('adminTemplate.general.googleAnalytics')}}" value="{{$gen->google_analytics ?? ''}}">
             </div>
 
             <div class="mb-3">
