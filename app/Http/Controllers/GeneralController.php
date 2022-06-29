@@ -100,7 +100,8 @@ class GeneralController extends Controller
             'slogan' => $req->input('slogan'),
             'section' => $req->input('section'),
             'active' => true,
-            'google_analytics' => $req->input('google_analytics')
+            'google_analytics' => $req->input('google_analytics'),
+            'google_ads_script' => $req->input('google_ads_script')
         ]);
         $saved = $gen->save();
 
