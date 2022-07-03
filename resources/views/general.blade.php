@@ -54,7 +54,7 @@
             @foreach(\App\Models\SocialNetwork::all() as $sn)
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1"><img src="{{asset($sn->icon)}}" alt="{{$sn->name}}" title="{{$sn->name}}"></span>
-                <input type="url" class="form-control" name="socialnetwork[{{$sn->id}}]" placeholder="{{$sn->name}}" aria-label="{{$sn->name}}">
+                <input type="url" class="form-control" name="socialnetwork[{{$sn->id}}]" value="{{$sn->socialNetworkUrl()->where('general_id', '=', 1)->first()->url ?? ''}}" placeholder="{{$sn->name}}" aria-label="{{$sn->name}}">
             </div>
             @endforeach
         </div>

@@ -51,23 +51,12 @@ class GeneralController extends Controller
     private function saveSocialNetwork(array $socialNetwork, int $general_id) : void
     {
         foreach($socialNetwork as $id => $url){
-            $sn = SocialNetworkUrl::where('social_network_id', '=', $id)->where('general_id', '=', $general_id);
-            if($sn->count() > 0){
-                if(is_null($url)){
-                    $sn->first()->delete();
-                    continue;
-                }
-
-                $sn = $sn->first();
-                $sn->url = $url;
-                $sn->save();
-                continue;
-            }
-
             if(is_null($url))
                 continue;
 
-            $sn = new SocialNetworkUrl();
+            $sn = SocialNetworkUrl::where('social_network_id', '=', $id)->where('general_id', '=', $general_id);
+            $sn = ($sn->count() == 0) ? new SocialNetworkUrl() : $sn->first();
+
             $sn->fill([
                 'general_id' => $general_id,
                 'social_network_id' => $id,
