@@ -42,6 +42,12 @@
 
         <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
         <link href="{{asset('css/main.css')}}" rel="stylesheet">
+        @isset($gen->google_ads_script)
+        {!!$gen->google_ads_script!!}
+        @endisset
+        @isset($gen->google_optimize_script)
+        {!!$gen->google_optimize_script!!}
+        @endisset
     </head>
     <body>
         <div class="container-md">
@@ -122,10 +128,6 @@
 
             gtag('config', '{{$gen->google_analytics}}');
         </script>
-        @endisset
-
-        @isset($gen->google_ads_script)
-        {!!$gen->google_ads_script!!}
         @endisset
     </body>
 </html>

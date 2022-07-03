@@ -99,6 +99,7 @@ return [
     'general.socialTab'             => 'Redes sociais',
     'general.googleAnalytics'       => 'Google Analytics ID',
     'general.googleAds'             => 'Script do Google Ads',
+    'general.googleOptimize'        => 'Script do Google Optimize',
 
     'articleCard.createdBy'         => 'Criado por',
     'articleCard.createdTime'       => 'em',

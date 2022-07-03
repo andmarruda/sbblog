@@ -42,7 +42,12 @@
 
             <div class="mb-3">
                 <label for="google_ads_script" class="form-label">{{__('adminTemplate.general.googleAds')}}</label>
-                <textarea class="form-control" id="google_ads_script" name="google_ads_script" placeholder="{{__('adminTemplate.general.googleAds')}}" rows="3">{{$gen->google_ads_script ?? ''}}</textarea>
+                <textarea class="form-control" id="google_ads_script" rows="2" style="resize: none;" name="google_ads_script" placeholder="{{__('adminTemplate.general.googleAds')}}">{{$gen->google_ads_script ?? ''}}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="google_optimize" class="form-label">{{__('adminTemplate.general.googleOptimize')}}</label>
+                <textarea class="form-control" id="google_optimize_script" name="google_optimize_script" rows="2" style="resize: none;" placeholder="{{__('adminTemplate.general.googleOptimize')}}">{{$gen->google_optimize_script ?? ''}}</textarea>
             </div>
         </div>
         <div class="tab-pane fade" id="social" role="tabpanel" aria-labelledby="social-tab">

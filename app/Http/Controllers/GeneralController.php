@@ -101,7 +101,8 @@ class GeneralController extends Controller
             'section' => $req->input('section'),
             'active' => true,
             'google_analytics' => $req->input('google_analytics'),
-            'google_ads_script' => $req->input('google_ads_script')
+            'google_ads_script' => $req->input('google_ads_script'),
+            'google_optimize_script' => $req->input('google_optimize_script')
         ]);
         $saved = $gen->save();
 
