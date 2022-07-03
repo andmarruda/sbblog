@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
 
 return new class extends Migration
 {
@@ -21,6 +22,11 @@ return new class extends Migration
             $table->string('section', 100);
             $table->boolean('active')->default(true);
         });
+
+        Artisan::call('db:seed', [
+            '--class' => 'GeneralSeeder',
+            '--force' => true
+        ]);
     }
 
     /**

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
 
 return new class extends Migration
 {
@@ -20,6 +21,11 @@ return new class extends Migration
             $table->string('label', 50);
             $table->string('icon', 50);
         });
+
+        Artisan::call('db:seed', [
+            '--class' => 'LanguagesSeeder',
+            '--force' => true
+        ]);
     }
 
     /**

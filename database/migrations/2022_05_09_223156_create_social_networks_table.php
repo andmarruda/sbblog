@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
 
 return new class extends Migration
 {
@@ -19,6 +20,11 @@ return new class extends Migration
             $table->string('icon', 45);
             $table->string('name', 50);
         });
+
+        Artisan::call('db:seed', [
+            '--class' => 'SocialNetworksSeeder',
+            '--force' => true
+        ]);
     }
 
     /**
