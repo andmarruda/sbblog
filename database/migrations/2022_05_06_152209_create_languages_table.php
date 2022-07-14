@@ -23,7 +23,7 @@ return new class extends Migration
         });
 
         Artisan::call('db:seed', [
-            '--class' => 'LanguagesSeeder',
+            '--class' => 'LanguageSeeder',
             '--force' => true
         ]);
     }
