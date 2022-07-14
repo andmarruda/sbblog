@@ -22,7 +22,7 @@ return new class extends Migration
         });
 
         Artisan::call('db:seed', [
-            '--class' => 'SocialNetworksSeeder',
+            '--class' => 'SocialNetworkSeeder',
             '--force' => true
         ]);
     }
