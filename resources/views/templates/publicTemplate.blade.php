@@ -1,3 +1,7 @@
+@php
+    ini_set('session.cookie_httponly', 1);
+@endphp
+
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
@@ -23,10 +27,11 @@
             <meta name="twitter:title" content="{{$article->title. ' '. config('app.name')}}">
             <meta name="twitter:description" content="{{$article->description}}">
             <meta name="twitter:image" content="{{asset('storage/'. $article->cover_path)}}">
-            <title>{{$article->title. ' '. config('app.name')}}</title>
+            <title>{{$article->title}}</title>
             <link rel="stylesheet" href="{{asset('css/monokai-sublime.min.css')}}">
             <link rel="stylesheet" href="{{asset('css/quill.snow.css')}}">
         @else
+            <meta name="description" content="{{$gen->slogan}}">
             <meta property="og:title" content="{{config('app.name')}}" />
             <meta property="og:type" content="article" />
             <meta property="og:url" content="{{url('/')}}" />
