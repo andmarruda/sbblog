@@ -1,7 +1,3 @@
-@php
-    ini_set('session.cookie_httponly', 1);
-@endphp
-
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
