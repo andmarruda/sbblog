@@ -1,5 +1,5 @@
 {
-    "name": "sbblog",
+    "name": "andmarruda/sbblog",
     "type": "framework",
     "description": "Blog based laravel framework.",
     "keywords": ["framework", "laravel", "blog", "easy blog", "article", "articles"],
