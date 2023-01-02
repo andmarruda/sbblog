@@ -27,8 +27,8 @@
             <link rel="stylesheet" href="{{asset('css/monokai-sublime.min.css')}}">
             <link rel="stylesheet" href="{{asset('css/quill.snow.css')}}">
         @else
-            <meta name="description" content="{{$gen->slogan}}">
-            <meta property="og:title" content="{{config('app.name')}}" />
+            <meta name="description" content="{{$gen->description}}">
+            <meta property="og:title" content="{{$gen->title}}" />
             <meta property="og:type" content="article" />
             <meta property="og:url" content="{{url('/')}}" />
             <meta property="og:image" content="{{$gen->brand_image=='default' || !Storage::disk('public')->exists($gen->brand_image) ? asset('images/sbblog.png') : asset('storage/'. $gen->brand_image)}}" />
@@ -36,9 +36,9 @@
             <meta name="twitter:card" content="summary_large_image">
             <meta property="twitter:domain" content="{{request()->getHttpHost();}}">
             <meta property="twitter:url" content="{{url('/')}}">
-            <meta name="twitter:title" content="{{config('app.name')}}">
+            <meta name="twitter:title" content="{{$gen->title}}">
             <meta name="twitter:image" content="{{$gen->brand_image=='default' || !Storage::disk('public')->exists($gen->brand_image) ? asset('images/sbblog.png') : asset('storage/'. $gen->brand_image)}}">
-            <title>{{config('app.name')}}</title>
+            <title>{{$gen->title. ' - '. $gen->slogan}}</title>
         @endif
 
         <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
