@@ -102,6 +102,7 @@ return [
     'general.googleOptimize'        => 'Google Optimize Script',
     'general.pageTitle'             => 'Page Title',
     'general.pageDescription'       => 'Page Description',
+    'general.autoconvert_webp'      => 'Automatically convert to webp?',
 
     'articleCard.createdBy'         => 'Created by',
     'articleCard.createdTime'       => 'at',

@@ -91,7 +91,10 @@ class GeneralController extends Controller
             'active' => true,
             'google_analytics' => $req->input('google_analytics'),
             'google_ads_script' => $req->input('google_ads_script'),
-            'google_optimize_script' => $req->input('google_optimize_script')
+            'google_optimize_script' => $req->input('google_optimize_script'),
+            'title' => $req->input('page_title'),
+            'description' => $req->input('page_description'),
+            'autoconvert_webp' => $req->input('autoconvert_webp')
         ]);
         $saved = $gen->save();
 

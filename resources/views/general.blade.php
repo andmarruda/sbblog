@@ -43,6 +43,8 @@
                 <input type="file" class="form-control" id="brand_image" name="brand_image">
             </div>
 
+            @include('utils.comboActive', ['active' => $gen->autoconvert_webp ?? NULL, 'label' => __('adminTemplate.general.autoconvert_webp'), 'comboId' => 'autoconvert_webp'])
+
             <div class="mb-3">
                 <label for="google_analytics" class="form-label">{{__('adminTemplate.general.googleAnalytics')}}</label>
                 <input type="text" maxlength="15" class="form-control" id="google_analytics" name="google_analytics" placeholder="{{__('adminTemplate.general.googleAnalytics')}}" value="{{$gen->google_analytics ?? ''}}">

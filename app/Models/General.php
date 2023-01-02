@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class General extends Model
 {
     use HasFactory;
-    protected $fillable = ['brand_image', 'slogan', 'section', 'active', 'google_analytics', 'google_ads_script', 'google_optimize_script'];
+    protected $fillable = ['brand_image', 'slogan', 'section', 'active', 'google_analytics', 'google_ads_script', 'google_optimize_script', 'title', 'description', 'autoconvert_webp'];
 
     /**
      * Get all social network urls for selected general
