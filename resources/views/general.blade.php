@@ -21,6 +21,14 @@
     <div class="tab-content" id="myTabContent" style="margin-top:10px;">
         <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
             <div class="mb-3">
+                <label for="page_title" class="form-label">{{__('adminTemplate.general.pageTitle')}}</label>
+                <input type="text" maxlength="110" class="form-control" id="page_title" name="page_title" placeholder="{{__('adminTemplate.general.pageTitle')}}" required value="{{$gen->title ?? ''}}">
+            </div>
+            <div class="mb-3">
+                <label for="page_description" class="form-label">{{__('adminTemplate.general.pageDescription')}}</label>
+                <input type="text" maxlength="200" class="form-control" id="page_description" name="page_description" placeholder="{{__('adminTemplate.general.pageDescription')}}" required value="{{$gen->description ?? ''}}">
+            </div>
+            <div class="mb-3">
                 <label for="slogan" class="form-label">{{__('adminTemplate.general.form.slogan')}}</label>
                 <input type="text" maxlength="200" class="form-control" id="slogan" name="slogan" placeholder="{{__('adminTemplate.general.form.slogan')}}" required value="{{$gen->slogan ?? ''}}">
             </div>

@@ -100,6 +100,8 @@ return [
     'general.googleAnalytics'       => 'Google Analytics ID',
     'general.googleAds'             => 'Script do Google Ads',
     'general.googleOptimize'        => 'Script do Google Optimize',
+    'general.pageTitle'             => 'Título da página',
+    'general.pageDescription'       => 'Descrição da página',
 
     'articleCard.createdBy'         => 'Criado por',
     'articleCard.createdTime'       => 'em',
