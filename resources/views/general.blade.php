@@ -22,20 +22,20 @@
         <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
             <div class="mb-3">
                 <label for="page_title" class="form-label">{{__('adminTemplate.general.pageTitle')}}</label>
-                <input type="text" maxlength="110" class="form-control" id="page_title" name="page_title" placeholder="{{__('adminTemplate.general.pageTitle')}}" required value="{{$gen->title ?? ''}}">
+                <input type="text" minlength="5" maxlength="110" class="form-control" id="page_title" name="page_title" placeholder="{{__('adminTemplate.general.pageTitle')}}" required value="{{$gen->title ?? ''}}">
             </div>
             <div class="mb-3">
                 <label for="page_description" class="form-label">{{__('adminTemplate.general.pageDescription')}}</label>
-                <input type="text" maxlength="200" class="form-control" id="page_description" name="page_description" placeholder="{{__('adminTemplate.general.pageDescription')}}" required value="{{$gen->description ?? ''}}">
+                <input type="text" minlength="50" maxlength="200" class="form-control" id="page_description" name="page_description" placeholder="{{__('adminTemplate.general.pageDescription')}}" required value="{{$gen->description ?? ''}}">
             </div>
             <div class="mb-3">
                 <label for="slogan" class="form-label">{{__('adminTemplate.general.form.slogan')}}</label>
-                <input type="text" maxlength="200" class="form-control" id="slogan" name="slogan" placeholder="{{__('adminTemplate.general.form.slogan')}}" required value="{{$gen->slogan ?? ''}}">
+                <input type="text" minlength="50" maxlength="200" class="form-control" id="slogan" name="slogan" placeholder="{{__('adminTemplate.general.form.slogan')}}" required value="{{$gen->slogan ?? ''}}">
             </div>
 
             <div class="mb-3">
                 <label for="section" class="form-label">{{__('adminTemplate.general.form.niche')}} <small>{{__('adminTemplate.general.form.niche.small')}}</small></label>
-                <input type="text" maxlength="200" class="form-control" id="section" name="section" placeholder="{{__('adminTemplate.general.form.niche')}}" required value="{{$gen->section ?? ''}}">
+                <input type="text" minlength="5" maxlength="200" class="form-control" id="section" name="section" placeholder="{{__('adminTemplate.general.form.niche')}}" required value="{{$gen->section ?? ''}}">
             </div>
 
             <div class="mb-3">

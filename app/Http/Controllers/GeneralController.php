@@ -75,6 +75,14 @@ class GeneralController extends Controller
      */
     public function generalSave(Request $req)
     {
+        $req->validate([
+            'slogan'            => 'required|min:50|max:200|string',
+            'section'           => 'required|min:5|max:100|string',
+            'title'             => 'required|min:5|max:110|string',
+            'description'       => 'required|min:50|max:200|string',
+            'autoconvert_web'   => 'required'
+        ]);
+
         $filepath = $req->input('registered_file');
         if($req->hasFile('brand_image')){
             if(!$req->file('brand_image')->isValid() || !in_array($req->file('brand_image')->extension(), self::ALLOWED_EXTENSION) || $req->file('brand_image')->getSize() > self::ALLOWED_SIZE)
