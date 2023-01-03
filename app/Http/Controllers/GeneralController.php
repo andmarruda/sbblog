@@ -78,9 +78,9 @@ class GeneralController extends Controller
         $req->validate([
             'slogan'            => 'required|min:45|max:200|string',
             'section'           => 'required|min:5|max:100|string',
-            'title'             => 'required|min:5|max:110|string',
-            'description'       => 'required|min:45|max:200|string',
-            'autoconvert_web'   => 'required'
+            'page_title'        => 'required|min:5|max:110|string',
+            'page_description'  => 'required|min:45|max:200|string',
+            'autoconvert_webp'  => 'required'
         ]);
 
         $filepath = $req->input('registered_file');
