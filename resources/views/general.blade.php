@@ -26,11 +26,11 @@
             </div>
             <div class="mb-3">
                 <label for="page_description" class="form-label">{{__('adminTemplate.general.pageDescription')}}</label>
-                <input type="text" minlength="50" maxlength="200" class="form-control" id="page_description" name="page_description" placeholder="{{__('adminTemplate.general.pageDescription')}}" required value="{{$gen->description ?? ''}}">
+                <input type="text" minlength="45" maxlength="200" class="form-control" id="page_description" name="page_description" placeholder="{{__('adminTemplate.general.pageDescription')}}" required value="{{$gen->description ?? ''}}">
             </div>
             <div class="mb-3">
                 <label for="slogan" class="form-label">{{__('adminTemplate.general.form.slogan')}}</label>
-                <input type="text" minlength="50" maxlength="200" class="form-control" id="slogan" name="slogan" placeholder="{{__('adminTemplate.general.form.slogan')}}" required value="{{$gen->slogan ?? ''}}">
+                <input type="text" minlength="45" maxlength="200" class="form-control" id="slogan" name="slogan" placeholder="{{__('adminTemplate.general.form.slogan')}}" required value="{{$gen->slogan ?? ''}}">
             </div>
 
             <div class="mb-3">
@@ -77,6 +77,8 @@
             @include('utils.alertDanger', ['message' => __('adminTemplate.general.errmessage')])
         @endif
     @endisset
+
+    @include('utils.alertError')
 
     <div class="mb-3">
         <button type="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> {{__('adminTemplate.form.btn.save')}}</button>

@@ -76,10 +76,10 @@ class GeneralController extends Controller
     public function generalSave(Request $req)
     {
         $req->validate([
-            'slogan'            => 'required|min:50|max:200|string',
+            'slogan'            => 'required|min:45|max:200|string',
             'section'           => 'required|min:5|max:100|string',
             'title'             => 'required|min:5|max:110|string',
-            'description'       => 'required|min:50|max:200|string',
+            'description'       => 'required|min:45|max:200|string',
             'autoconvert_web'   => 'required'
         ]);
 
