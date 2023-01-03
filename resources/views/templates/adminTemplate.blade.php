@@ -46,7 +46,7 @@
                                         <ul class="dropdown-menu" aria-labelledby="navbarConfiguration">
                                             <li><a class="dropdown-item" href="{{route('admin.user')}}">{{__('adminTemplate.menu.config.user')}}</a></li>
                                             <li><a class="dropdown-item" href="javascript: void(0);" data-bs-toggle="modal" data-bs-target="#modalChangePass">{{__('adminTemplate.menu.config.password')}}</a></li>
-                                            <li><a class="dropdown-item" href="{{route('admin.general')}}">{{__('adminTemplate.menu.config.general')}}</a></li>
+                                            <li><a class="dropdown-item" href="{{route('general.edit', 1)}}">{{__('adminTemplate.menu.config.general')}}</a></li>
                                         </ul>
                                     </li>
 

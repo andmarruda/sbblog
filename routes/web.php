@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\ArticleController;
+use \App\Http\Controllers\GeneralController;
+use \App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +28,7 @@ Route::post('/visitEnd', '\App\Http\Controllers\ArticleController@articleVisitEn
 
 Route::prefix('/admin')->group(function() {
     //Navigation
-    Route::get('/', '\App\Http\Controllers\AdminController@loginInterface')->name('admin.login');
+    Route::get('/', [AdminController::class, 'loginInterface'])->name('admin.login');
 
     //user
     Route::get('/user/{id?}', '\App\Http\Controllers\UserController@userInterface')->where('id', '[0-9]+')->name('admin.user');
@@ -39,9 +41,7 @@ Route::prefix('/admin')->group(function() {
     Route::post('/checkLogin', '\App\Http\Controllers\UserController@login')->name('admin.checkLogin');
     Route::get('/logout', '\App\Http\Controllers\UserController@logout')->name('admin.logout');
 
-    //general configuration
-    Route::get('/general', '\App\Http\Controllers\GeneralController@generalInterface')->name('admin.general')->middleware('sbauth');;
-    Route::post('/generalPost', '\App\Http\Controllers\GeneralController@generalSave')->name('admin.generalPost')->middleware('sbauth');;
+    Route::resource('general', GeneralController::class);
 
     //With sbauth middleware
     Route::get('/dashboard', '\App\Http\Controllers\AdminController@dashboardInterface')->name('admin.dashboard')->middleware('sbauth');

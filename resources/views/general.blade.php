@@ -1,9 +1,12 @@
 @extends('templates.adminTemplate')
 
 @section('page')
-<form method="post" action="{{route('admin.generalPost')}}" style="margin-top:30px;" autocomplete="off" enctype="multipart/form-data">
-    <input type="hidden" name="registered_file" id="registered_file" value="{{$gen->brand_image ?? ''}}">
+<form method="post" action="{{route('general.store')}}" style="margin-top:30px;" autocomplete="off" enctype="multipart/form-data">
     @csrf
+    @isset($gen)
+    @method('PUT')
+    @endisset
+
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item active" aria-current="page">{{__('adminTemplate.general.title')}}</li>

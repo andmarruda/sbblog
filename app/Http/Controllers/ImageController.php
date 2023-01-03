@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
+use \Sysborg\btd;
 use SplFileInfo;
 
 class ImageController extends Controller
@@ -42,6 +43,22 @@ class ImageController extends Controller
         'name'  => NULL,
         'file'  => NULL
     ];
+
+    /**
+     * Add file validation to the entry of validation and input desired
+     * @version     1.0.0
+     * @author      Anderson Arruda < contato@sysborg.com.br >
+     * @param       array $validate
+     * @param       string $fielname
+     * @return      array
+     */
+    public static function validateFile(array $validate, string $fielname) : array
+    {
+        return [
+            ...$validate,
+            $fielname => 'required|max:'. self::ALLOWED_SIZE. '|mimes:'. btd::implodeAllowedExtensions(',')
+        ];
+    }
 
     /**
      * Set uploaded file and check if it's valid after this converts to webp format

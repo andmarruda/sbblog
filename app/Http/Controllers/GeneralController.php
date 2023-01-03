@@ -4,111 +4,77 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\General;
-use App\Models\SocialNetwork;
-use App\Models\SocialNetworkUrl;
 
 class GeneralController extends Controller
 {
     /**
-     * Allowed file extension
-     * @var             array
+     * Data validations
+     * var      array
      */
-    CONST ALLOWED_EXTENSION = ['jpg', 'jpeg', 'bmp', 'gif', 'png', 'webp'];
+    private array $validations = [
+        'slogan'            => 'required|min:45|max:200|string',
+        'section'           => 'required|min:5|max:100|string',
+        'page_title'        => 'required|min:5|max:110|string',
+        'page_description'  => 'required|min:45|max:200|string',
+        'autoconvert_webp'  => 'required'
+    ];
 
     /**
-     * Allowd max file size
-     * @var             int
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
      */
-    CONST ALLOWED_SIZE = 1500000;
-
-    /**
-     * Gererates the interface of General configuration form
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           ?string $message
-     * @return          view
-     */
-    public function generalInterface(?string $message=NULL, ?bool $saved=NULL)
+    public function create()
     {
-        $attrs = ['gen' => General::find(1)];
-        if(!is_null($message))
-            $attrs['message'] = $message;
-
-        if(!is_null($saved))
-            $attrs['saved'] = $saved;
-
-        return view('general', $attrs);
+        return view('general');
     }
 
     /**
-     * Saves all the URL passed for social networks
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           array $socialNetwork
-     * @param           int $general_id
-     * @return          void
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    private function saveSocialNetwork(array $socialNetwork, int $general_id) : void
+    public function store(Request $request)
     {
-        foreach($socialNetwork as $id => $url){
-            if(is_null($url))
-                continue;
-
-            $sn = SocialNetworkUrl::where('social_network_id', '=', $id)->where('general_id', '=', $general_id);
-            $sn = ($sn->count() == 0) ? new SocialNetworkUrl() : $sn->first();
-
-            $sn->fill([
-                'general_id' => $general_id,
-                'social_network_id' => $id,
-                'url' => $url
-            ]);
-            $sn->save();
-        }
+        $request->validate($this->validations);
     }
 
     /**
-     * Saves the general configuration
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           Request $req
-     * @return          view
+     * Display the specified resource.
+     *
+     * @param  General $general
+     * @return \Illuminate\Http\Response
      */
-    public function generalSave(Request $req)
+    public function show(General $general)
     {
-        $req->validate([
-            'slogan'            => 'required|min:45|max:200|string',
-            'section'           => 'required|min:5|max:100|string',
-            'page_title'        => 'required|min:5|max:110|string',
-            'page_description'  => 'required|min:45|max:200|string',
-            'autoconvert_webp'  => 'required'
-        ]);
+        return $general;
+    }
 
-        $filepath = $req->input('registered_file');
-        if($req->hasFile('brand_image')){
-            if(!$req->file('brand_image')->isValid() || !in_array($req->file('brand_image')->extension(), self::ALLOWED_EXTENSION) || $req->file('brand_image')->getSize() > self::ALLOWED_SIZE)
-                return $this->generalInterface(__('adminTemplate.general.imageError'), false);
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  General $general
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(General $general)
+    {
+        return view('general', ['gen' => $general]);
+    }
 
-            $filepath = basename($req->file('brand_image')->store('public'));
-        }
-
-        $gen = General::find(1);
-        $gen->fill([
-            'brand_image' => $filepath,
-            'slogan' => $req->input('slogan'),
-            'section' => $req->input('section'),
-            'active' => true,
-            'google_analytics' => $req->input('google_analytics'),
-            'google_ads_script' => $req->input('google_ads_script'),
-            'google_optimize_script' => $req->input('google_optimize_script'),
-            'title' => $req->input('page_title'),
-            'description' => $req->input('page_description'),
-            'autoconvert_webp' => $req->input('autoconvert_webp')
-        ]);
-        $saved = $gen->save();
-
-        if(!is_null($req->input('socialnetwork')))
-            $this->saveSocialNetwork($req->input('socialnetwork'), $gen->id);
-
-        return $this->generalInterface(saved: $saved);
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  General $general
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, General $general)
+    {
+        $filepath = $general->brand_image;
+        if($request->hasFile('brand_image') && $request->file('brand_image')->isValid()){
+            $request->validate(ImageController::validateFile($this->validations, 'brand_image'));
+        } else
+            $request->validate($this->validations);
     }
 }
