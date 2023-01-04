@@ -83,6 +83,18 @@ class ImageController extends Controller
     }
 
     /**
+     * Remove exists file
+     * @version     1.0.0
+     * @author      Anderson Arruda < contato@sysborg.com.br >
+     * @param       string $file      
+     * @return      bool
+     */
+    public static function deleteFile(string $file) : bool
+    {
+        return File::delete($file);
+    }
+
+    /**
      * Set uploaded file and check if it's valid after this converts to webp format
      * @version     1.0.0
      * @author      Anderson Arruda < andmarruda@gmail.com >

@@ -106,6 +106,7 @@ class GeneralController extends Controller
             $extension = $request->file('brand_image')->extension();
             $stored = $request->file('brand_image')->store('public');
             $filepath = ($request->input('autoconvert_webp')) ? ImageController::imageToWebp($stored, $extension, true) : $stored;
+            ImageController::deleteFile($general->brand_image);
         } else
             $request->validate($this->validations);
 
@@ -126,6 +127,6 @@ class GeneralController extends Controller
         if(!is_null($request->input('socialnetwork')))
             $this->saveSocialNetwork($request->input('socialnetwork'), $general->id);
 
-        return redirect()->route('general.edit')->with('saved', $saved);
+        return redirect()->route('general.edit', $general->id)->with('saved', $saved);
     }
 }

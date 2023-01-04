@@ -73,13 +73,9 @@
         </div>
     </div>
 
-    @isset($saved)
-        @if($saved)
-            @include('utils.alertSuccess', ['message' => __('adminTemplate.general.okmessage')])
-        @else
-            @include('utils.alertDanger', ['message' => __('adminTemplate.general.errmessage')])
-        @endif
-    @endisset
+    @if(!is_null(session('saved')))
+        @include('utils.alertSuccess', ['message' => __('adminTemplate.general.okmessage')])
+    @endif
 
     @include('utils.alertError')
 
