@@ -39,7 +39,7 @@ Route::prefix('/admin')->middleware('sbauth')->group(function() {
     Route::post('/userSearch', '\App\Http\Controllers\UserController@userSearch')->name('admin.userSearch');
     Route::post('/userAlterPass', '\App\Http\Controllers\UserController@alterPassword')->name('admin.userAlterPass');
 
-    Route::resource('general', GeneralController::class);
+    Route::resource('general', GeneralController::class)->only(['edit', 'update']);
 
     //With sbauth middleware
     Route::get('/dashboard', '\App\Http\Controllers\AdminController@dashboardInterface')->name('admin.dashboard');

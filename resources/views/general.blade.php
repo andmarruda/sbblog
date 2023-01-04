@@ -7,11 +7,7 @@
     @method('PUT')
     @endisset
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">{{__('adminTemplate.general.title')}}</li>
-        </ol>
-    </nav>
+    @include('utils.breadcrumb', ['title' => __('adminTemplate.general.title')])
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">

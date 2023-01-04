@@ -2,11 +2,7 @@
 
 @section('page')
 <form method="post" action="{{route('admin.categoryPost')}}" style="margin-top:30px;" autocomplete="off">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">{{__('adminTemplate.category.title')}}</li>
-        </ol>
-    </nav>
+    @include('utils.breadcrumb', ['title' => __('adminTemplate.category.title')])
 
     @csrf
     <input type="hidden" name="id" id="id" value="{{$cat->id ?? ''}}">
@@ -18,13 +14,11 @@
 
     @include('utils.comboActive', ['active' => $cat->active ?? NULL])
 
-    @isset($saved)
-        @if($saved)
-            @include('utils.alertSuccess', ['message' => __('adminTemplate.category.okmessage')])
-        @else
-            @include('utils.alertDanger', ['message' => __('adminTemplate.category.errmessage')])
-        @endif
-    @endisset
+    @if(!is_null(session('saved')))
+        @include('utils.alertSuccess', ['message' => __('adminTemplate.category.okmessage')])
+    @endif
+
+    @include('utils.alertError')
 
     <div class="mb-3">
         <button type="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> {{__('adminTemplate.form.btn.save')}}</button>
