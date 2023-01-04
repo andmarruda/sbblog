@@ -10,18 +10,6 @@ use App\Models\SocialNetworkUrl;
 class GeneralController extends Controller
 {
     /**
-     * Allowed file extension
-     * @var             array
-     */
-    CONST ALLOWED_EXTENSION = ['jpg', 'jpeg', 'bmp', 'gif', 'png', 'webp'];
-
-    /**
-     * Allowd max file size
-     * @var             int
-     */
-    CONST ALLOWED_SIZE = 1500000;
-
-    /**
      * Gererates the interface of General configuration form
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
@@ -75,23 +63,6 @@ class GeneralController extends Controller
      */
     public function generalSave(Request $req)
     {
-        $req->validate([
-            'slogan'            => 'required|min:45|max:200|string',
-            'section'           => 'required|min:5|max:100|string',
-            'page_title'        => 'required|min:5|max:110|string',
-            'page_description'  => 'required|min:45|max:200|string',
-            'autoconvert_webp'  => 'required'
-        ]);
-
-        $filepath = $req->input('registered_file');
-        if($req->hasFile('brand_image')){
-            if(!$req->file('brand_image')->isValid() || !in_array($req->file('brand_image')->extension(), self::ALLOWED_EXTENSION) || $req->file('brand_image')->getSize() > self::ALLOWED_SIZE)
-                return $this->generalInterface(__('adminTemplate.general.imageError'), false);
-
-            $filepath = basename($req->file('brand_image')->store('public'));
-        }
-
-        $gen = General::find(1);
         $gen->fill([
             'brand_image' => $filepath,
             'slogan' => $req->input('slogan'),

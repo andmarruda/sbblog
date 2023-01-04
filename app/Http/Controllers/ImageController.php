@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
-use \Sysborg\btd;
+use Illuminate\Support\Facades\File;
+use sysborg\btd;
 use SplFileInfo;
 
 class ImageController extends Controller
@@ -58,6 +59,27 @@ class ImageController extends Controller
             ...$validate,
             $fielname => 'required|max:'. self::ALLOWED_SIZE. '|mimes:'. btd::implodeAllowedExtensions(',')
         ];
+    }
+
+    /**
+     * Convert file to webp
+     * @version     1.0.0
+     * @author      Anderson Arruda < contato@sysborg.com.br >
+     * @param       string $filepath
+     * @param       bool $deleteOriginal
+     * @return      string
+     */
+    public static function imageToWebp(string $file, string $originalExtension, bool $deleteOriginal) : string
+    {
+        $filepath = Storage::path($file);
+        $b = new btd($filepath);
+        $newfile = str_replace('.'. $originalExtension, '.webp', $filepath);
+        $b->save($newfile, 'webp');
+
+        if($deleteOriginal)
+            File::delete($file);
+
+        return str_replace('.'. $originalExtension, '.webp', $file);
     }
 
     /**

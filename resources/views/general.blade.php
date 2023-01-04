@@ -1,7 +1,7 @@
 @extends('templates.adminTemplate')
 
 @section('page')
-<form method="post" action="{{route('general.store')}}" style="margin-top:30px;" autocomplete="off" enctype="multipart/form-data">
+<form method="post" action="{{isset($gen) ? route('general.update', $gen->id) : route('general.store')}}" style="margin-top:30px;" autocomplete="off" enctype="multipart/form-data">
     @csrf
     @isset($gen)
     @method('PUT')

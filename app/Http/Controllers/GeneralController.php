@@ -74,6 +74,10 @@ class GeneralController extends Controller
         $filepath = $general->brand_image;
         if($request->hasFile('brand_image') && $request->file('brand_image')->isValid()){
             $request->validate(ImageController::validateFile($this->validations, 'brand_image'));
+            $extension = $request->file('brand_image')->extension();
+            $filepath = ImageController::imageToWebp($request->file('brand_image')->store('public'), $extension, true);
+            var_dump('a: '. $filepath); die;
+
         } else
             $request->validate($this->validations);
     }
