@@ -9,6 +9,16 @@ use App\Http\Controllers\UserController;
 class Auth
 {
     /**
+     * Routes name that are exceptions
+     * @var         array
+     */
+    private array $except = [
+        'admin.login',
+        'admin.logout',
+        'admin.checkLogin'
+    ];
+
+    /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -17,12 +27,14 @@ class Auth
      */
     public function handle(Request $request, Closure $next)
     {
-        $uc = new UserController();
-        if(!$uc->isLogged())
-            return $uc->redirectLoginAdmin();
+        if(!in_array($request->route()->getName(), $this->except)){
+            $uc = new UserController();
+            if(!$uc->isLogged())
+                return $uc->redirectLoginAdmin();
 
-        if($uc->isConfigUser())
-            return $uc->redirectFirstUser();
+            if($uc->isConfigUser())
+                return $uc->redirectFirstUser();
+        }
 
         return $next($request);
     }

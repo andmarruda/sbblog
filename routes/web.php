@@ -26,36 +26,34 @@ Route::post('/article', '\App\Http\Controllers\PublicController@articlePageComme
 Route::post('/visitInit', '\App\Http\Controllers\ArticleController@articleVisitInit')->name('visitInit');
 Route::post('/visitEnd', '\App\Http\Controllers\ArticleController@articleVisitEnd')->name('visitEnd');
 
-Route::prefix('/admin')->group(function() {
-    //Navigation
+Route::prefix('/admin')->middleware('sbauth')->group(function() {
+    //exceptions of middleware
     Route::get('/', [AdminController::class, 'loginInterface'])->name('admin.login');
+    Route::post('/checkLogin', '\App\Http\Controllers\UserController@login')->name('admin.checkLogin');
+    Route::get('/logout', '\App\Http\Controllers\UserController@logout')->name('admin.logout');
 
     //user
     Route::get('/user/{id?}', '\App\Http\Controllers\UserController@userInterface')->where('id', '[0-9]+')->name('admin.user');
     Route::get('/changeLang/{id}', '\App\Http\Controllers\UserController@setPreferredLang')->where('id', '[0-9]+')->name('admin.changeLang');
     Route::post('/user', '\App\Http\Controllers\UserController@userFormPost')->name('admin.userPost');
-    Route::post('/userSearch', '\App\Http\Controllers\UserController@userSearch')->name('admin.userSearch')->middleware('sbauth');
-    Route::post('/userAlterPass', '\App\Http\Controllers\UserController@alterPassword')->name('admin.userAlterPass')->middleware('sbauth');
-
-    //Login && Logout
-    Route::post('/checkLogin', '\App\Http\Controllers\UserController@login')->name('admin.checkLogin');
-    Route::get('/logout', '\App\Http\Controllers\UserController@logout')->name('admin.logout');
+    Route::post('/userSearch', '\App\Http\Controllers\UserController@userSearch')->name('admin.userSearch');
+    Route::post('/userAlterPass', '\App\Http\Controllers\UserController@alterPassword')->name('admin.userAlterPass');
 
     Route::resource('general', GeneralController::class);
 
     //With sbauth middleware
-    Route::get('/dashboard', '\App\Http\Controllers\AdminController@dashboardInterface')->name('admin.dashboard')->middleware('sbauth');
+    Route::get('/dashboard', '\App\Http\Controllers\AdminController@dashboardInterface')->name('admin.dashboard');
 
     //Article
-    Route::get('/articleList', '\App\Http\Controllers\ArticleController@articleListInterface')->name('admin.articleList')->middleware('sbauth');
+    Route::get('/articleList', '\App\Http\Controllers\ArticleController@articleListInterface')->name('admin.articleList');
     Route::post('/articleList', '\App\Http\Controllers\ArticleController@articleListInterfaceSearch')->middleware('sbauth');
-    Route::get('/newArticle/{id?}', '\App\Http\Controllers\ArticleController@articleFormInterface')->where('id', '[0-9]+')->name('admin.newArticle')->middleware('sbauth');
-    Route::post('/newArticle', '\App\Http\Controllers\ArticleController@articleFormPost')->name('admin.newArticlePost')->middleware('sbauth');
-    Route::post('/article/comment/enable-disable', [ArticleController::class, 'enableDisableComment'])->name('admin.article.comment.action')->middleware('sbauth');
-    Route::get('/article/convertWebp/{id}', [ArticleController::class, 'convertWebp'])->where('id', '[0-9]+')->name('admin.article.convertWebp')->middleware('sbauth');
+    Route::get('/newArticle/{id?}', '\App\Http\Controllers\ArticleController@articleFormInterface')->where('id', '[0-9]+')->name('admin.newArticle');
+    Route::post('/newArticle', '\App\Http\Controllers\ArticleController@articleFormPost')->name('admin.newArticlePost');
+    Route::post('/article/comment/enable-disable', [ArticleController::class, 'enableDisableComment'])->name('admin.article.comment.action');
+    Route::get('/article/convertWebp/{id}', [ArticleController::class, 'convertWebp'])->where('id', '[0-9]+')->name('admin.article.convertWebp');
 
     //Category
-    Route::get('/category/{id?}', '\App\Http\Controllers\CategoryController@categoryInterface')->where('id', '[0-9]+')->name('admin.category')->middleware('sbauth');
-    Route::post('/categorySearch', '\App\Http\Controllers\CategoryController@categorySearch')->name('admin.categorySearch')->middleware('sbauth');
-    Route::post('/category', '\App\Http\Controllers\CategoryController@categoryFormPost')->name('admin.categoryPost')->middleware('sbauth');
+    Route::get('/category/{id?}', '\App\Http\Controllers\CategoryController@categoryInterface')->where('id', '[0-9]+')->name('admin.category');
+    Route::post('/categorySearch', '\App\Http\Controllers\CategoryController@categorySearch')->name('admin.categorySearch');
+    Route::post('/category', '\App\Http\Controllers\CategoryController@categoryFormPost')->name('admin.categoryPost');
 });
