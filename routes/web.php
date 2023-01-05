@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\ArticleController;
 use \App\Http\Controllers\GeneralController;
 use \App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,7 @@ Route::prefix('/admin')->middleware('sbauth')->group(function() {
     Route::post('/userAlterPass', '\App\Http\Controllers\UserController@alterPassword')->name('admin.userAlterPass');
 
     Route::resource('general', GeneralController::class)->only(['edit', 'update']);
+    Route::resource('category', CategoryController::class)->except(['destroy', 'show']);
 
     //With sbauth middleware
     Route::get('/dashboard', '\App\Http\Controllers\AdminController@dashboardInterface')->name('admin.dashboard');
@@ -52,8 +54,7 @@ Route::prefix('/admin')->middleware('sbauth')->group(function() {
     Route::post('/article/comment/enable-disable', [ArticleController::class, 'enableDisableComment'])->name('admin.article.comment.action');
     Route::get('/article/convertWebp/{id}', [ArticleController::class, 'convertWebp'])->where('id', '[0-9]+')->name('admin.article.convertWebp');
 
-    //Category
-    Route::get('/category/{id?}', '\App\Http\Controllers\CategoryController@categoryInterface')->where('id', '[0-9]+')->name('admin.category');
+    /*Route::get('/category/{id?}', '\App\Http\Controllers\CategoryController@categoryInterface')->where('id', '[0-9]+')->name('admin.category');
     Route::post('/categorySearch', '\App\Http\Controllers\CategoryController@categorySearch')->name('admin.categorySearch');
-    Route::post('/category', '\App\Http\Controllers\CategoryController@categoryFormPost')->name('admin.categoryPost');
+    Route::post('/category', '\App\Http\Controllers\CategoryController@categoryFormPost')->name('admin.categoryPost');*/
 });

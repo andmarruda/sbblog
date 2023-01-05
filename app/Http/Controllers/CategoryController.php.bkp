@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use \App\Models\Category;
+use \App\Models\Util;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+
+class CategoryController extends Controller
+{
+    /**
+     * List all category ordered by name
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @param           
+     * @return          \Illuminate\Database\Eloquent\Collection<int, static>
+     */
+    public function getAll()
+    {
+        return Category::all()->sortBy('category');
+    }
+
+    /**
+     * List all activated category ordered by name
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @param           
+     * @return          \Illuminate\Database\Eloquent\Collection<int, static>
+     */
+    public function getAllActivated()
+    {
+        return Category::where('active', '=', true)->orderBy('category')->get();
+    }
+
+    /**
+     * Search categories
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @param           Request $req
+     * @return          NEVER JSON
+     */
+    public function categorySearch(Request $req)
+    {
+        $c = Category::where('category', 'ILIKE', '%'. $req->input('categorySearch'). '%')->get();
+        header('Content-Type: application/json; charset=utf-8');
+        echo $c->toJson();
+    }
+}

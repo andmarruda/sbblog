@@ -2,31 +2,108 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
-use \App\Models\Category;
 use \App\Models\Util;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 class CategoryController extends Controller
 {
     /**
-     * Gererates the interface of Category form and search
-     * 
-     * @return view
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function categoryInterface(?int $id=NULL)
+    public function index()
     {
-        if(!is_null($id)){
-            $c = Category::find($id);
-            $attrs = $c->count() > 0 ? ['cat' => $c] : [];
-        }
-        return view('category', $attrs ?? []);
+        //
+    }
+
+    /**
+     * Sets informations from form to model
+     * @author  Anderson Arruda < contato@sysborg.com.br >
+     * @param   Category $category
+     * @param   Request $request
+     * @return  void
+     */
+    private function fill(Category &$category, Request $request) : void
+    {
+        $category->fill([
+            'color' => is_null($request->input('id')) ? $this->generatesRandomColor() : $category->color,
+            'active' => $request->input('active'),
+            'category' => $request->input('categoryName'),
+            'user_id' => 1
+        ]);
+    }
+
+    /**
+     * Generate new site map
+     * @author  Anderson Arruda < contato@sysborg.com.br >
+     * @param   
+     * @return  void
+     */
+    private function sitemap() : void
+    {
+        $sm = new SiteMapController();
+        $sm->generate();
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('category');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request) : \Illuminate\Http\RedirectResponse
+    {
+        $category = new Category();
+        $this->fill($category, $request);
+        $saved = $category->save();
+        $this->sitemap();
+
+        return redirect()->route('category.create')->with('saved', $saved);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  Category $category
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Category $category)
+    {
+        return view('category', ['cat' => $category]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Category $category
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Category $category)
+    {
+        $this->fill($category, $request);
+        $saved = $category->save();
+        $this->sitemap();
+
+        return redirect()->route('category.edit', $category->id)->with('saved', $saved);
     }
 
     /**
      * Generates a random color to the category
      * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @author          Anderson Arruda < contato@sysborg.com.br >
      * @param           
      * @return          string
      */
@@ -40,69 +117,5 @@ class CategoryController extends Controller
         }
 
         return $rand;
-    }
-
-    /**
-     * List all category ordered by name
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          \Illuminate\Database\Eloquent\Collection<int, static>
-     */
-    public function getAll()
-    {
-        return Category::all()->sortBy('category');
-    }
-
-    /**
-     * List all activated category ordered by name
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          \Illuminate\Database\Eloquent\Collection<int, static>
-     */
-    public function getAllActivated()
-    {
-        return Category::where('active', '=', true)->orderBy('category')->get();
-    }
-
-    /**
-     * When trys to save the value from form
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           Request $req
-     * @return          view
-     */
-    public function categoryFormPost(Request $req)
-    {
-        $c = is_null($req->input('id')) ? new Category() : Category::find($req->input('id'));
-        $c->fill([
-            'color' => is_null($req->input('id')) ? $this->generatesRandomColor() : $c->color,
-            'active' => $req->input('active'),
-            'category' => $req->input('categoryName'),
-            'user_id' => 1
-        ]);
-
-        $saved = $c->save();
-
-        //generates and send site map to google
-        $sm = new SiteMapController();
-        $sm->generate();
-
-        return view('category', ['saved' => $saved]);
-    }
-
-    /**
-     * Search categories
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           Request $req
-     * @return          NEVER JSON
-     */
-    public function categorySearch(Request $req)
-    {
-        $c = Category::where('category', 'ILIKE', '%'. $req->input('categorySearch'). '%')->get();
-        header('Content-Type: application/json; charset=utf-8');
-        echo $c->toJson();
     }
 }
