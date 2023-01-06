@@ -41,7 +41,7 @@ Route::prefix('/admin')->middleware('sbauth')->group(function() {
     Route::post('/userAlterPass', '\App\Http\Controllers\UserController@alterPassword')->name('admin.userAlterPass');
 
     Route::resource('general', GeneralController::class)->only(['edit', 'update']);
-    Route::resource('category', CategoryController::class)->except(['destroy', 'show']);
+    Route::resource('category', CategoryController::class)->except(['show']);
 
     //With sbauth middleware
     Route::get('/dashboard', '\App\Http\Controllers\AdminController@dashboardInterface')->name('admin.dashboard');

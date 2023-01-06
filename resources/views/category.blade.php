@@ -14,8 +14,6 @@
         <input type="text" maxlength="50" class="form-control" id="categoryName" name="categoryName" placeholder="{{__('adminTemplate.category.form.label')}}" required value="{{$cat->category ?? ''}}">
     </div>
 
-    @include('utils.comboActive', ['active' => $cat->active ?? NULL])
-
     @if(!is_null(session('saved')))
         @include('utils.alertSuccess', ['message' => __('adminTemplate.category.okmessage')])
     @endif

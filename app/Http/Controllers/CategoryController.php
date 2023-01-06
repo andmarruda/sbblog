@@ -101,6 +101,19 @@ class CategoryController extends Controller
     }
 
     /**
+     * Remove the specified resource from storage.
+     * 
+     * @param   int $id
+     * @return  \Illuminate\Http\Response
+     */
+    public function destroy(int $id)
+    {
+        $category = Category::withTrashed()->find($id);
+        is_null($category->deleted_at) ? $category->delete() : $category->restore();
+        return redirect()->route('category.index');
+    }
+
+    /**
      * Generates a random color to the category
      * @version         1.0.0
      * @author          Anderson Arruda < contato@sysborg.com.br >

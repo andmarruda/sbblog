@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use DOMDocument;
 use Illuminate\Http\Request;
 
@@ -82,8 +83,7 @@ class SiteMapController extends Controller
      */
     private function allCategory(\DOMElement &$urlset) : void
     {
-        $all = (new CategoryController())->getAllActivated();
-        foreach($all as $cat){
+        foreach(Category::get() as $cat){
             $this->urlTag(route('latestPageCategory', ['category' => $cat->category, 'id' => $cat->id]), date('Y-m-d', strtotime($cat->article()->max('updated_at'))), $urlset);
         }
     }
