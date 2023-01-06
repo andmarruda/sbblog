@@ -67,12 +67,13 @@ return [
     'dashboard.article.latest'      => 'Últimos artigos',
 
     'category.title'		        => 'Categoria',
+    'category.index.title'          => 'Categorias',
     'category.form.label'		    => 'Categoria',
     'category.okmessage'		    => 'Categoria salva com sucesso!',
     'category.errmessage'		    => 'Erro ao salvar a categoria!',
-    'category.modal.title'		    => 'Pesquisar categoria',
-    'category.modal.input'		    => 'Categoria',
-    'category.modal.tab.label'      => 'Categoria',
+    'category.list.name'            => 'Categoria',
+    'category.list.action'          => 'Ações',
+    'category.list.disabled'        => 'Desabilitado?',
 
     'user.title'                    => 'Usuário',
     'user.firstUser.advice'         => 'Para maior segurança do sistema, crie um novo usuário! Após isso o sistema irá desativar o usuário de configuração!',

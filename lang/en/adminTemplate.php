@@ -67,12 +67,13 @@ return [
     'dashboard.article.latest'      => 'Latest Articles',
 
     'category.title'		        => 'Category',
+    'category.index.title'          => 'Categories',
     'category.form.label'		    => 'Category',
     'category.okmessage'		    => 'Category saved successfully!',
     'category.errmessage'		    => 'Error saving category!',
-    'category.modal.title'		    => 'Search category',
-    'category.modal.input'		    => 'Category',
-    'category.modal.tab.label'      => 'Category',
+    'category.list.name'            => 'Category',
+    'category.list.action'          => 'Actions',
+    'category.list.disabled'        => 'Disabled?',
 
     'user.title'                    => 'User',
     'user.firstUser.advice'         => 'To increase system\'s security, create a new user! After this the system will disable the configuration user!',

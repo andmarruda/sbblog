@@ -15,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $all = Category::withTrashed()->get()->sortBy('category');
+        return view('category-list', ['category' => $all]);
     }
 
     /**
@@ -29,7 +30,6 @@ class CategoryController extends Controller
     {
         $category->fill([
             'color' => is_null($request->input('id')) ? $this->generatesRandomColor() : $category->color,
-            'active' => $request->input('active'),
             'category' => $request->input('categoryName'),
             'user_id' => 1
         ]);
