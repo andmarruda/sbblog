@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Category extends Model
 {
     use HasFactory;
-    protected $fillable = ['category', 'active', 'color', 'user_id'];
+    use SoftDeletes;
+
+    protected $fillable = ['category', 'color', 'user_id'];
 
     /**
      * Get average time of staying at this article
