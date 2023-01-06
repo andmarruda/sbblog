@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\General;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class PublicController extends Controller
 {
@@ -16,8 +17,7 @@ class PublicController extends Controller
      */
     private function basicInfo() : array
     {
-        $c = new CategoryController();
-        return ['category' => $c->getAllActivated(), 'gen' => General::find(1)];
+        return ['category' => Category::all(), 'gen' => General::find(1)];
     }
 
     /**
