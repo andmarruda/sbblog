@@ -19,6 +19,16 @@
     </ul>
     <div class="tab-content" id="myTabContent" style="margin-top:10px;">
         <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+            <div class="row align-items-center mb-3">
+                <div class="col-md-2">
+                    <img src="{{asset('storage/'. $gen->getBrandImage())}}" class="img-thumbnail" alt="{{__('adminTemplate.general.brandImage')}}" id="img-preview" style="max-width:150px !important; max-height:200px !important;">
+                </div>
+                <div class="col">
+                    <label for="brand_image" class="form-label">{{__('adminTemplate.general.brandImage')}}</label>
+                    <input type="file" class="form-control" id="brand_image" name="brand_image">
+                </div>
+            </div>
+
             <div class="mb-3">
                 <label for="page_title" class="form-label">{{__('adminTemplate.general.pageTitle')}}</label>
                 <input type="text" minlength="5" maxlength="110" class="form-control" id="page_title" name="page_title" placeholder="{{__('adminTemplate.general.pageTitle')}}" required value="{{$gen->title ?? ''}}">
@@ -35,11 +45,6 @@
             <div class="mb-3">
                 <label for="section" class="form-label">{{__('adminTemplate.general.form.niche')}} <small>{{__('adminTemplate.general.form.niche.small')}}</small></label>
                 <input type="text" minlength="5" maxlength="200" class="form-control" id="section" name="section" placeholder="{{__('adminTemplate.general.form.niche')}}" required value="{{$gen->section ?? ''}}">
-            </div>
-
-            <div class="mb-3">
-                <label for="brand_image" class="form-label">{{__('adminTemplate.general.brandImage')}}</label>
-                <input type="file" class="form-control" id="brand_image" name="brand_image">
             </div>
 
             <div class="mb-3">
@@ -88,4 +93,12 @@
         <button type="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> {{__('adminTemplate.form.btn.save')}}</button>
     </div>
 </form>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('brand_image').addEventListener('change', (event) => {
+            previewImage(event, 'img-preview');
+        });
+    });
+</script>
 @endsection

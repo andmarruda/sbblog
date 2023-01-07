@@ -46,3 +46,7 @@ const loadForm = (url, event) => {
 const getColumn = (arr, columnName) => {
     return arr.map((item => item[columnName]));
 };
+
+const previewImage = ({target}, img_id) => {
+    document.getElementById(img_id).src = URL.createObjectURL(target.files[0]);
+};

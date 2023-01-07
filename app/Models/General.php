@@ -21,4 +21,16 @@ class General extends Model
      {
          return $this->hasMany(SocialNetworkUrl::class);
      }
+
+     /**
+      * Get the brand image without bucket name directly for asset use
+      * @version    1.0.0
+      * @author     Anderson Arruda < contato@sysborg.com.br >
+      * @param      
+      * @return     string
+      */
+    public function getBrandImage() : string
+    {
+        return preg_replace('/.*\//', '', $this->brand_image);
+    }
 }
