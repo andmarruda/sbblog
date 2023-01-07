@@ -104,6 +104,7 @@ return [
     'general.pageTitle'             => 'Page Title',
     'general.pageDescription'       => 'Page Description',
     'general.autoconvert_webp'      => 'Automatically convert to webp?',
+    'general.comment_config'        => 'Comment setting',
 
     'articleCard.createdBy'         => 'Created by',
     'articleCard.createdTime'       => 'at',

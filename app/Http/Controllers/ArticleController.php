@@ -8,9 +8,8 @@ use App\Models\ArticleComments;
 use App\Models\ArticleTags;
 use App\Models\ArticleVisits;
 use App\Models\Util;
+use App\Models\Category;
 use DateTime;
-use DOMDocument;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 if(session_status() != PHP_SESSION_ACTIVE)
     session_start();
@@ -169,10 +168,7 @@ class ArticleController extends Controller
      */
     private function prepareFormInterface(?bool $saved=NULL, ?string $message=NULL, ?array $art=NULL)
     {
-        $c = new CategoryController();
-        $categories = $c->getAllActivated();
-
-        $args = ['categories' => $categories];
+        $args = ['categories' => Category::get()];
         if(!is_null($saved))
             $args['saved'] = $saved;
 

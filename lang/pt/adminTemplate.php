@@ -104,6 +104,7 @@ return [
     'general.pageTitle'             => 'Título da página',
     'general.pageDescription'       => 'Descrição da página',
     'general.autoconvert_webp'      => 'Converte automáticamente para webp?',
+    'general.comment_config'        => 'Configuração de comentário',
 
     'articleCard.createdBy'         => 'Criado por',
     'articleCard.createdTime'       => 'em',
