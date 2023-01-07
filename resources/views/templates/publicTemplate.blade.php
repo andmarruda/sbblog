@@ -69,7 +69,7 @@
             <div class="row">
                 <div class="col-md-12" style="text-align:center;">
                     <a href="{{route('latestPage')}}">
-                        <img src="{{$gen->brand_image=='default' || !Storage::disk('public')->exists($gen->brand_image) ? asset('images/sbblog.png') : asset('storage/'. $gen->brand_image)}}" alt="{{config('app.name')}}">
+                        <img src="{{$gen->brand_image=='default' || !Storage::disk('public')->exists($gen->getBrandImage()) ? asset('images/sbblog.png') : asset('storage/'. $gen->getBrandImage())}}" alt="{{$gen->title}}">
                     </a>
                     <p class="slogan">{{$gen->slogan}}</p>
                 </div>
