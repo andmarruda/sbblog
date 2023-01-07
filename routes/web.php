@@ -24,7 +24,7 @@ Route::prefix('/admin')->middleware('sbauth')->group(function() {
     Route::get('/logout', [UserController::class, 'logout'])->name('admin.logout');
 
     Route::get('/changeLang/{id}', [UserController::class, 'setPreferredLang'])->where('id', '[0-9]+')->name('admin.changeLang');
-    Route::get('/dashboard', '\App\Http\Controllers\AdminController@dashboardInterface')->name('admin.dashboard');
+    Route::get('/dashboard', [AdminController::class, 'dashboardInterface'])->name('admin.dashboard');
     Route::resource('general', GeneralController::class)->only(['edit', 'update']);
     Route::resource('category', CategoryController::class)->except(['show']);
 
