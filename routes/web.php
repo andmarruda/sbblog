@@ -5,17 +5,7 @@ use \App\Http\Controllers\ArticleController;
 use \App\Http\Controllers\GeneralController;
 use \App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Http\Controllers\UserController;
 
 Route::get('/', '\App\Http\Controllers\PublicController@latestPage')->name('latestPage');
 Route::get('/byCategory/{category?}/{id?}', '\App\Http\Controllers\PublicController@latestPage')->name('latestPageCategory')->where('id', '[0-9]+');
@@ -30,21 +20,19 @@ Route::post('/visitEnd', '\App\Http\Controllers\ArticleController@articleVisitEn
 Route::prefix('/admin')->middleware('sbauth')->group(function() {
     //exceptions of middleware
     Route::get('/', [AdminController::class, 'loginInterface'])->name('admin.login');
-    Route::post('/checkLogin', '\App\Http\Controllers\UserController@login')->name('admin.checkLogin');
-    Route::get('/logout', '\App\Http\Controllers\UserController@logout')->name('admin.logout');
+    Route::post('/checkLogin', [UserController::class, 'login'])->name('admin.checkLogin');
+    Route::get('/logout', [UserController::class, 'logout'])->name('admin.logout');
 
-    //user
-    Route::get('/user/{id?}', '\App\Http\Controllers\UserController@userInterface')->where('id', '[0-9]+')->name('admin.user');
-    Route::get('/changeLang/{id}', '\App\Http\Controllers\UserController@setPreferredLang')->where('id', '[0-9]+')->name('admin.changeLang');
-    Route::post('/user', '\App\Http\Controllers\UserController@userFormPost')->name('admin.userPost');
-    Route::post('/userSearch', '\App\Http\Controllers\UserController@userSearch')->name('admin.userSearch');
-    Route::post('/userAlterPass', '\App\Http\Controllers\UserController@alterPassword')->name('admin.userAlterPass');
-
+    Route::get('/changeLang/{id}', [UserController::class, 'setPreferredLang'])->where('id', '[0-9]+')->name('admin.changeLang');
+    Route::get('/dashboard', '\App\Http\Controllers\AdminController@dashboardInterface')->name('admin.dashboard');
     Route::resource('general', GeneralController::class)->only(['edit', 'update']);
     Route::resource('category', CategoryController::class)->except(['show']);
 
-    //With sbauth middleware
-    Route::get('/dashboard', '\App\Http\Controllers\AdminController@dashboardInterface')->name('admin.dashboard');
+    //user
+    Route::get('/user/{id?}', '\App\Http\Controllers\UserController@userInterface')->where('id', '[0-9]+')->name('admin.user');
+    Route::post('/user', '\App\Http\Controllers\UserController@userFormPost')->name('admin.userPost');
+    Route::post('/userSearch', '\App\Http\Controllers\UserController@userSearch')->name('admin.userSearch');
+    Route::post('/userAlterPass', '\App\Http\Controllers\UserController@alterPassword')->name('admin.userAlterPass');
 
     //Article
     Route::get('/articleList', '\App\Http\Controllers\ArticleController@articleListInterface')->name('admin.articleList');
@@ -53,8 +41,4 @@ Route::prefix('/admin')->middleware('sbauth')->group(function() {
     Route::post('/newArticle', '\App\Http\Controllers\ArticleController@articleFormPost')->name('admin.newArticlePost');
     Route::post('/article/comment/enable-disable', [ArticleController::class, 'enableDisableComment'])->name('admin.article.comment.action');
     Route::get('/article/convertWebp/{id}', [ArticleController::class, 'convertWebp'])->where('id', '[0-9]+')->name('admin.article.convertWebp');
-
-    /*Route::get('/category/{id?}', '\App\Http\Controllers\CategoryController@categoryInterface')->where('id', '[0-9]+')->name('admin.category');
-    Route::post('/categorySearch', '\App\Http\Controllers\CategoryController@categorySearch')->name('admin.categorySearch');
-    Route::post('/category', '\App\Http\Controllers\CategoryController@categoryFormPost')->name('admin.categoryPost');*/
 });
