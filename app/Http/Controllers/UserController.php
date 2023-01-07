@@ -29,72 +29,6 @@ class UserController extends Controller
     private string $regExPass = '/(?=.*[a-zA-Z].*)(?=.*[0-9].*)(^[a-zA-Z0-9]{8,}$)/';
 
     /**
-     * Returns an array for fill or create
-     * @return  array
-     */
-    private function fillArray(Request $request) : array
-    {
-        return [
-            'name'      => $request->input('name'),
-            'email'     => $request->input('email'),
-            'password'  => md5($request->input('pass'))
-        ];
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('users');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request) : \Illuminate\Http\RedirectResponse
-    {
-        $validations = $this->validations;
-        array_push($validations['email'], Rule::unique('users'));
-        $request->validate($this->validations);
-        $saved = user::create($this->fillArray($request));
-        return redirect()->route('user.create')->with('saved', $saved);
-    }
-
-    /**
-     * Generates the user form's interface
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return view
-     */
-    public function userInterface(?int $id=NULL)
-    {
-        if(!is_null($id) && $id != 1){
-            $u = User::find($id);
-            $attrs=$u->count() > 0 ? ['user' => $u] : [];
-        }
-        return view('users', $attrs ?? []);
-    }
-
-    /**
-     * Verify if has a session logged
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          bool
-     */
-    public function isLogged()
-    {
-        return isset($_SESSION['sbblog']) && isset($_SESSION['sbblog']['user_id']) && isset($_SESSION['sbblog']['name']) && isset($_SESSION['sbblog']['email']);
-    }
-
-    /**
      * Verify if the logged user is the First user registered
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
@@ -119,29 +53,15 @@ class UserController extends Controller
     }
 
     /**
-     * Verify if is logged in if not redirect to Login template
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          Redirect::route
-     */
-    public function redirectLoginAdmin()
-    {
-        return redirect()->route('admin.login');
-    }
-
-    /**
-     * Disable the configuration's user
+     * Verify if has a session logged
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
      * @param           
      * @return          bool
      */
-    private function disableConfigUser() : bool
+    public function isLogged()
     {
-        $um = User::find(1);
-        $um->active = false;
-        return $um->save();
+        return isset($_SESSION['sbblog']) && isset($_SESSION['sbblog']['user_id']) && isset($_SESSION['sbblog']['name']) && isset($_SESSION['sbblog']['email']);
     }
 
     /**
@@ -163,18 +83,6 @@ class UserController extends Controller
     }
 
     /**
-     * Get locale from logged user
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          ?string
-     */
-    public function getLocale() : ?string
-    {
-        return $this->isLogged() ? $_SESSION['sbblog']['lang']['lang_id'] : NULL;
-    }
-
-    /**
      * Change preferred user's language
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
@@ -188,6 +96,18 @@ class UserController extends Controller
         $u->save();
         $this->loadPreferredLang($u);
         return redirect()->route('admin.dashboard');
+    }
+
+    /**
+     * Get locale from logged user
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @param           
+     * @return          ?string
+     */
+    public function getLocale() : ?string
+    {
+        return $this->isLogged() ? $_SESSION['sbblog']['lang']['lang_id'] : NULL;
     }
 
     /**
@@ -234,57 +154,88 @@ class UserController extends Controller
     }
 
     /**
-     * Verify if email is already registered
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           string $email
-     * @return          bool
+     * Returns an array for fill or create
+     * @return  array
      */
-    private function emailIsRegistered(string $email, ?int $id) : bool
+    private function fillArray(Request $request) : array
     {
-        $u = User::where('email', '=', $email);
-        if(!is_null($id))
-            $u = $u->where('id', '!=', $id);
-
-        return $u->count() > 0;
+        return [
+            'name'      => $request->input('name'),
+            'email'     => $request->input('email'),
+            'password'  => md5($request->input('pass'))
+        ];
     }
 
     /**
-     * Saves information about user on POST
+     * Disable the configuration's user
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           Request $req
-     * @return          view
+     * @param           
+     * @return          bool
      */
-    public function userFormPost(Request $req)
+    private function disableConfigUser() : bool
     {
-        if(!$this->isLogged())
-            return $this->redirectLoginAdmin();
+        $um = User::find(1);
+        $um->active = false;
+        return $um->save();
+    }
 
-        if($this->emailIsRegistered($req->input('username'), $req->input('id')))
-            return view('users', ['saved' => false, 'message' => __('sbblog.auth.userExists', ['email' => $req->input('username')])]);
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('users');
+    }
 
-        if($req->input('pass') != '' && !preg_match($this->regExPass, $req->input('pass')))
-            return view('users', ['saved' => false, 'message' => __('sbblog.auth.passwordStrong')]);
-
-        if($req->input('pass') != $req->input('confirmPass'))
-            return view('users', ['saved' => false, 'message' => __('sbblog.auth.errPassConfirm')]);
-
-        $userModel = (is_null($req->input('id'))) ? new User() : User::find($req->input('id'));
-        $values = [
-            'name'      => $req->input('name'),
-            'email'     => $req->input('username'),
-            'active'    => $req->input('active'),
-            'password'  => (!is_null($req->id) && $req->input('pass')=='' ? $userModel->password : md5($req->input('pass')))
-        ];
-
-        $userModel->fill($values);
-        $saved = $userModel->save();
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request) : \Illuminate\Http\RedirectResponse
+    {
+        $validations = $this->validations;
+        $validations['email'] = array_push($validations['email'], Rule::unique('users'));
+        $request->validate($this->validations);
+        $saved = user::create($this->fillArray($request));
 
         if($this->isConfigUser() && $saved && $this->disableConfigUser())
-            return view('users', ['saved' => $saved, 'configUser' => true]);
+            return redirect()->route('user.create')->with('saved', $saved)->with('configUser', true);
 
-        return view('users', ['saved' => $saved]);
+        return redirect()->route('user.create')->with('saved', $saved);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(User $user)
+    {
+        return view('users', ['user' => $user]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, User $user)
+    {
+        $validations = $this->validations;
+        $validations['email'] = array_push($validations['email'], Rule::unique('users')->ignoreModel($user));
+        $request->validate($this->validations);
+        $user->fill($this->fillArray($request));
+        $saved = $user->save();
+
+        return redirect()->route('user.edit', $user->id)->with('saved', $saved);
     }
 
     /**
@@ -319,19 +270,5 @@ class UserController extends Controller
         $saved = $ug->save();
         
         echo json_encode(['error' => (!$saved), 'message' => __('adminTemplate.password.verifyCurrentErr')]);
-    }
-
-    /**
-     * Search users
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           Request $req
-     * @return          NEVER JSON
-     */
-    public function userSearch(Request $req)
-    {
-        $u = User::where('name', 'ILIKE', '%'. $req->input('userSearch'). '%')->orWhere('email', '=', $req->input('email'))->get();
-        header('Content-Type: application/json; charset=utf-8');
-        echo $u->toJson();
     }
 }

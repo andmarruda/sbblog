@@ -30,10 +30,8 @@ Route::prefix('/admin')->middleware('sbauth')->group(function() {
     Route::resource('user', UserController::class);
 
     //user
-    /*Route::get('/user/{id?}', '\App\Http\Controllers\UserController@userInterface')->where('id', '[0-9]+')->name('admin.user');
-    Route::post('/user', '\App\Http\Controllers\UserController@userFormPost')->name('admin.userPost');
-    Route::post('/userSearch', '\App\Http\Controllers\UserController@userSearch')->name('admin.userSearch');
-    */
+    //Route::post('/user', '\App\Http\Controllers\UserController@userFormPost')->name('admin.userPost');
+    
     Route::post('/userAlterPass', '\App\Http\Controllers\UserController@alterPassword')->name('admin.userAlterPass');
 
     //Article
