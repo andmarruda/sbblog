@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -12,10 +13,58 @@ if(session_status() != PHP_SESSION_ACTIVE)
 class UserController extends Controller
 {
     /**
+     * Data validations
+     * var      array
+     */
+    private array $validations = [
+        'name'      => 'required|min:5|max:255|string',
+        'email'     => ['required', 'email', 'max:255'],
+        'password'  => 'required|string|regex:'. $this->regExPass. '|min:8|confirmed'
+    ];
+    
+    /**
      * Regular expression to validate the strong of the password
      * @var string
      */
     private string $regExPass = '/(?=.*[a-zA-Z].*)(?=.*[0-9].*)(^[a-zA-Z0-9]{8,}$)/';
+
+    /**
+     * Returns an array for fill or create
+     * @return  array
+     */
+    private function fillArray(Request $request) : array
+    {
+        return [
+            'name'      => $request->input('name'),
+            'email'     => $request->input('email'),
+            'password'  => md5($request->input('pass'))
+        ];
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('users');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request) : \Illuminate\Http\RedirectResponse
+    {
+        $validations = $this->validations;
+        array_push($validations['email'], Rule::unique('users'));
+        $request->validate($this->validations);
+        $saved = user::create($this->fillArray($request));
+        return redirect()->route('user.create')->with('saved', $saved);
+    }
 
     /**
      * Generates the user form's interface
@@ -26,9 +75,6 @@ class UserController extends Controller
      */
     public function userInterface(?int $id=NULL)
     {
-        if(!$this->isLogged())
-            return $this->redirectLoginAdmin();
-
         if(!is_null($id) && $id != 1){
             $u = User::find($id);
             $attrs=$u->count() > 0 ? ['user' => $u] : [];

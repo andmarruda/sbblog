@@ -11,7 +11,7 @@
 
     <div class="mb-3">
         <label for="categoryName" class="form-label">{{__('adminTemplate.category.form.label')}}</label>
-        <input type="text" maxlength="50" class="form-control" id="categoryName" name="categoryName" placeholder="{{__('adminTemplate.category.form.label')}}" required value="{{$cat->category ?? ''}}">
+        <input type="text" minlength="5" maxlength="50" class="form-control" id="categoryName" name="categoryName" placeholder="{{__('adminTemplate.category.form.label')}}" required value="{{$cat->category ?? ''}}">
     </div>
 
     @if(!is_null(session('saved')))

@@ -9,6 +9,14 @@ use \App\Models\Util;
 class CategoryController extends Controller
 {
     /**
+     * Data validations
+     * var      array
+     */
+    private array $validations = [
+        'category' => 'required|min:5|max:50|string'
+    ];
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -31,7 +39,7 @@ class CategoryController extends Controller
         $category->fill([
             'color' => is_null($request->input('id')) ? $this->generatesRandomColor() : $category->color,
             'category' => $request->input('categoryName'),
-            'user_id' => 1
+            'user_id' => $_SESSION['sbblog']['user_id']
         ]);
     }
 
@@ -65,6 +73,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request) : \Illuminate\Http\RedirectResponse
     {
+        $request->validate($this->validations);
         $category = new Category();
         $this->fill($category, $request);
         $saved = $category->save();
@@ -93,6 +102,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        $request->validate($this->validations);
         $this->fill($category, $request);
         $saved = $category->save();
         $this->sitemap();
