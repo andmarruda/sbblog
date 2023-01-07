@@ -42,6 +42,15 @@
                 <input type="file" class="form-control" id="brand_image" name="brand_image">
             </div>
 
+            <div class="mb-3">
+                <label for="comment_config_id" class="form-label">{{__('adminTemplate.general.comment_config')}}</label>
+                <select class="form-control" name="comment_config_id" id="comment_config_id">
+                @foreach ($comment_configs as $config)
+                    <option value="{{$config->id}}">{{$config->description}}</option>
+                @endforeach
+                </select>
+            </div>
+
             @include('utils.comboActive', ['active' => $gen->autoconvert_webp ?? NULL, 'label' => __('adminTemplate.general.autoconvert_webp'), 'comboId' => 'autoconvert_webp'])
 
             <div class="mb-3">

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SocialNetworkUrl;
-use App\Models\SocialNetwork;
 use App\Models\General;
+use App\Models\CommentConfig;
 
 class GeneralController extends Controller
 {
@@ -62,7 +62,7 @@ class GeneralController extends Controller
      */
     public function edit(General $general)
     {
-        return view('general', ['gen' => $general]);
+        return view('general', ['gen' => $general, 'comment_configs' => CommentConfig::where('language_id', '=', $_SESSION['sbblog']['lang']['id'])->get()]);
     }
 
     /**

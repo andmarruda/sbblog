@@ -111,7 +111,8 @@ class UserController extends Controller
         $_SESSION['sbblog']['lang'] = [
             'label' => $lang->label, 
             'icon' => $lang->icon, 
-            'lang_id' => $lang->lang_id
+            'lang_id' => $lang->lang_id,
+            'id' => $lang->id
         ];
     }
 
