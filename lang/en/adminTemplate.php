@@ -76,6 +76,7 @@ return [
     'category.list.disabled'        => 'Disabled?',
 
     'user.title'                    => 'User',
+    'user.index.title'              => 'Users',
     'user.firstUser.advice'         => 'To increase system\'s security, create a new user! After this the system will disable the configuration user!',
     'user.form.name'                => 'Name',
     'user.form.user'                => 'User "Email"',
@@ -83,10 +84,10 @@ return [
     'user.form.confirmPass'         => 'Confirm password',
     'user.okmessage'                => 'User saved successfully!',
     'user.errmessage'               => 'Error saving user!',
-    'user.modal.title'              => 'Search User',
-    'user.modal.input'              => 'User',
-    'user.modal.grid.user'          => 'User',
-    'user.modal.grid.name'          => 'Name',
+    'user.list.name'                => 'Name',
+    'user.list.email'               => 'Email',
+    'user.list.enabled'             => 'Enabled?',
+    'user.list.action'              => 'Actions',
 
     'general.title'                 => 'General Settings',
     'general.form.slogan'           => 'Slogan',

@@ -18,8 +18,8 @@ class UserController extends Controller
      */
     private array $validations = [
         'name'      => 'required|min:5|max:255|string',
-        'email'     => ['required', 'email', 'max:255'],
-        'password'  => 'required|string|regex:'. $this->regExPass. '|min:8|confirmed'
+        'username'  => ['required', 'email', 'max:255'],
+        'pass'      => 'required|string|regex:/(?=.*[a-zA-Z].*)(?=.*[0-9].*)(^[a-zA-Z0-9]{8,}$)/|min:8|confirmed'
     ];
     
     /**
@@ -120,8 +120,7 @@ class UserController extends Controller
     public function login(Request $req)
     {
         $um = User::where('email', '=', $req->input('email'))
-                ->where('password', '=', md5($req->input('pass')))
-                ->where('active', '=', true);
+                ->where('password', '=', md5($req->input('pass')));
         if($um->count() > 0)
         {
             $g = $um->first();
@@ -161,7 +160,7 @@ class UserController extends Controller
     {
         return [
             'name'      => $request->input('name'),
-            'email'     => $request->input('email'),
+            'email'     => $request->input('username'),
             'password'  => md5($request->input('pass'))
         ];
     }
@@ -178,6 +177,17 @@ class UserController extends Controller
         $um = User::find(1);
         $um->active = false;
         return $um->save();
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $all = User::withTrashed()->get()->sortBy('name');
+        return view('users-list', ['users' => $all]);
     }
 
     /**
@@ -199,7 +209,7 @@ class UserController extends Controller
     public function store(Request $request) : \Illuminate\Http\RedirectResponse
     {
         $validations = $this->validations;
-        $validations['email'] = array_push($validations['email'], Rule::unique('users'));
+        $validations['username'] = array_push($validations['username'], Rule::unique('users'));
         $request->validate($this->validations);
         $saved = user::create($this->fillArray($request));
 
@@ -230,7 +240,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validations = $this->validations;
-        $validations['email'] = array_push($validations['email'], Rule::unique('users')->ignoreModel($user));
+        $validations['username'] = array_push($validations['username'], Rule::unique('users')->ignoreModel($user));
         $request->validate($this->validations);
         $user->fill($this->fillArray($request));
         $saved = $user->save();

@@ -76,6 +76,7 @@ return [
     'category.list.disabled'        => 'Desabilitado?',
 
     'user.title'                    => 'Usuário',
+    'user.index.title'              => 'Usuários',
     'user.firstUser.advice'         => 'Para maior segurança do sistema, crie um novo usuário! Após isso o sistema irá desativar o usuário de configuração!',
     'user.form.name'                => 'Nome',
     'user.form.user'                => 'Usuário "Email"',
@@ -83,10 +84,10 @@ return [
     'user.form.confirmPass'         => 'Confirmação de senha',
     'user.okmessage'                => 'Usuário salvo com sucesso!',
     'user.errmessage'               => 'Erro ao salvar o usuário!',
-    'user.modal.title'              => 'Pesquisar usuário',
-    'user.modal.input'              => 'Usuário',
-    'user.modal.grid.user'          => 'Usuário',
-    'user.modal.grid.name'          => 'Nome',
+    'user.list.name'                => 'Nome',
+    'user.list.email'               => 'Email',
+    'user.list.enabled'             => 'Ativo?',
+    'user.list.action'              => 'Ações',
 
     'general.title'                 => 'Configuração Geral',
     'general.form.slogan'           => 'Slogan',
