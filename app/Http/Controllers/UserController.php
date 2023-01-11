@@ -186,7 +186,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $all = User::withTrashed()->get()->sortBy('name');
+        $all = User::withTrashed()->where('id', '!=', 1)->get()->sortBy('name');
         return view('users-list', ['users' => $all]);
     }
 
