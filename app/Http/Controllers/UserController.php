@@ -53,6 +53,18 @@ class UserController extends Controller
     }
 
     /**
+     * Verify if is logged in if not redirect to Login template
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @param
+     * @return          Redirect::route
+     */
+    public function redirectLoginAdmin()
+    {
+        return redirect()->route('admin.login');
+    }
+
+    /**
      * Verify if has a session logged
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
