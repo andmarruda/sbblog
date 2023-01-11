@@ -13,7 +13,7 @@ class CategoryController extends Controller
      * var      array
      */
     private array $validations = [
-        'category' => 'required|min:5|max:50|string'
+        'categoryName' => 'required|min:5|max:50|string'
     ];
 
     /**
