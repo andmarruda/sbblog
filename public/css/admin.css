@@ -1,0 +1,25 @@
+/** Powered by Anderson Arruda and Sysborg - sysborg.com.br | andersonarruda.com.br **/
+html, body{
+    height: 100%;
+}
+
+.container-md{
+    min-height: 100%;
+    position: relative;
+}
+
+footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    margin-top: 60px;
+}
+
+#alert-success, #alert-error{
+    margin-bottom:150px;
+}
+
+#alert-success ul, #alert-error ul{
+    margin-bottom: 0 !important;
+}
