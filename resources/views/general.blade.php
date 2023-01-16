@@ -51,7 +51,7 @@
                 <label for="comment_config_id" class="form-label">{{__('adminTemplate.general.comment_config')}}</label>
                 <select class="form-control" name="comment_config_id" id="comment_config_id">
                 @foreach ($comment_configs as $config)
-                    <option value="{{$config->id}}">{{$config->description}}</option>
+                    <option value="{{$config->id}}"{{$config->id==$gen->comment_config_id ? ' selected="selected"' : ''}}>{{$config->description}}</option>
                 @endforeach
                 </select>
             </div>

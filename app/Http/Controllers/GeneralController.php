@@ -18,7 +18,8 @@ class GeneralController extends Controller
         'section'           => 'required|min:5|max:100|string',
         'page_title'        => 'required|min:5|max:110|string',
         'page_description'  => 'required|min:45|max:200|string',
-        'autoconvert_webp'  => 'required'
+        'autoconvert_webp'  => 'required',
+        'comment_config_id' => 'required'
     ];
 
     /**
@@ -120,7 +121,8 @@ class GeneralController extends Controller
             'google_optimize_script' => $request->input('google_optimize_script'),
             'title' => $request->input('page_title'),
             'description' => $request->input('page_description'),
-            'autoconvert_webp' => $request->input('autoconvert_webp')
+            'autoconvert_webp' => $request->input('autoconvert_webp'),
+            'comment_config_id' => $request->input('comment_config_id')
         ]);
         $saved = $general->save();
 
