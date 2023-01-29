@@ -11,7 +11,8 @@
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",
-        "sysborg/bitethedust": "^1.2"
+        "sysborg/bitethedust": "^1.2",
+        "josiasmontag/laravel-recaptchav3": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

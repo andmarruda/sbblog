@@ -1,8 +1,14 @@
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">{{$name}}</h5>
-        <small>{{date('d/m/Y H:i', strtotime($created_at))}}</small>
+        <div class="d-flex justify-content-between">
+            <div>
+                <h5 class="card-title">{{$name}}</h5>
+                <small>{{date('d/m/Y H:i', strtotime($created_at))}}</small>
+            </div>
+            <a href="#" title="Reportar comentário"><i class="fa-solid fa-flag"></i></a>
+        </div>
         <p class="card-text">{{$comment}}</p>
+        
         @if(isset($admin) && $admin)
         <p style="text-align:right;">
             @if($active)
