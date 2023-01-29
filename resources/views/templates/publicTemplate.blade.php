@@ -26,6 +26,7 @@
             <title>{{$article->title}}</title>
             <link rel="stylesheet" href="{{asset('css/monokai-sublime.min.css')}}">
             <link rel="stylesheet" href="{{asset('css/quill.snow.css')}}">
+            {!! RecaptchaV3::initJs() !!}
         @else
             <meta name="description" content="{{$gen->description}}">
             <meta property="og:title" content="{{$gen->title}}" />

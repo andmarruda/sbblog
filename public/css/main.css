@@ -38,3 +38,5 @@
         display: none;
     }
 }
+
+.grecaptcha-badge { visibility: hidden !important; }
