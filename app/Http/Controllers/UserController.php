@@ -49,7 +49,7 @@ class UserController extends Controller
      */
     public function redirectFirstUser()
     {
-        return redirect()->route('admin.user')->with('configUser', '1');
+        return redirect()->route('user.create')->with('configUser', '1');
     }
 
     /**

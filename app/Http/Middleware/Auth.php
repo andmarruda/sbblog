@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Session;
 
 class Auth
 {
@@ -32,7 +33,7 @@ class Auth
             if(!$uc->isLogged())
                 return $uc->redirectLoginAdmin();
 
-            if($uc->isConfigUser())
+            if($uc->isConfigUser() && ($request->route()->getName() != 'user.create' || !Session::has('configUser')))
                 return $uc->redirectFirstUser();
         }
 
