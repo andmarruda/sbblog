@@ -1,0 +1,56 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: root
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: sbblog-laravel
+    container_name: sbblog-dockerized
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - sbblog-network
+    command: ["sh", "-c", "php-fpm && composer update && php artisan migrate"]
+
+  nginx:
+    image: nginx
+    container_name: sbblog-nginx
+    restart: unless-stopped
+    ports:
+      - "100:80"
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - sbblog-network
+
+  pgsqldb:
+    image: postgres:16
+    container_name: sbblog-pgsqldb
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: sbblog_user
+      POSTGRES_PASSWORD: Sbblog@123
+      POSTGRES_DB: sbblogdb
+    volumes:
+      - sbblog-dbdata:/var/lib/postgresql/16/main
+      - ./docker-compose/pg_hba.conf:/etc/postgresql/16/main/pg_hba.conf
+      - ./docker-compose/postgresql.conf:/etc/postgresql/16/main/postgresql.conf
+    networks:
+      - sbblog-network
+
+networks:
+  sbblog-network:
+    driver: bridge
+    name: sbblog-network
+
+volumes:
+  sbblog-dbdata:
+    driver: local
