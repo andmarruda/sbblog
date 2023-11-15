@@ -1,20 +1,6 @@
 @extends('templates.adminTemplate')
 
 @section('page')
-    @php
-        function intervalToText($secs){
-            $secs = (int) $secs;
-            $text='';
-            $min = (int) ($secs / 60);
-            if($min > 0){
-                $text .= $min. ' minuto(s) ';
-                $secs = $secs - ($min * 60);
-            }
-            $text .= $secs. ' segundo(s)';
-            return $text;
-        }
-    @endphp
-
     <div class="row" style="margin-top:20px;">
         <div class="col-md-6">
             <div class="card">
@@ -60,9 +46,9 @@
                             <tr>
                                 <td><span class="badge" style="background-color:{{$stat->article_color}};">&nbsp;</span></td>
                                 <td>{{$stat->title}}</td>
-                                <td>{{intervalToText($stat->avg_sec)}}</td>
-                                <td>{{intervalToText($stat->min_sec)}}</td>
-                                <td>{{intervalToText($stat->max_sec)}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                                 <td>{{$stat->total_visits}}</td>
                             </tr>
                             @endforeach

@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Artisan;
 
 return new class extends Migration
 {
@@ -22,11 +21,6 @@ return new class extends Migration
             $table->boolean('active');
             $table->timestamps();
         });
-
-        Artisan::call('db:seed', [
-            '--class' => 'UserSeeder',
-            '--force' => true
-        ]);
     }
 
     /**

@@ -1,5 +1,21 @@
 @extends('templates.adminTemplate')
 
+@section('css')
+<link rel="stylesheet" href="{{asset('css/monokai-sublime.min.css')}}">
+<link rel="stylesheet" href="{{asset('css/quill.snow.css')}}">
+<style>
+    #article{
+        min-height:200px; 
+        max-height:500px; 
+        overflow-y:auto;
+    }
+
+    #articleCoverPreview {
+        max-height: 200px;
+    }
+</style>
+@endsection
+
 @section('page')
 <nav aria-label="breadcrumb" style="margin-top:30px;">
     <ol class="breadcrumb">
@@ -15,7 +31,7 @@
 </nav>
 <div class="tab-content" id="nav-tabContent" style="margin-bottom:20px;">
   <div class="tab-pane fade show active" id="nav-form" role="tabpanel" aria-labelledby="nav-form-tab">
-    <form method="post" id="formArticleSave" action="{{route('admin.newArticlePost')}}" style="margin-top:20px;" autocomplete="off" enctype="multipart/form-data">
+    <form method="post" id="formArticleSave" action="{{ route('admin.newArticlePost') }}" style="margin-top:20px;" autocomplete="off" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="id" id="id" value="{{$article->id ?? ''}}">
         <input type="hidden" name="addedTags" id="addedTags" value="">
@@ -23,61 +39,66 @@
         <input type="hidden" id="articleText" name="articleText" value="{{$article->article ?? ''}}">
         <input type="hidden" id="articleCoverPath" name="articleCoverPath" value="{{$article->cover_path ?? ''}}">
 
-        <div class="mb-3">
-            <label for="articleName" class="form-label">{{__('adminTemplate.article.form.title')}}</label>
-            <input type="text" maxlength="150" class="form-control" id="articleName" name="articleName" placeholder="{{__('adminTemplate.article.form.title')}}" required value="{{$article->title ?? ''}}">
-        </div>
-
-        @isset($article->cover_path)
-        <div class="mb-3">
-            <label for="articleCoverPreview" class="form-lable">{{__('adminTemplate.article.form.previewFolder')}}</label><br>
-            <img src="{{asset('storage/'.$article->cover_path)}}" alt="{{$article->title ?? ''}}" class="img-fluid">
-            
-            @if((new \App\Http\Controllers\ImageController(NULL))->getExtension('public/'. $article->cover_path) != 'webp')
-            <a href="{{route('admin.article.convertWebp', ['id' => $article->id ?? -1])}}" class="btn btn-outline-primary" role="button">{{__('adminTemplate.article.form.convertWebp')}}</a>
-            @endif
-        </div>
-        @endisset
-
-        <div class="mb-3">
-            <label for="articleCover" class="form-label">{{__('adminTemplate.article.form.cover')}}</label>
-            <input type="file" class="form-control" id="articleCover" name="articleCover">
-        </div>
-
-        <div class="mb-3">
-            <label for="category" class="form-label">{{__('adminTemplate.article.form.category')}}</label>
-            <select class="form-control" id="category" name="category" required>
-                <option value="">{{__('adminTemplate.article.form.category.select')}}</option>
-                @if($categories->count() > 0)
-                @foreach($categories as $cat)
-                    <option value="{{$cat->id}}"{{($cat->id == ($article->category_id ?? -1)) ? ' selected="selected"' : ''}}>{{$cat->category}}</option>
-                @endforeach
-                @endif
-            </select>
-        </div>
-
-        @include('utils.comboActive', ['active' => $article->active ?? NULL])
-
-        <div class="mb-3">
-            <label for="description" class="form-label">{{__('adminTemplate.article.form.meta')}} <small>{{__('adminTemplate.article.form.meta.small')}}</small></label>
-            <input type="text" class="form-control" id="description" name="description" maxlength="200" value="{{$article->description ?? ''}}" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="premiereDate" class="form-label">{{__('adminTemplate.article.form.premiereDate')}}</label>
-            <div class="row">
-                <div class="col">
-                    <input type="date" class="form-control" id="premiereDate" name="premiereDate" value="{{!isset($article->premiere_date) ? '' : date('Y-m-d', strtotime($article->premiere_date))}}">
+        <div class="row">
+            <div class="col-6">
+                <div class="mb-3 text-center">
+                    <label for="articleCoverPreview" class="form-lable">{{__('adminTemplate.article.form.previewFolder')}}</label><br>
+                    <img src="@isset($article->cover_path) {{asset('storage/'.($article->cover_path))}} @endisset" alt="{{$article->title ?? ''}}" class="img-fluid" id="articleCoverPreview">
                 </div>
-                <div class="col">
-                    <input type="time" class="form-control" id="premiereTime" name="premiereTime" value="{{!isset($article->premiere_date) ? '' : date('H:i', strtotime($article->premiere_time))}}">
+                @isset($article->cover_path)
+                <div class="mb-3">
+                    @if((new \App\Http\Controllers\ImageController(NULL))->getExtension('public/'. $article->cover_path) != 'webp')
+                    <a href="{{route('admin.article.convertWebp', ['id' => $article->id ?? -1])}}" class="btn btn-outline-primary" role="button">{{__('adminTemplate.article.form.convertWebp')}}</a>
+                    @endif
+                </div>
+                @endisset
+
+                <div class="mb-3">
+                    <label for="articleCover" class="form-label">{{__('adminTemplate.article.form.cover')}}</label>
+                    <input type="file" class="form-control" id="articleCover" name="articleCover">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="mb-3">
+                    <label for="articleName" class="form-label">{{__('adminTemplate.article.form.title')}}</label>
+                    <input type="text" maxlength="150" class="form-control" id="articleName" name="articleName" placeholder="{{__('adminTemplate.article.form.title')}}" required value="{{$article->title ?? ''}}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="category" class="form-label">{{__('adminTemplate.article.form.category')}}</label>
+                    <select class="form-control" id="category" name="category" required>
+                        <option value="">{{__('adminTemplate.article.form.category.select')}}</option>
+                        @if($categories->count() > 0)
+                        @foreach($categories as $cat)
+                            <option value="{{$cat->id}}"{{($cat->id == ($article->category_id ?? -1)) ? ' selected="selected"' : ''}}>{{$cat->category}}</option>
+                        @endforeach
+                        @endif
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">{{__('adminTemplate.article.form.meta')}} <small>{{__('adminTemplate.article.form.meta.small')}}</small></label>
+                    <input type="text" class="form-control" id="description" name="description" maxlength="200" value="{{$article->description ?? ''}}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="premiereDate" class="form-label">{{__('adminTemplate.article.form.premiereDate')}}</label>
+                    <div class="row">
+                        <div class="col">
+                            <input type="date" class="form-control" id="premiereDate" name="premiereDate" value="{{!isset($article->premiere_date) ? '' : date('Y-m-d', strtotime($article->premiere_date))}}">
+                        </div>
+                        <div class="col">
+                            <input type="time" class="form-control" id="premiereTime" name="premiereTime" value="{{!isset($article->premiere_date) ? '' : date('H:i', strtotime($article->premiere_time))}}">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="mb-3">
             <label for="article" class="form-label">{{__('adminTemplate.article.form.article')}}</label>
-            <div id="article" style="min-height:200px;"></div>
+            <div id="article"></div>
         </div>
 
         <div class="input-group mb-3">
@@ -120,7 +141,24 @@
     @endif
   </div>
 </div>
+@endsection
 
+@section('jscript')
+<script src="{{asset('js/highlight.min.js')}}"></script>
+<script src="{{asset('js/quill.min.js')}}"></script>
+<script>
+    const loadPreviewImage = ({ target }) => {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById('articleCoverPreview').src = e.target.result;
+        };
+        reader.readAsDataURL(target.files[0]);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('articleCover').addEventListener('change', loadPreviewImage);
+    });
+</script>
 
 <script>
     var quillArticle;

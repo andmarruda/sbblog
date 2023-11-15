@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use DOMDocument;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SiteMapController extends Controller
 {
@@ -97,8 +98,14 @@ class SiteMapController extends Controller
      */
     private function sendSiteMapGoogle() : void
     {
-        $client = new \GuzzleHttp\Client();
-        $client->request('GET', 'https://www.google.com/ping', ['query' => ['sitemap' => route('latestPage'). '/'. $this->xmlName]]);
+        try
+        {
+            $client = new \GuzzleHttp\Client();
+            $client->request('GET', 'https://www.google.com/ping', ['query' => ['sitemap' => route('latestPage'). '/'. $this->xmlName]]);
+        } catch(\Exception $err)
+        {
+            Log::channel('sitemap')->error($err->getFile(). ':'. $err->getLine(). ' - '. $err->getMessage());
+        }
     }
 
     /**

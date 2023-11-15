@@ -40,7 +40,7 @@ services:
       POSTGRES_PASSWORD: Sbblog@123
       POSTGRES_DB: sbblogdb
     volumes:
-      - sbblog-dbdata:/var/lib/postgresql/16/main
+      - sbblog-dbdata:/var/lib/postgresql/data
       - ./docker-compose/pg_hba.conf:/etc/postgresql/16/main/pg_hba.conf
       - ./docker-compose/postgresql.conf:/etc/postgresql/16/main/postgresql.conf
     networks:

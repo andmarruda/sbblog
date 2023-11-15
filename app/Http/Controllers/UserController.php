@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use App\Models\User;
-
-if(session_status() != PHP_SESSION_ACTIVE)
-    session_start();
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -65,36 +62,6 @@ class UserController extends Controller
     }
 
     /**
-     * Verify if has a session logged
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          bool
-     */
-    public function isLogged()
-    {
-        return isset($_SESSION['sbblog']) && isset($_SESSION['sbblog']['user_id']) && isset($_SESSION['sbblog']['name']) && isset($_SESSION['sbblog']['email']);
-    }
-
-    /**
-     * Setting the user preferred language
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           int $user_id
-     * @return          void
-     */
-    public function loadPreferredLang(\App\Models\User $user) : void
-    {
-        $lang = $user->language()->get()->first();
-        $_SESSION['sbblog']['lang'] = [
-            'label' => $lang->label, 
-            'icon' => $lang->icon, 
-            'lang_id' => $lang->lang_id,
-            'id' => $lang->id
-        ];
-    }
-
-    /**
      * Change preferred user's language
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
@@ -106,20 +73,7 @@ class UserController extends Controller
         $u = User::find($_SESSION['sbblog']['user_id']);
         $u->language_id = $language_id;
         $u->save();
-        $this->loadPreferredLang($u);
         return redirect()->route('admin.dashboard');
-    }
-
-    /**
-     * Get locale from logged user
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          ?string
-     */
-    public function getLocale() : ?string
-    {
-        return $this->isLogged() ? $_SESSION['sbblog']['lang']['lang_id'] : NULL;
     }
 
     /**
@@ -131,22 +85,12 @@ class UserController extends Controller
      */
     public function login(Request $req)
     {
-        $um = User::where('email', '=', $req->input('email'))
-                ->where('password', '=', md5($req->input('pass')));
-        if($um->count() > 0)
+        if(auth()->attempt($req->all(['email', 'password'])))
         {
-            $g = $um->first();
-            $_SESSION['sbblog'] = [
-                'user_id' => $g->id,
-                'name'    => $g->name,
-                'email'   => $g->email,
-            ];
-
-            $this->loadPreferredLang($g);
             return redirect()->route('admin.dashboard');
         }
 
-        return redirect()->route('admin.login')->with('message', __('sbblog.auth.loginInvalid'));
+        return redirect()->back()->with('message', __('sbblog.auth.loginInvalid'));
     }
 
     /**
@@ -158,8 +102,8 @@ class UserController extends Controller
      */
     public function logout()
     {
-        if(session_status()==PHP_SESSION_ACTIVE)
-            session_destroy();
+        if(auth()->check())
+            auth()->logout();
 
         return redirect()->route('admin.login');
     }
@@ -173,7 +117,7 @@ class UserController extends Controller
         return [
             'name'      => $request->input('name'),
             'email'     => $request->input('username'),
-            'password'  => md5($request->input('pass'))
+            'password'  => Hash::make($request->input('pass'))
         ];
     }
 
@@ -288,7 +232,7 @@ class UserController extends Controller
         }
 
         $ug = $u->first();
-        $ug->password = md5($req->input('newPassword'));
+        $ug->password = Hash::make($req->input('newPassword'));
         $saved = $ug->save();
         
         echo json_encode(['error' => (!$saved), 'message' => __('adminTemplate.password.verifyCurrentErr')]);

@@ -17,11 +17,13 @@ Route::post('/article', '\App\Http\Controllers\PublicController@articlePageComme
 Route::post('/visitInit', '\App\Http\Controllers\ArticleController@articleVisitInit')->name('visitInit');
 Route::post('/visitEnd', '\App\Http\Controllers\ArticleController@articleVisitEnd')->name('visitEnd');
 
-Route::prefix('/admin')->middleware('sbauth')->group(function() {
+Route::prefix('/admin')->middleware('auth')->group(function() {
     //exceptions of middleware
-    Route::get('/', [AdminController::class, 'loginInterface'])->name('admin.login');
-    Route::post('/checkLogin', [UserController::class, 'login'])->name('admin.checkLogin');
-    Route::get('/logout', [UserController::class, 'logout'])->name('admin.logout');
+    Route::withoutMiddleware('auth')->group(function() {
+        Route::get('/', [AdminController::class, 'loginInterface'])->name('admin.login');
+        Route::post('/checkLogin', [UserController::class, 'login'])->name('admin.checkLogin');
+        Route::get('/logout', [UserController::class, 'logout'])->name('admin.logout');
+    });
 
     Route::get('/changeLang/{id}', [UserController::class, 'setPreferredLang'])->where('id', '[0-9]+')->name('admin.changeLang');
     Route::get('/dashboard', [AdminController::class, 'dashboardInterface'])->name('admin.dashboard');
@@ -36,7 +38,7 @@ Route::prefix('/admin')->middleware('sbauth')->group(function() {
 
     //Article
     Route::get('/articleList', '\App\Http\Controllers\ArticleController@articleListInterface')->name('admin.articleList');
-    Route::post('/articleList', '\App\Http\Controllers\ArticleController@articleListInterfaceSearch')->middleware('sbauth');
+    Route::post('/articleList', '\App\Http\Controllers\ArticleController@articleListInterfaceSearch')->name('admin.articleListSearch');
     Route::get('/newArticle/{id?}', '\App\Http\Controllers\ArticleController@articleFormInterface')->where('id', '[0-9]+')->name('admin.newArticle');
     Route::post('/newArticle', '\App\Http\Controllers\ArticleController@articleFormPost')->name('admin.newArticlePost');
     Route::post('/article/comment/enable-disable', [ArticleController::class, 'enableDisableComment'])->name('admin.article.comment.action');

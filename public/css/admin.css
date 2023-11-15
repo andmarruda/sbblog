@@ -26,3 +26,11 @@ footer{
 #alert-success ul, #alert-error ul{
     margin-bottom: 0 !important;
 }
+
+.message-top {
+    position: fixed;
+    top: 0;
+    left: 25% !important;
+    right: 25% !important;
+    z-index: 1030;
+}

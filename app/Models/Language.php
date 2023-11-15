@@ -27,4 +27,20 @@ class Language extends Model
 
         return config('app.locale');
     }
+
+    /**
+     * Get user language icon and label
+     * @return ['icon' => string, 'label' => string]
+     */
+    public static function getSelectedLang()
+    {
+        if(auth()->check())
+        {
+            $lang = Language::find(auth()->user()->language_id);
+            if($lang)
+                return ['icon' => $lang->icon, 'label' => $lang->label];
+        }
+
+        return ['icon' => '', 'label' => ''];
+    }
 }

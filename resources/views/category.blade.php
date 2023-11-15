@@ -14,9 +14,7 @@
         <input type="text" minlength="5" maxlength="50" class="form-control" id="categoryName" name="categoryName" placeholder="{{__('adminTemplate.category.form.label')}}" required value="{{$cat->category ?? ''}}">
     </div>
 
-    @if(!is_null(session('saved')))
-        @include('utils.alertSuccess', ['message' => __('adminTemplate.category.okmessage')])
-    @endif
+    @include('alert.response-message')
 
     @include('utils.alertError')
 

@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use App\Models\Language;
@@ -19,10 +18,14 @@ class AdminLang
      */
     public function handle(Request $request, Closure $next)
     {
-        $uc = new UserController();
-        $locale = $uc->getLocale() ?? Language::defaultLocale();
-        App::setLocale($locale);
-
+        $lang_id = Language::defaultLocale();
+        if(auth()->check())
+        {
+            $lang = Language::find(auth()->user()->language_id);
+            $lang_id = ($lang) ? $lang->lang_id : $lang_id;
+        }
+        
+        App::setLocale($lang_id);
         return $next($request);
     }
 }

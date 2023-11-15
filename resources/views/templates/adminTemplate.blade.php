@@ -6,12 +6,7 @@
         <title>{{config('app.name')}} - Painel administrativo</title>
         <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
         <link href="{{asset('css/admin.css')}}" rel="stylesheet">
-        @if(in_array(Route::current()->getName(), ['admin.newArticle', 'admin.newArticlePost']))
-        <link rel="stylesheet" href="{{asset('css/monokai-sublime.min.css')}}">
-        <link rel="stylesheet" href="{{asset('css/quill.snow.css')}}">
-        <script src="{{asset('js/highlight.min.js')}}"></script>
-        <script src="{{asset('js/quill.min.js')}}"></script>
-        @endif
+        @yield('css')
     </head>
     <body>
         <div class="container-md">
@@ -60,10 +55,10 @@
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="javascript: void(0);" id="navbarArticleDropDownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="{{asset($_SESSION['sbblog']['lang']['icon'])}}" alt="{{$_SESSION['sbblog']['lang']['label']}}">
+                                        <img src="{{ asset($lang['icon']) }}" alt="{{ $lang['label'] }}">
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarArticleDropDownMenu">
-                                        @foreach(\App\Models\Language::all() as $mLang)
+                                        @foreach($languages as $mLang)
                                         <li><a class="dropdown-item" href="{{route('admin.changeLang', ['id' => $mLang->id])}}"><img src="{{asset($mLang->icon)}}" alt="{{$mLang->label}}"> {{$mLang->label}}</a></li>
                                         @endforeach
                                     </ul>
@@ -83,10 +78,8 @@
                     {{__('adminTemplate.footer.copyright')}} © 2021-2031
                 </div>
                 <div class="col-md-5" style="text-align: right;">
-                    <a href="https://sysborg.com.br" target="_blank" title="https://sysborg.com.br">
-                        <img src="{{asset('images/poweredby.png')}}" alt="Powered By Sysborg">
-                    </a> <span style="margin-left:10px; margin-right:10px;">|</span> <a href="https://andersonarruda.com.br" target="_blank" title="https://andersonarruda.com.br">
-                        <img src="{{asset('images/poweredby2.png')}}" alt="Powered By Anderson Arruda">
+                    <a href="https://andersonarruda.com.br" target="_blank" title="https://andersonarruda.com.br">
+                        <img src="{{ asset('images/poweredby2.png') }}" alt="Powered By Anderson Arruda">
                     </a>
                 </div>
             </footer>
@@ -146,9 +139,9 @@
             </div>
         </div>
 
-        <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-        <script src="{{asset('js/fontawesome/all.min.js')}}"></script>
-        <script src="{{asset('js/sbblog.js')}}"></script>
+        <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('js/fontawesome/all.min.js') }}"></script>
+        <script src="{{ asset('js/sbblog.js') }}"></script>
         <script>
             const alterPassword = async () => {
                 let fd = new FormData(document.getElementById('formAlterPass'));
@@ -175,5 +168,7 @@
                 }
             };
         </script>
+
+        @yield('jscript')
     </body>
 </html>

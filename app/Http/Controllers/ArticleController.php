@@ -168,7 +168,7 @@ class ArticleController extends Controller
      */
     private function prepareFormInterface(?bool $saved=NULL, ?string $message=NULL, ?array $art=NULL)
     {
-        $args = ['categories' => Category::get()];
+        $args = [];
         if(!is_null($saved))
             $args['saved'] = $saved;
 

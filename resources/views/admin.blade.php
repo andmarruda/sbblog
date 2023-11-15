@@ -19,11 +19,11 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="email">Email</label>
-                                    <input type="text" class="form-control" name="email" id="email" value="" placeholder="Email">
+                                    <input type="text" class="form-control" name="email" id="email" value="{{ old('email') }}" placeholder="Email" required="required">
                                 </div>
                                 <div class="mb-3">
                                     <label for="pass">Senha</label>
-                                    <input type="password" class="form-control" name="pass" id="pass" value="" placeholder="Senha">
+                                    <input type="password" class="form-control" name="password" id="password" value="" placeholder="Senha" required="required">
                                 </div>
                                 @if(!is_null(session('message')))
                                 <div class="mb-3">

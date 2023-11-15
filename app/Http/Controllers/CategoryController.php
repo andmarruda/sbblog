@@ -39,7 +39,7 @@ class CategoryController extends Controller
         $category->fill([
             'color' => is_null($request->input('id')) ? $this->generatesRandomColor() : $category->color,
             'category' => $request->input('categoryName'),
-            'user_id' => $_SESSION['sbblog']['user_id']
+            'user_id' => auth()->user()->id
         ]);
     }
 
@@ -79,7 +79,9 @@ class CategoryController extends Controller
         $saved = $category->save();
         $this->sitemap();
 
-        return redirect()->route('category.create')->with('saved', $saved);
+        return redirect()->route('category.create')
+                ->with('saved', $saved)
+                ->with('saved-message', __('adminTemplate.category.okmessage'));
     }
 
     /**
@@ -107,7 +109,9 @@ class CategoryController extends Controller
         $saved = $category->save();
         $this->sitemap();
 
-        return redirect()->route('category.edit', $category->id)->with('saved', $saved);
+        return redirect()->route('category.edit', $category->id)
+            ->with('saved', $saved)
+            ->with('saved-message', __('adminTemplate.category.okmessage'));
     }
 
     /**
