@@ -2,7 +2,7 @@
 
 SBBlog are developed over Laravel framework. If want to know more about access <a href="https://laravel.com/" target="_blank">https://laravel.com</a>
 
-# Important: Some new features are being added so maybe you experience some bugs, please use Release v1.0.3 - When the biggest changes are done, we will remove this warning.
+<h2><span style="color:red;">Important:</span> Some new features are being added so maybe you experience some bugs, please use Release v1.0.3 - When the biggest changes are done, we will remove this warning.</h2>
 
 WOWWWW that's my first open project in Laravel, i remember when i was starting in this project, so much things to learn, and now i will bring all this cool stuff for this Project.
 
