@@ -35,11 +35,7 @@ class Language extends Model
     public static function getSelectedLang()
     {
         if(auth()->check())
-        {
-            $lang = Language::find(auth()->user()->language_id);
-            if($lang)
-                return ['icon' => $lang->icon, 'label' => $lang->label];
-        }
+            return auth()->user()->language->toArray();
 
         return ['icon' => '', 'label' => ''];
     }

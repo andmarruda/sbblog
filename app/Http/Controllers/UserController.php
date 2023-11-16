@@ -26,18 +26,6 @@ class UserController extends Controller
     private string $regExPass = '/(?=.*[a-zA-Z].*)(?=.*[0-9].*)(^[a-zA-Z0-9]{8,}$)/';
 
     /**
-     * Verify if the logged user is the First user registered
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          bool
-     */
-    public function isConfigUser() : bool
-    {
-        return $_SESSION['sbblog']['user_id'] == 1;
-    }
-
-    /**
      * Redirect to User Register to generates a new and safe user
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
@@ -169,7 +157,7 @@ class UserController extends Controller
         $request->validate($this->validations);
         $saved = user::create($this->fillArray($request));
 
-        if($this->isConfigUser() && $saved && $this->disableConfigUser())
+        if(User::firstUserLogged()->count() > 0 && $saved && $this->disableConfigUser())
             return redirect()->route('user.create')->with('saved', $saved)->with('configUser', true);
 
         return redirect()->route('user.create')->with('saved', $saved);

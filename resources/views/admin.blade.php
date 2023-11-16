@@ -34,10 +34,7 @@
                             </form>
                         </div>
                         <div class="card-footer" style="text-align:right;">
-                            SBBlog Powered By <br>
-                            <a href="https://sysborg.com.br" target="_blank" title="https://sysborg.com.br">
-                                <img src="{{asset('images/poweredby.png')}}" alt="Powered By Sysborg">
-                            </a> <span style="margin-left:10px; margin-right:10px;">|</span> <a href="https://andersonarruda.com.br" target="_blank" title="https://andersonarruda.com.br">
+                            <a href="https://andersonarruda.com.br" target="_blank" title="https://andersonarruda.com.br">
                                 <img src="{{asset('images/poweredby2.png')}}" alt="Powered By Anderson Arruda">
                             </a>
                         </div>

@@ -20,7 +20,7 @@ Route::post('/visitEnd', '\App\Http\Controllers\ArticleController@articleVisitEn
 Route::prefix('/admin')->middleware('auth')->group(function() {
     //exceptions of middleware
     Route::withoutMiddleware('auth')->group(function() {
-        Route::get('/', [AdminController::class, 'loginInterface'])->name('admin.login');
+        Route::get('/', [AdminController::class, 'loginInterface'])->name('login');
         Route::post('/checkLogin', [UserController::class, 'login'])->name('admin.checkLogin');
         Route::get('/logout', [UserController::class, 'logout'])->name('admin.logout');
     });

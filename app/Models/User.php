@@ -8,10 +8,17 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+
+    /**
+     * First user email
+     * @var string
+     */
+    const FIRST_USER_EMAIL = 'admin@admin.com';
 
     /**
      * The attributes that are mass assignable.
@@ -43,11 +50,36 @@ class User extends Authenticatable
      * Get the preferred language parent
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @apram           
+     * @param           
      * @return          Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function language() : \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\Language::class);
+    }
+
+    /**
+     * Scope check if is the first user
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com > 
+     * @param           Builder $query
+     * @return          void
+     */
+    public function scopeFirstUser(Builder $query) : void
+    {
+        $query->where('email', self::FIRST_USER_EMAIL);
+    }
+
+    /**
+     * Scope check if is the first user logged
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com > 
+     * @param           Builder $query
+     * @return          void
+     */
+    public function scopeFirstUserLogged(Builder $query) : void
+    {
+        $query->where('email', self::FIRST_USER_EMAIL)
+            ->where('id', auth()->check() ? auth()->user()->id : -1);
     }
 }
