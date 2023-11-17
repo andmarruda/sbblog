@@ -46,7 +46,7 @@ class UserController extends Controller
      */
     public function redirectLoginAdmin()
     {
-        return redirect()->route('admin.login');
+        return redirect()->route('login');
     }
 
     /**
@@ -93,7 +93,7 @@ class UserController extends Controller
         if(auth()->check())
             auth()->logout();
 
-        return redirect()->route('admin.login');
+        return redirect()->route('login');
     }
 
     /**
