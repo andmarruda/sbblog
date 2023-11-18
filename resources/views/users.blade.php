@@ -18,16 +18,16 @@
         <input type="text" maxlength="255" class="form-control" id="name" name="name" placeholder="{{__('adminTemplate.user.form.name')}}" required value="{{$user->name ?? ''}}">
     </div>
     <div class="mb-3">
-        <label for="username" class="form-label">{{__('adminTemplate.user.form.user')}}</label>
-        <input type="email" maxlength="255" class="form-control" id="username" name="username" placeholder="{{__('adminTemplate.user.form.user')}}" required value="{{$user->email ?? ''}}">
+        <label for="email" class="form-label">{{__('adminTemplate.user.form.user')}}</label>
+        <input type="email" maxlength="255" class="form-control" id="email" name="email" placeholder="{{__('adminTemplate.user.form.user')}}" required value="{{$user->email ?? ''}}">
     </div>
     <div class="mb-3">
-        <label for="pass" class="form-label">{{__('adminTemplate.user.form.pass')}}</label>
-        <input type="password" maxlength="150" class="form-control" id="pass" name="pass" placeholder="{{__('adminTemplate.user.form.pass')}}" required>
+        <label for="password" class="form-label">{{__('adminTemplate.user.form.pass')}}</label>
+        <input type="password" maxlength="150" class="form-control" id="password" name="password" placeholder="{{__('adminTemplate.user.form.pass')}}" required>
     </div>
     <div class="mb-3">
-        <label for="pass_confirmation" class="form-label">{{__('adminTemplate.user.form.confirmPass')}}</label>
-        <input type="password" maxlength="150" class="form-control" id="pass_confirmation" name="pass_confirmation" placeholder="{{__('adminTemplate.user.form.confirmPass')}}" required>
+        <label for="password_confirmation" class="form-label">{{__('adminTemplate.user.form.confirmPass')}}</label>
+        <input type="password" maxlength="150" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="{{__('adminTemplate.user.form.confirmPass')}}" required>
     </div>
 
     @if(!is_null(session('saved')))
@@ -45,8 +45,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         if(document.getElementById('id').value.length > 0){
-            document.getElementById('pass').removeAttribute('required');
-            document.getElementById('pass_confirmation').removeAttribute('required');
+            document.getElementById('password').removeAttribute('required');
+            document.getElementById('password_confirmation').removeAttribute('required');
         }
     });
 
@@ -54,8 +54,8 @@
         if(document.getElementById('id').value.length == 0)
             return;
 
-        let p = document.getElementById('pass');
-        let cp = document.getElementById('pass_confirmation');
+        let p = document.getElementById('password');
+        let cp = document.getElementById('password_confirmation');
         if(p.value.length > 0 || cp.value.length > 0){
             p.setAttribute('required', '');
             cp.setAttribute('required', '');
@@ -66,8 +66,8 @@
         cp.removeAttribute('required', '');
     };
 
-    document.getElementById('pass').addEventListener('blur', () => changePass());
-    document.getElementById('pass_confirmation').addEventListener('blur', () => changePass());
+    document.getElementById('password').addEventListener('blur', () => changePass());
+    document.getElementById('password_confirmation').addEventListener('blur', () => changePass());
 </script>
 
 @if(isset($configUser) && $configUser)

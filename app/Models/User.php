@@ -53,6 +53,12 @@ class User extends Authenticatable
         static::created(function () {
             event(new DisableFirstUser());
         });
+
+        static::saving(function (&$user) {
+            if (isset($user->password) && !empty($user->password)) {
+                $user->password = Hash::make($user->password);
+            }
+        });
     }
 
     /**

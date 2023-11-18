@@ -8,59 +8,17 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
-{
-    /**
-     * Data validations
-     * var      array
-     */
-    private array $validations = [
-        'name'      => 'required|min:5|max:255|string',
-        'username'  => ['required', 'email', 'max:255'],
-        'pass'      => 'required|string|regex:/(?=.*[a-zA-Z].*)(?=.*[0-9].*)(^[a-zA-Z0-9]{8,}$)/|min:8|confirmed'
-    ];
-    
-    /**
-     * Regular expression to validate the strong of the password
-     * @var string
-     */
-    private string $regExPass = '/(?=.*[a-zA-Z].*)(?=.*[0-9].*)(^[a-zA-Z0-9]{8,}$)/';
-
-    /**
-     * Redirect to User Register to generates a new and safe user
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          Redirect::route
-     */
-    public function redirectFirstUser()
-    {
-        return redirect()->route('user.create')->with('configUser', '1');
-    }
-
-    /**
-     * Verify if is logged in if not redirect to Login template
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param
-     * @return          Redirect::route
-     */
-    public function redirectLoginAdmin()
-    {
-        return redirect()->route('login');
-    }
-
+{   
     /**
      * Change preferred user's language
-     * @version         1.0.0
+     * @version         2.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
      * @param           int $language_id
      * @return          view
      */
     public function setPreferredLang(int $language_id)
     {
-        $u = User::find($_SESSION['sbblog']['user_id']);
-        $u->language_id = $language_id;
-        $u->save();
+        User::find(auth()->user()->id)->update(['language_id' => $language_id]);
         return redirect()->route('admin.dashboard');
     }
 
@@ -97,33 +55,6 @@ class UserController extends Controller
     }
 
     /**
-     * Returns an array for fill or create
-     * @return  array
-     */
-    private function fillArray(Request $request) : array
-    {
-        return [
-            'name'      => $request->input('name'),
-            'email'     => $request->input('username'),
-            'password'  => Hash::make($request->input('pass'))
-        ];
-    }
-
-    /**
-     * Disable the configuration's user
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          bool
-     */
-    private function disableConfigUser() : bool
-    {
-        $um = User::find(1);
-        $um->active = false;
-        return $um->save();
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -152,10 +83,14 @@ class UserController extends Controller
      */
     public function store(Request $request) : \Illuminate\Http\RedirectResponse
     {
-        $validations = $this->validations;
-        $validations['username'] = array_push($validations['username'], Rule::unique('users'));
-        $request->validate($this->validations);
-        $saved = user::create($this->fillArray($request));
+        $request->validate([
+            'name'      => 'required|min:5|max:255|string',
+            'email'     => 'required|email|max:255|unique:users,email',
+            'password'  => 'required|string|regex:'. config('auth.password_regex'). '|min:8|confirmed'
+        ]);
+        
+
+        $saved = User::create($request->all('name', 'email', 'password'));
 
         if(User::firstUserLogged()->count() > 0 && $saved && $this->disableConfigUser())
             return redirect()->route('user.create')->with('saved', $saved)->with('configUser', true);
@@ -183,12 +118,12 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $validations = $this->validations;
-        $validations['username'] = array_push($validations['username'], Rule::unique('users')->ignoreModel($user));
-        $request->validate($this->validations);
-        $user->fill($this->fillArray($request));
-        $saved = $user->save();
-
+        $request->validate([
+            'name'      => 'required|min:5|max:255|string',
+            'email'     => 'required|email|max:255|unique:users,email,'. $user->id,
+            'password'  => 'required|string|regex:'. config('auth.password_regex'). '|min:8|confirmed'
+        ]);
+        $user->update($request->all('name', 'email', 'password'));
         return redirect()->route('user.edit', $user->id)->with('saved', $saved);
     }
 
@@ -201,6 +136,8 @@ class UserController extends Controller
      */
     public function alterPassword(Request $req)
     {
+        //validates returning with json
+        //add validatio by request with the correct form
         header('Content-Type: application/json; charset=utf-8');
 
         if(!preg_match($this->regExPass, $req->input('newPassword'))){

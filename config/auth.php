@@ -107,5 +107,6 @@ return [
     */
 
     'password_timeout' => 10800,
+    'password_regex' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\S]{8,}$/',
 
 ];
