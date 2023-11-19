@@ -69,13 +69,4 @@
     document.getElementById('password').addEventListener('blur', () => changePass());
     document.getElementById('password_confirmation').addEventListener('blur', () => changePass());
 </script>
-
-@if(isset($configUser) && $configUser)
-    <script>
-        setTimeout(() => {
-            location.href = "{{route('admin.logout')}}";
-        }, 1000);
-    </script>
-@endif
-
 @endsection

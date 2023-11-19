@@ -89,12 +89,7 @@ class UserController extends Controller
             'password'  => 'required|string|regex:'. config('auth.password_regex'). '|min:8|confirmed'
         ]);
         
-
         $saved = User::create($request->all('name', 'email', 'password'));
-
-        if(User::firstUserLogged()->count() > 0 && $saved && $this->disableConfigUser())
-            return redirect()->route('user.create')->with('saved', $saved)->with('configUser', true);
-
         return redirect()->route('user.create')->with('saved', $saved);
     }
 

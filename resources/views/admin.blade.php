@@ -30,6 +30,9 @@
                                     @include('utils.alertDanger', ['message' => session('message')])
                                 </div>
                                 @endif
+                                @if(session()->has('firstUserMessage'))
+                                    @include('utils.alertSuccess', ['message' => session('firstUserMessage')])
+                                @endif
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-arrow-right-to-bracket"></i> Entrar</button>
                             </form>
                         </div>

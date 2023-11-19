@@ -17,5 +17,5 @@ return [
     'auth.userExists'               => 'O email :email já está registrado!',
     'auth.passwordStrong'           => 'Aumente a segurança da sua senha! Sua senha deve conter pelo menos 1 letra, 1 número e pelo menos 8 caracteres.',
     'auth.errPassConfirm'           => 'Senha e confirmação de senha não são correspondentes!',
-    
+    'auth.firstUserDisabled'        => 'Novo usuário criado e primeiro usuário desabilitado!',
 ];

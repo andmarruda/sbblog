@@ -17,5 +17,5 @@ return [
     'auth.userExists'               => 'Email :email already exists!',
     'auth.passwordStrong'           => 'Increase your password\'s strong! Your password must contain at least 1 letter, 1 number and at least 8 characters.',
     'auth.errPassConfirm'           => 'Confirm password and password doesn\'t match!',
-    
+    'auth.firstUserDisabled'        => 'New user created and first user disabled!',
 ];

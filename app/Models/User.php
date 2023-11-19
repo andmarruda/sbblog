@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use App\Events\DisableFirstUser;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
