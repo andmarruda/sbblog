@@ -16,7 +16,7 @@ class RedirectFirstUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->check() && !in_array($request->route()->getName(), ['user.create', 'user.store']))
+        if(auth()->check() && auth()->user()->firstUserLogged()->count() > 0 && !in_array($request->route()->getName(), ['user.create', 'user.store']))
             return redirect()->route('user.create');
 
         return $next($request);
