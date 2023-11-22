@@ -17,7 +17,7 @@ Route::post('/article', '\App\Http\Controllers\PublicController@articlePageComme
 Route::post('/visitInit', '\App\Http\Controllers\ArticleController@articleVisitInit')->name('visitInit');
 Route::post('/visitEnd', '\App\Http\Controllers\ArticleController@articleVisitEnd')->name('visitEnd');
 
-Route::prefix('/admin')->middleware(['auth', 'firstUserRedirect'])->group(function() {
+Route::prefix('/admin')->middleware(['auth', 'firstUserRedirect', 'language'])->group(function() {
     //exceptions of middleware
     Route::withoutMiddleware(['auth', 'firstUserRedirect'])->group(function() {
         Route::get('/', [AdminController::class, 'loginInterface'])->name('login');
