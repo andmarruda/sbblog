@@ -6,6 +6,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {   
@@ -86,7 +87,7 @@ class UserController extends Controller
         $request->validate([
             'name'      => 'required|min:5|max:255|string',
             'email'     => 'required|email|max:255|unique:users,email',
-            'password'  => 'required|string|regex:'. config('auth.password_regex'). '|min:8|confirmed'
+            'password'  => 'required|regex:'. config('auth.password_regex'). '|min:8|confirmed'
         ]);
         
         $saved = User::create($request->all('name', 'email', 'password'));
@@ -116,7 +117,7 @@ class UserController extends Controller
         $request->validate([
             'name'      => 'required|min:5|max:255|string',
             'email'     => 'required|email|max:255|unique:users,email,'. $user->id,
-            'password'  => 'required|string|regex:'. config('auth.password_regex'). '|min:8|confirmed'
+            'password'  => 'required|regex:'. config('auth.password_regex'). '|min:8|confirmed'
         ]);
         $user->update($request->all('name', 'email', 'password'));
         return redirect()->route('user.edit', $user->id)->with('saved', $saved);
@@ -127,34 +128,22 @@ class UserController extends Controller
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
      * @param           Request $req
-     * @return          NEVER string
+     * @return          JsonReturn
      */
     public function alterPassword(Request $req)
     {
-        //validates returning with json
-        //add validatio by request with the correct form
-        header('Content-Type: application/json; charset=utf-8');
+        $validator = Validator::make($req->all(), [
+            'oldPassword'       => ['required', 'regex:'. config('auth.password_regex'), 'min:8', function($attribute, $oldPassword, $fail) {
+                if(!Hash::check($oldPassword, auth()->user()->password))
+                    return $fail(__('sbblog.auth.oldPasswordInvalid'));
+            }],
+            'newPassword'       => 'required|regex:'. config('auth.password_regex'). '|min:8|confirmed'
+        ]);
 
-        if(!preg_match($this->regExPass, $req->input('newPassword'))){
-            echo json_encode(['error' => true, 'message' => __('adminTemplate.password.safetyMessage')]);
-            return;
-        }
+        if($validator->fails())
+            return response()->json($validator->errors(), 422);
 
-        if($req->input('newPassword') != $req->input('checkPassword')){
-            echo json_encode(['error' => true, 'message' => __('adminTemplate.password.diffPassword')]);
-            return;
-        }
-
-        $u = User::where('id', '=', $_SESSION['sbblog']['user_id'])->where('password', '=', md5($req->input('oldPassword')));
-        if($u->count() == 0){
-            echo json_encode(['error' => true, 'message' => __('adminTemplate.password.verifyCurrentErr')]);
-            return;
-        }
-
-        $ug = $u->first();
-        $ug->password = Hash::make($req->input('newPassword'));
-        $saved = $ug->save();
-        
-        echo json_encode(['error' => (!$saved), 'message' => __('adminTemplate.password.verifyCurrentErr')]);
+        User::find(auth()->user()->id)->update(['password' => $req->input('newPassword')]);
+        return response()->json(['message' => __('sbblog.auth.passwordChanged')]);
     }
 }

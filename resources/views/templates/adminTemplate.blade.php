@@ -111,7 +111,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="formAlterPass" action="javascript: alterPassword();">
+                        <form id="formAlterPass">
                             @csrf
                             <div class="mb-3">
                                 <label for="oldPassword">{{__('adminTemplate.modal.password.oldpass')}}</label>
@@ -124,8 +124,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="checkPassword">{{__('adminTemplate.modal.password.confpass')}}</label>
-                                <input type="password" class="form-control" id="checkPassword" name="checkPassword" value="" placeholder="{{__('adminTemplate.modal.password.confpass')}}" required>
+                                <label for="newPassword_confirmation">{{__('adminTemplate.modal.password.confpass')}}</label>
+                                <input type="password" class="form-control" id="newPassword_confirmation" name="newPassword_confirmation" value="" placeholder="{{__('adminTemplate.modal.password.confpass')}}" required>
                             </div>
 
                             <div class="mb-3">
@@ -143,28 +143,50 @@
         <script src="{{ asset('js/fontawesome/all.min.js') }}"></script>
         <script src="{{ asset('js/sbblog.js') }}"></script>
         <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('formAlterPass').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    alterPassword();
+                });
+            });
+
+            const unexpectedError = `{{ __('sbblog.unexpected') }}`;
+
+            const divMessage = (message, type = 'danger') => {
+                return `
+                    <div class="alert alert-${type} alert-dismissible fade show">
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+            };
+
             const alterPassword = async () => {
                 let fd = new FormData(document.getElementById('formAlterPass'));
+                const advice = document.getElementById('adviceAlterPass');
                 let f = await fetch("{{route('admin.userAlterPass')}}", {
                     method: 'POST',
                     body: fd
                 });
 
-                if(!f.ok)
+                if(!f.status >= 300 && f.status < 400)
                     location.href = "{{route('admin.logout')}}";
 
                 try{
                     let j = await f.json();
-                    let div = document.getElementById('adviceAlterPass');
-                    div.innerHTML = '<div class="alert '+ (j.error ? 'alert-danger' : 'alert-success') + ' alert-dismissible fade show">'+ j.message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-                    if(!j.error){
-                        setTimeout(() => { 
-                            document.getElementById('formAlterPass').reset(); 
-                        }, 1000);
+                    if(f.status == 200) {
+                        advice.innerHTML = divMessage(j.message, 'success');
+                        setTimeout(() => document.getElementById('formAlterPass').reset(), 1000);
+                    } else {
+                        let error = '';
+
+                        for(let i of Object.keys(j))
+                            error += j[i].join('<br>') + '<br>';
+
+                        advice.innerHTML = divMessage(error);
                     }
                 } catch(e){
-                    console.log(e);
-                    location.href = "{{route('admin.logout')}}";
+                    advice.innerHTML = divMessage(unexpectedError);
                 }
             };
         </script>

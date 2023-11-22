@@ -56,7 +56,7 @@ class User extends Authenticatable
         });
 
         static::saving(function (&$user) {
-            if (isset($user->password) && !empty($user->password)) {
+            if (!$user->originalIsEquivalent('password')) {
                 $user->password = Hash::make($user->password);
             }
         });

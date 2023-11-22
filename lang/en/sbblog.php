@@ -18,4 +18,7 @@ return [
     'auth.passwordStrong'           => 'Increase your password\'s strong! Your password must contain at least 1 letter, 1 number and at least 8 characters.',
     'auth.errPassConfirm'           => 'Confirm password and password doesn\'t match!',
     'auth.firstUserDisabled'        => 'New user created and first user disabled!',
+    'auth.oldPasswordInvalid'       => 'The current password is invalid!',
+    'unexpected'                    => 'Unexpected error!',
+    'auth.passwordChanged'          => 'Password changed successfully!',
 ];
