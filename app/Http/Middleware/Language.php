@@ -16,6 +16,9 @@ class Language
      */
     public function handle(Request $request, Closure $next)
     {
+        if(!auth()->check())
+            return $next($request);
+
         \App::setlocale(auth()->user()->language->lang_id);
         return $next($request);
     }

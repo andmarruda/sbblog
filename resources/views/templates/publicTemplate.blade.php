@@ -50,6 +50,8 @@
         @isset($gen->google_optimize_script)
         {!!$gen->google_optimize_script!!}
         @endisset
+
+        @yield('recaptcha')
     </head>
     <body>
         <div class="container-md">

@@ -32,6 +32,15 @@ class UserController extends Controller
      */
     public function login(Request $req)
     {
+        if(config('app.RECAPTCHAV3_SITEKEY') != '')
+        {
+            $req->validate([
+                'email'     => 'required|email|max:255',
+                'password'  => 'required|regex:'. config('auth.password_regex'). '|min:8',
+                'g-recaptcha-response' => 'required|recaptchav3:authentication,0.7'
+            ]);
+        }
+
         if(auth()->attempt($req->all(['email', 'password'])))
         {
             return redirect()->route('admin.dashboard');

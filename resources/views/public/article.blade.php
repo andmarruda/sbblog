@@ -1,5 +1,11 @@
 @extends('templates.publicTemplate', ['category' => $category, 'article' => $article])
 
+@section('recaptcha')
+    @if(config('app.RECAPTCHAV3_SITEKEY') != '')
+        {!! RecaptchaV3::initJs() !!}
+    @endif    
+@endsection
+
 @section('page')
 
 <div class="card">
@@ -67,8 +73,19 @@
         <label for="comment" class="form-label">* Comentário <small>Máximo de 350 dígitos</small></label>
         <textarea class="form-control" rows="3" id="text" name="text" required maxlength="350" placeholder="*Comentário"></textarea>
     </div>
-    {!! RecaptchaV3::field(route('articleComment')) !!}
+    @if(config('app.RECAPTCHAV3_SITEKEY') != '')
+        {!! RecaptchaV3::field('comment') !!}
+    @endif
     <button type="submit" class="btn btn-outline-primary"><i class="fa-regular fa-message"></i> Comentar</button>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 </form>
 
 <script src="{{asset('js/collectSbblog.js')}}"></script>

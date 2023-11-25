@@ -5,6 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{config('app.name')}} - Painel administrativo</title>
         <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+        @if(config('app.RECAPTCHAV3_SITEKEY') != '')
+            {!! RecaptchaV3::initJs() !!}
+        @endif
     </head>
     <body>
         <div class="container">
@@ -17,6 +20,9 @@
                         <div class="card-body">
                             <form method="post" action="{{route('admin.checkLogin')}}" autocomplete="off">
                                 @csrf
+                                @if(config('app.RECAPTCHAV3_SITEKEY') != '')
+                                    {!! RecaptchaV3::field('authentication') !!}
+                                @endif
                                 <div class="mb-3">
                                     <label for="email">Email</label>
                                     <input type="text" class="form-control" name="email" id="email" value="{{ old('email') }}" placeholder="Email" required="required">

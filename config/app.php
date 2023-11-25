@@ -125,6 +125,9 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'RECAPTCHAV3_SECRET'    => env('RECAPTCHAV3_SECRET', ''),
+    'RECAPTCHAV3_SITEKEY'   => env('RECAPTCHAV3_SITEKEY', ''),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

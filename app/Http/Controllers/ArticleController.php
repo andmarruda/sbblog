@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Lunaweb\RecaptchaV3\Facades\RecaptchaV3;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\ArticleComments;
@@ -255,6 +256,12 @@ class ArticleController extends Controller
      */
     public function articleComment(Request $req) : bool
     {
+        $req->validate([
+            'name'                  => 'required|max:255',
+            'text'                  => 'required|max:255',
+            'g-recaptcha-response'  => config('app.RECAPTCHAV3_SITEKEY')=='' ? 'nullable' : 'required|recaptchav3:comment,0.5'
+        ]);
+
         $comm = new ArticleComments();
         $comm->fill([
             'article_id' => $req->input('id'),
@@ -354,6 +361,7 @@ class ArticleController extends Controller
      */
     public function articleFormPost(Request $req)
     {
+        //dd($req->all());
         $saved = false;
         if(!$req->hasFile('articleCover') && $req->input('articleCoverPath') == '')
             return $this->prepareFormInterface($saved, __('adminTemplate.article.form.imageNotNull'));
@@ -386,12 +394,13 @@ class ArticleController extends Controller
             'cover_path' => $filepath, 
             'category_id' => $req->input('category'), 
             'article' => $req->input('articleText'), 
-            'user_id' => $_SESSION['sbblog']['user_id'], 
+            'user_id' => auth()->user()->id, 
             'url_friendly' => $this->titleToFriendlyUrl($req->input('articleName')), 
             'active' => $req->input('active'),
             'article_color' => is_null($req->input('id')) ? $this->generatesRandomColor() : $a->article_color,
             'description' => $req->input('description'),
-            'premiere_date' => $premiere_date
+            'premiere_date' => $premiere_date,
+            'active' => 1,
         ]);
 
         $saved = $a->save();
