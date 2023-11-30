@@ -6,22 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\SocialNetworkUrl;
 use App\Models\General;
 use App\Models\CommentConfig;
+use Illuminate\Support\Facades\Storage;
+use App\Helpers\Image;
 
 class GeneralController extends Controller
 {
-    /**
-     * Data validations
-     * var      array
-     */
-    private array $validations = [
-        'slogan'            => 'required|min:45|max:200|string',
-        'section'           => 'required|min:5|max:100|string',
-        'page_title'        => 'required|min:5|max:110|string',
-        'page_description'  => 'required|min:45|max:200|string',
-        'autoconvert_webp'  => 'required',
-        'comment_config_id' => 'required'
-    ];
-
     /**
      * Show the form for creating a new resource.
      *
@@ -45,17 +34,6 @@ class GeneralController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  General $general
-     * @return \Illuminate\Http\Response
-     */
-    public function show(General $general)
-    {
-        return $general;
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  General $general
@@ -63,7 +41,7 @@ class GeneralController extends Controller
      */
     public function edit(General $general)
     {
-        return view('general', ['gen' => $general, 'comment_configs' => CommentConfig::where('language_id', '=', $_SESSION['sbblog']['lang']['id'])->get()]);
+        return view('general', ['gen' => $general, 'comment_configs' => CommentConfig::where('language_id', '=', auth()->user()->language_id)->get()]);
     }
 
     /**
@@ -101,30 +79,26 @@ class GeneralController extends Controller
      */
     public function update(Request $request, General $general) : \Illuminate\Http\RedirectResponse
     {
-        $filepath = $general->brand_image;
-        if($request->hasFile('brand_image') && $request->file('brand_image')->isValid()){
-            $request->validate(ImageController::validateFile($this->validations, 'brand_image'));
-            $extension = $request->file('brand_image')->extension();
-            $stored = $request->file('brand_image')->store('public');
-            $filepath = ($request->input('autoconvert_webp')) ? ImageController::imageToWebp($stored, $extension, true) : $stored;
-            ImageController::deleteFile($general->brand_image);
-        } else
-            $request->validate($this->validations);
-
-        $general->fill([
-            'brand_image' => $filepath,
-            'slogan' => $request->input('slogan'),
-            'section' => $request->input('section'),
-            'active' => true,
-            'google_analytics' => $request->input('google_analytics'),
-            'google_ads_script' => $request->input('google_ads_script'),
-            'google_optimize_script' => $request->input('google_optimize_script'),
-            'title' => $request->input('page_title'),
-            'description' => $request->input('page_description'),
-            'autoconvert_webp' => $request->input('autoconvert_webp'),
-            'comment_config_id' => $request->input('comment_config_id')
+        $request->validate([
+            'slogan'            => 'required|min:45|max:200|string',
+            'section'           => 'required|min:5|max:100|string',
+            'page_title'        => 'required|min:5|max:110|string',
+            'page_description'  => 'required|min:45|max:200|string',
+            'autoconvert_webp'  => 'required',
+            'comment_config_id' => 'required',
+            'brand_image'       => 'sometimes|mimes:'. config('upload.mimes'). '|max:'. config('upload.maxsize')
         ]);
-        $saved = $general->save();
+        
+        $filepath = $general->brand_image;
+        if($request->hasFile('brand_image') && $request->file('brand_image')->isValid())
+            $filepath = Image::generalBrandImage($request, $request->input('autoconvert_webp'));
+
+        $saved = $general->update([...$request->all(), 
+            'brand_image' => $filepath,
+            'active' => true,
+            'title' => $request->input('page_title'),
+            'description' => $request->input('page_description')
+        ]);
 
         if(!is_null($request->input('socialnetwork')))
             $this->saveSocialNetwork($request->input('socialnetwork'), $general->id);

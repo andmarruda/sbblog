@@ -106,6 +106,7 @@ return [
     'general.pageDescription'       => 'Descrição da página',
     'general.autoconvert_webp'      => 'Converte automáticamente para webp?',
     'general.comment_config'        => 'Configuração de comentário',
+    'brand.recommended'             => 'Recomendado 200x200px',
 
     'articleCard.createdBy'         => 'Criado por',
     'articleCard.createdTime'       => 'em',

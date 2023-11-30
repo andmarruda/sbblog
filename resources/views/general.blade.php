@@ -24,7 +24,7 @@
                     <img src="{{asset('storage/'. $gen->getBrandImage())}}" class="img-thumbnail" alt="{{__('adminTemplate.general.brandImage')}}" id="img-preview" style="max-width:150px !important; max-height:200px !important;">
                 </div>
                 <div class="col">
-                    <label for="brand_image" class="form-label">{{__('adminTemplate.general.brandImage')}}</label>
+                    <label for="brand_image" class="form-label">{{__('adminTemplate.general.brandImage')}} <small>{{ __('adminTemplate.brand.recommended') }}</label>
                     <input type="file" class="form-control" id="brand_image" name="brand_image">
                 </div>
             </div>
