@@ -9,10 +9,8 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\User;
-use Illuminate\Support\Facades\Session;
 
-class DisableFirstUser
+class SitemapEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -23,9 +21,6 @@ class DisableFirstUser
      */
     public function handle() : void
     {
-        if(!auth()->check() || auth()->user()->email != User::FIRST_USER_EMAIL)
-            return;
-
-        User::firstUser()->delete();
+        
     }
 }

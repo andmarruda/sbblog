@@ -44,7 +44,7 @@
                         <tbody>
                             @foreach($artStat as $stat)
                             <tr>
-                                <td><span class="badge" style="background-color:{{$stat->article_color}};">&nbsp;</span></td>
+                                <td><span class="badge" style="background-color:{{$stat->bgcolor}};">&nbsp;</span></td>
                                 <td>{{$stat->title}}</td>
                                 <td></td>
                                 <td></td>
@@ -81,8 +81,8 @@
                     datasets: [{
                     label: 'Categorias mais acessadas',
                     data: getColumn(catStat, 'total_visits'),
-                    backgroundColor: getColumn(catStat, 'color'),
-                    borderColor: getColumn(catStat, 'color'),
+                    backgroundColor: getColumn(catStat, 'bgcolor'),
+                    borderColor: getColumn(catStat, 'bgcolor'),
                     borderWidth: 1
                     }]
                 },
@@ -109,8 +109,8 @@
                     datasets: [{
                     label: 'Artigos com maior tempo de permanência',
                     data: getColumn(artStat, 'avg_sec'),
-                    backgroundColor: getColumn(artStat, 'article_color'),
-                    borderColor: getColumn(artStat, 'article_color'),
+                    backgroundColor: getColumn(artStat, 'bgcolor'),
+                    borderColor: getColumn(artStat, 'bgcolor'),
                     borderWidth: 1
                     }]
                 },

@@ -8,47 +8,12 @@ use App\Models\Article;
 use App\Models\ArticleComments;
 use App\Models\ArticleTags;
 use App\Models\ArticleVisits;
-use App\Models\Util;
 use App\Models\Category;
+use App\Helpers\Utils;
 use DateTime;
-
-if(session_status() != PHP_SESSION_ACTIVE)
-    session_start();
 
 class ArticleController extends Controller
 {
-    /**
-     * Generates a random color to the article
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          string
-     */
-    public function generatesRandomColor() : string
-    {
-        $rand = Util::randomColor();
-        $search = Article::where('article_color', $rand);
-        while($search->count() > 0){
-            $rand = Util::randomColor();
-            $search = Article::where('article_color', $rand);
-        }
-
-        return $rand;
-    }
-
-    /**
-     * Remove accents and prepare the title to a friendly URL
-     * @version     1.0.0
-     * @author      Anderson Arruda < andmarruda@gmail.com >
-     * @param       string $title
-     * @return      string
-     */
-    public function titleToFriendlyUrl(string $title) : string
-    {
-        $title = str_replace(' ', '-', iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $title));
-        return preg_replace('/[^0-9A-Za-z]/', '', $title);
-    }
-
     /**
      * Get latests 20 articles by category
      * @version     1.0.0
@@ -395,9 +360,8 @@ class ArticleController extends Controller
             'category_id' => $req->input('category'), 
             'article' => $req->input('articleText'), 
             'user_id' => auth()->user()->id, 
-            'url_friendly' => $this->titleToFriendlyUrl($req->input('articleName')), 
+            'url_friendly' => Utils::getSlug($req->input('articleName')), 
             'active' => $req->input('active'),
-            'article_color' => is_null($req->input('id')) ? $this->generatesRandomColor() : $a->article_color,
             'description' => $req->input('description'),
             'premiere_date' => $premiere_date,
             'active' => 1,

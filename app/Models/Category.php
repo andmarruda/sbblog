@@ -6,13 +6,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\Utils;
+use App\Events\SitemapEvent;
 
 class Category extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['category', 'color', 'user_id'];
+    protected $fillable = ['category', 'user_id'];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function (Category &$model) {
+            $model->bgcolor = Utils::uniqueRandomColor($model);
+        });
+
+        static::saved(function () {
+            event(new SitemapEvent());
+        });
+    }
 
     /**
      * Get average time of staying at this article

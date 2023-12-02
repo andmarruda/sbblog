@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
-use \App\Models\Util;
 
 class CategoryController extends Controller
 {
@@ -13,7 +12,7 @@ class CategoryController extends Controller
      * var      array
      */
     private array $validations = [
-        'categoryName' => 'required|min:5|max:50|string'
+        'category' => 'required|min:5|max:50|string'
     ];
 
     /**
@@ -25,22 +24,6 @@ class CategoryController extends Controller
     {
         $all = Category::withTrashed()->get()->sortBy('category');
         return view('category-list', ['category' => $all]);
-    }
-
-    /**
-     * Sets informations from form to model
-     * @author  Anderson Arruda < contato@sysborg.com.br >
-     * @param   Category $category
-     * @param   Request $request
-     * @return  void
-     */
-    private function fill(Category &$category, Request $request) : void
-    {
-        $category->fill([
-            'color' => is_null($request->input('id')) ? $this->generatesRandomColor() : $category->color,
-            'category' => $request->input('categoryName'),
-            'user_id' => auth()->user()->id
-        ]);
     }
 
     /**
@@ -74,9 +57,7 @@ class CategoryController extends Controller
     public function store(Request $request) : \Illuminate\Http\RedirectResponse
     {
         $request->validate($this->validations);
-        $category = new Category();
-        $this->fill($category, $request);
-        $saved = $category->save();
+        $saved = Category::create([...$request->all(), 'user_id' => auth()->user()->id]);
         $this->sitemap();
 
         return redirect()->route('category.create')
@@ -105,8 +86,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $request->validate($this->validations);
-        $this->fill($category, $request);
-        $saved = $category->save();
+        $saved = $category->update([...$request->all(), 'user_id' => auth()->user()->id]);
         $this->sitemap();
 
         return redirect()->route('category.edit', $category->id)
@@ -125,24 +105,5 @@ class CategoryController extends Controller
         $category = Category::withTrashed()->find($id);
         is_null($category->deleted_at) ? $category->delete() : $category->restore();
         return redirect()->route('category.index');
-    }
-
-    /**
-     * Generates a random color to the category
-     * @version         1.0.0
-     * @author          Anderson Arruda < contato@sysborg.com.br >
-     * @param           
-     * @return          string
-     */
-    public function generatesRandomColor() : string
-    {
-        $rand = Util::randomColor();
-        $search = Category::where('color', $rand);
-        while($search->count() > 0){
-            $rand = Util::randomColor();
-            $search = Category::where('color', $rand);
-        }
-
-        return $rand;
     }
 }

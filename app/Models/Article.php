@@ -9,7 +9,19 @@ use Illuminate\Support\Facades\DB;
 class Article extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'cover_path', 'category_id', 'article', 'user_id', 'url_friendly', 'active', 'article_color', 'description', 'premiere_date'];
+    protected $fillable = ['title', 'cover_path', 'category_id', 'article', 'user_id', 'url_friendly', 'active', 'description', 'premiere_date'];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function (Category &$model) {
+            $model->bgcolor = Utils::uniqueRandomColor($model);
+        });
+
+        static::saved(function () {
+            event(new SitemapEvent());
+        });
+    }
 
     /**
      * Get all tags for selected article
@@ -136,7 +148,7 @@ class Article extends Model
     {
         return DB::table('article_visits', 'av')
             ->join('articles AS art', 'art.id', '=', 'av.article_id')
-            ->select(DB::raw('art.id, art.title, art.article_color, COUNT(DISTINCT av.visit_hash) AS total_visits, extract(EPOCH from AVG(unload_datetime - load_datetime)) AS avg_sec, extract(EPOCH from MIN(unload_datetime - load_datetime)) min_sec, extract(EPOCH from MAX(unload_datetime - load_datetime)) max_sec'))
+            ->select(DB::raw('art.id, art.title, art.bgcolor, COUNT(DISTINCT av.visit_hash) AS total_visits, extract(EPOCH from AVG(unload_datetime - load_datetime)) AS avg_sec, extract(EPOCH from MIN(unload_datetime - load_datetime)) min_sec, extract(EPOCH from MAX(unload_datetime - load_datetime)) max_sec'))
             ->where('av.created_at', '>=', date('Y-m-d H:i:s', strtotime('- 6 month')))
             ->groupBy('art.id')
             ->orderBy('avg_sec', 'DESC')
