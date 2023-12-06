@@ -27,10 +27,6 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
-            <h5>{{__('adminTemplate.articleList.latest')}}</h5>
-        </div>
-
         @include('utils.articleCard', ['articles' => $articles])
 
         <div class="col-md-12" style="margin-top:20px;" id="articleListPages">

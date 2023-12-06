@@ -34,3 +34,7 @@ footer{
     right: 25% !important;
     z-index: 1030;
 }
+
+.article-title li {
+    font-size: 18px !important;
+}

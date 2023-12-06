@@ -27,18 +27,6 @@ class CategoryController extends Controller
     }
 
     /**
-     * Generate new site map
-     * @author  Anderson Arruda < contato@sysborg.com.br >
-     * @param   
-     * @return  void
-     */
-    private function sitemap() : void
-    {
-        $sm = new SiteMapController();
-        $sm->generate();
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -58,7 +46,6 @@ class CategoryController extends Controller
     {
         $request->validate($this->validations);
         $saved = Category::create([...$request->all(), 'user_id' => auth()->user()->id]);
-        $this->sitemap();
 
         return redirect()->route('category.create')
                 ->with('saved', $saved)
@@ -87,7 +74,6 @@ class CategoryController extends Controller
     {
         $request->validate($this->validations);
         $saved = $category->update([...$request->all(), 'user_id' => auth()->user()->id]);
-        $this->sitemap();
 
         return redirect()->route('category.edit', $category->id)
             ->with('saved', $saved)

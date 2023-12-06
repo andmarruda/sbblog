@@ -3,18 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Events\SitemapEvent;
+use App\Helpers\Utils;
 
 class Article extends Model
 {
-    use HasFactory;
-    protected $fillable = ['title', 'cover_path', 'category_id', 'article', 'user_id', 'url_friendly', 'active', 'description', 'premiere_date'];
+    use HasFactory, SoftDeletes;
+    protected $fillable = ['title', 'cover_path', 'category_id', 'article', 'user_id', 'url_friendly', 'description', 'premiere_date'];
 
     protected static function boot()
     {
         parent::boot();
-        static::creating(function (Category &$model) {
+        static::creating(function (Article &$model) {
             $model->bgcolor = Utils::uniqueRandomColor($model);
         });
 

@@ -83,18 +83,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Get all active article
-     * @version     1.0.0
-     * @author      Anderson Arruda < andmarruda@gmail.com >
-     * @param       
-     * @return      Collection of Article
-     */
-    public function getAllActive()
-    {
-        return Article::where('active', '=', true)->orderBy('updated_at', 'DESC')->get();
-    }
-
-    /**
      * Generates the article list interface when has a search
      * @version     1.0.0
      * @author      Anderson Arruda < andmarruda@gmail.com >
@@ -361,10 +349,8 @@ class ArticleController extends Controller
             'article' => $req->input('articleText'), 
             'user_id' => auth()->user()->id, 
             'url_friendly' => Utils::getSlug($req->input('articleName')), 
-            'active' => $req->input('active'),
             'description' => $req->input('description'),
             'premiere_date' => $premiere_date,
-            'active' => 1,
         ]);
 
         $saved = $a->save();
@@ -378,10 +364,6 @@ class ArticleController extends Controller
             $removeTags = json_decode($req->input('removedTags'), true);
             $this->articleRemoveTags($removeTags, $article_id);
         }
-
-        //generates and send site map to google
-        $sm = new SiteMapController();
-        $sm->generate();
 
         return $this->prepareFormInterface($saved, '');
     }

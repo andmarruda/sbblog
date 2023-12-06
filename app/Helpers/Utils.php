@@ -3,6 +3,7 @@ namespace App\Helpers;
 
 use App\Models\Article;
 use App\Models\Category;
+use Illuminate\Support\Facades\Log;
 
 class Utils {
     /**
@@ -42,6 +43,25 @@ class Utils {
         } while($class::where('bgcolor', '=', $rand)->count() > 0);
 
         return $rand;
+    }
+
+    /**
+     * Ping google url with the sitemap
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @param           string $xmlName
+     * @return          void
+     */
+    public static function sendSiteMapGoogle(string $xmlName) : void
+    {
+        try
+        {
+            $client = new \GuzzleHttp\Client();
+            $client->request('GET', 'https://www.google.com/ping', ['query' => ['sitemap' => route('latestPage'). '/'. $xmlName]]);
+        } catch(\Exception $err)
+        {
+            Log::channel('sitemap')->error($err->getFile(). ':'. $err->getLine(). ' - '. $err->getMessage());
+        }
     }
 }
 ?>
