@@ -15,6 +15,47 @@ use DateTime;
 class ArticleController extends Controller
 {
     /**
+     * Index of articles
+     * @version     1.0.0
+     * @param       ?int $category_id
+     * @param       Request $req
+     */
+    public function index(Request $request)
+    {
+        $articles = Article::orderBy('updated_at', 'DESC')->withTrashed();
+        $category_id = $request->input('category_id');
+        if(!is_null($category_id))
+            $articles->where('category_id', '=', $category_id);
+
+        $search = $request->input('search');
+        if(!is_null($search))
+        {
+            $articles->where(function($query) use($search) {
+                $query->where('title', 'ILIKE', '%'. $search. '%')
+                    ->orWhere('description', 'ILIKE', '%'. $search. '%');
+            });
+        }
+
+        $articles = $articles->paginate(config('sbblog.page_limit'));
+        return view('articleList', compact('articles', 'category_id'));
+    }
+
+    /**
+     * Soft delete article by id
+     * @version     1.0.0
+     * @param       int $id
+     * @return      redirect
+     */
+    public function destroy(int $id)
+    {
+        $article = Article::withTrash()->find($id);
+        $delete = is_null($article->deleted_at);
+        ($delete) ? $article->delete() : $article->restore();
+        $message = ($delete) ? 'adminTemplate.article.list.deleted' : 'adminTemplate.article.list.restored';
+        return redirect()->route('article.index')->with('success', __($message));
+    }
+
+    /**
      * Get latests 20 articles by category
      * @version     1.0.0
      * @author      Anderson Arruda < andmarruda@gmail.com >
@@ -56,18 +97,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Get article by Id
-     * @version     1.0.0
-     * @author      Anderson Arruda < andmarruda@gmail.com >
-     * @param       int $id
-     * @return      Object
-     */
-    public function getById(int $id)
-    {
-        return Article::find($id);
-    }
-
-    /**
      * Get last 20 articles created_at desc
      * @version     1.0.0
      * @author      Anderson Arruda < andmarruda@gmail.com >
@@ -80,35 +109,6 @@ class ArticleController extends Controller
             return Article::where('premiere_date', '<=', date('Y-m-d H:i:s'))->orWhereNull('premiere_date')->orderBy('created_at', 'DESC')->paginate(20);
         
         return Article::orderBy('created_at', 'DESC')->paginate(20);
-    }
-
-    /**
-     * Generates the article list interface when has a search
-     * @version     1.0.0
-     * @author      Anderson Arruda < andmarruda@gmail.com >
-     * @param       Request $req
-     * @return      view
-     */
-    public function articleListInterfaceSearch(Request $req)
-    {
-        return $this->articleListInterface($req->input('search'));
-    }
-
-    /**
-     * Genarates the article list interface
-     * @version     1.0.0
-     * @author      Anderson Arruda < andmarruda@gmail.com >
-     * @param       ?string $search
-     * @return      view
-     */
-    public function articleListInterface(?string $search=NULL)
-    {
-            $arts = (is_null($search)) ? 
-                $this->getLasts()
-            :
-                Article::where('title', 'ILIKE', '%'. $search. '%')->orWhere('article', 'ILIKE', '%'. $search. '%')->paginate(20);
-
-        return view('articleList', ['articles' => $arts]);
     }
 
     /**
@@ -294,7 +294,7 @@ class ArticleController extends Controller
      */
     public function convertWebp(int $id)
     {
-        $art = $this->getById($id);
+        $art = Article::find($id);
         $ic = new ImageController(NULL);
         if($ic->getExtension('public/'. $art->cover_path) != 'webp'){
             $ic->convertWebp('public/'. $art->cover_path);

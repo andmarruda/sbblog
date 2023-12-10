@@ -150,4 +150,9 @@ return [
     'article.form.imageNotValid'    => 'Error when trying to send the file, please try it again!',
     'article.form.extensionErr'     => 'Extension :extension are not allowed!',
     'article.form.sizeErr'          => 'Cover file exceeds file size limit of :mbyte Mb',
+    'article.list.deleted'          => 'Article deleted successfully!',
+    'article.list.restored'         => 'Article restored successfully!',
+
+    'message.delete?'               => 'Do you want to delete this item?',
+    'message.restore?'              => 'Do you want to restore this item?',
 ];

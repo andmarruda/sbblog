@@ -10,7 +10,7 @@
                 <div class="col-md-8 offset-md-1">
                     <nav class="mt-2 article-title" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0 article-title">
-                            <li class="breadcrumb-item"><a href="#">{{$article->category->category}}</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('article.index', ['category_id' => $article->category_id])}}">{{$article->category->category}}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{$article->title}}</li>
                         </ol>
                     </nav>
@@ -26,7 +26,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <a href="{{route('admin.newArticle')}}/{{$article->id}}" class="btn btn-outline-primary"><i class="fa-regular fa-pen-to-square"></i> {{__('adminTemplate.form.btn.change')}}</a>
-                            <a href="{{route('admin.newArticle')}}/{{$article->id}}" class="btn btn-outline-danger"><i class="fa-regular fa-trash-can"></i> {{__('adminTemplate.articleList.softDelete')}}</a>
+                            <a href="{{route('article.destroy', ['id' => $article->id])}}/{{$article->id}}" class="btn btn-outline-danger"><i class="fa-regular fa-trash-can"></i> {{__('adminTemplate.articleList.softDelete')}}</a>
                         </div>
 
                         <div>

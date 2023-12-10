@@ -150,4 +150,9 @@ return [
     'article.form.imageNotValid'    => 'Ocorreu um problema ao enviar o arquivo, por favor tente novamente!',
     'article.form.extensionErr'     => 'A extensão :extension não é permitida!',
     'article.form.sizeErr'          => 'O arquivo de capa excede o limite de :mbyte Mb',
+    'article.list.deleted'          => 'Artigo deletado com sucesso!',
+    'article.list.restored'         => 'Artigo restaurado com sucesso!',
+
+    'message.delete?'               => 'Deseja deletar este item?',
+    'message.restore?'              => 'Deseja restaurar este item?',
 ];

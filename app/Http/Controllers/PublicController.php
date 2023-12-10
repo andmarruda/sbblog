@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\General;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Article;
 
 class PublicController extends Controller
 {
@@ -64,9 +65,7 @@ class PublicController extends Controller
     public function articlePage(string $friendly, int $id)
     {
         $infos = $this->basicInfo();
-
-        $ac = new ArticleController();
-        $article = $ac->getById($id);
+        $article = Article::find($id);
         if(is_null($article))
             return view('public.articleNotFound', $infos);
 

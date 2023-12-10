@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\ArticleController;
-use \App\Http\Controllers\GeneralController;
-use \App\Http\Controllers\AdminController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 
@@ -29,18 +29,14 @@ Route::prefix('/admin')->middleware(['auth', 'firstUserRedirect', 'language'])->
     Route::get('/dashboard', [AdminController::class, 'dashboardInterface'])->name('admin.dashboard');
     Route::resource('general', GeneralController::class)->only(['edit', 'update']);
     Route::resource('category', CategoryController::class)->except(['show']);
-    Route::resource('user', UserController::class);
-
-    //user
-    //Route::post('/user', '\App\Http\Controllers\UserController@userFormPost')->name('admin.userPost');
-    
-    Route::post('/userAlterPass', '\App\Http\Controllers\UserController@alterPassword')->name('admin.userAlterPass');
+    Route::resource('user', UserController::class);    
+    Route::post('/userAlterPass', [UserController::class, 'alterPassword'])->name('admin.userAlterPass');
 
     //Article
-    Route::get('/articleList', '\App\Http\Controllers\ArticleController@articleListInterface')->name('admin.articleList');
-    Route::post('/articleList', '\App\Http\Controllers\ArticleController@articleListInterfaceSearch')->name('admin.articleListSearch');
     Route::get('/newArticle/{id?}', '\App\Http\Controllers\ArticleController@articleFormInterface')->where('id', '[0-9]+')->name('admin.newArticle');
     Route::post('/newArticle', '\App\Http\Controllers\ArticleController@articleFormPost')->name('admin.newArticlePost');
     Route::post('/article/comment/enable-disable', [ArticleController::class, 'enableDisableComment'])->name('admin.article.comment.action');
     Route::get('/article/convertWebp/{id}', [ArticleController::class, 'convertWebp'])->where('id', '[0-9]+')->name('admin.article.convertWebp');
+
+    Route::resource('article', ArticleController::class)->except(['show', 'create', 'edit', 'update']);
 });

@@ -12,8 +12,8 @@
             </ol>
         </nav>
 
-        <form class="row g-2" action="{{dirname($_SERVER['PHP_SELF'])}}/admin/articleList" method="post">
-            @csrf
+        <form class="row g-2" action="{{ route('article.index') }}" method="get">
+            <input type="hidden" name="category_id" value="{{$category_id ?? ''}}">
             <div class="col-md-6">
                 <label for="search" class="visually-hidden">{{__('adminTemplate.articleList.searchInput')}} <small>{{__('adminTemplate.articleList.searchInput.small')}}</small></label>
                 <input type="text" class="form-control" id="search" name="search" placeholder="{{__('adminTemplate.articleList.searchInput')}}" required>
@@ -21,7 +21,7 @@
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary mb-3"><i class="fa fa-search"></i> {{__('adminTemplate.form.btn.search')}}</button>
                 <a href="{{route('admin.newArticle')}}" role="button" class="btn btn-outline-primary mb-3"><i class="fa fa-file-circle-plus"></i> {{__('adminTemplate.form.btn.addArticle')}}</a>
-                <a href="{{route('admin.articleList')}}" role="button" class="btn btn-outline-primary mb-3"><i class="fa fa-magnifying-glass-minus"></i> {{__('adminTemplate.form.btn.cleanFilter')}}</a>
+                <a href="{{route('article.index')}}" role="button" class="btn btn-outline-primary mb-3"><i class="fa fa-magnifying-glass-minus"></i> {{__('adminTemplate.form.btn.cleanFilter')}}</a>
             </div>
         </form>
     </div>
