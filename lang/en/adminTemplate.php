@@ -155,4 +155,7 @@ return [
 
     'message.delete?'               => 'Do you want to delete this item?',
     'message.restore?'              => 'Do you want to restore this item?',
+    'confirm_label'                 => 'Confirm',
+    'cancel_label'                  => 'Cancel',
+    'confirm_dialog_title'          => 'Confirm',
 ];

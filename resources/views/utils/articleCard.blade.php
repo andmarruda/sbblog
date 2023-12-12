@@ -26,7 +26,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <a href="{{route('admin.newArticle')}}/{{$article->id}}" class="btn btn-outline-primary"><i class="fa-regular fa-pen-to-square"></i> {{__('adminTemplate.form.btn.change')}}</a>
-                            <a href="{{route('article.destroy', ['id' => $article->id])}}/{{$article->id}}" class="btn btn-outline-danger"><i class="fa-regular fa-trash-can"></i> {{__('adminTemplate.articleList.softDelete')}}</a>
+                            <a href="#" data-url="{{route('article.destroy', ['article' => $article->id])}}" data-toogle="article-destroy" class="btn btn-outline-danger"><i class="fa-regular fa-trash-can"></i> {{__('adminTemplate.articleList.softDelete')}}</a>
                         </div>
 
                         <div>

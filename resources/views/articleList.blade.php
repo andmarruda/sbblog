@@ -34,3 +34,20 @@
         </div>
     </div>
 @endsection
+
+@section('jscript')
+<script src="{{asset('js/adminsb.js')}}"></script>
+
+<script>
+    const confirm_destroy = @json($confirm_destroy);
+    console.log(confirm_destroy);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        Array.from(document.querySelectorAll('a[data-toogle="article-destroy"]')).forEach((element) => {
+            element.addEventListener('click', (event) => {
+                confirmModal(confirm_destroy);
+            });
+        });
+    });
+</script>
+@endsection

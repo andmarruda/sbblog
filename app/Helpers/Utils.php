@@ -63,5 +63,25 @@ class Utils {
             Log::channel('sitemap')->error($err->getFile(). ':'. $err->getLine(). ' - '. $err->getMessage());
         }
     }
+
+    /**
+     * Get modal interesting data
+     * @version         1.0.0
+     * @author          Anderson Arruda < andmarruda@gmail.com >
+     * @param           
+     * @return          array
+     */
+    public static function translateModalConfirm() : array
+    {
+        return [
+            'confirm_destroy' => [
+                'title' => __('adminTemplate.confirm_dialog_title'),
+                'cancel_label' => __('adminTemplate.cancel_label'),
+                'confirm_label' => __('adminTemplate.confirm_label'),
+                'body_restore' => __('adminTemplate.message.restore?'),
+                'body_delete' => __('adminTemplate.message.delete?'),
+            ]
+        ];
+    }
 }
 ?>

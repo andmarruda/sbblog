@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\View\Composers\AdminTemplateComposer;
 use App\Http\View\Composers\ArticleFundamentalsComposer;
+use App\Http\View\Composers\ArticleListComposer;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
@@ -30,5 +31,6 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive();
         View::composer(['templates.adminTemplate'], AdminTemplateComposer::class);
         View::composer(['newArticle'], ArticleFundamentalsComposer::class);
+        View::composer(['articleList'], ArticleListComposer::class);
     }
 }
