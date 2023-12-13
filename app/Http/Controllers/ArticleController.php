@@ -48,67 +48,11 @@ class ArticleController extends Controller
      */
     public function destroy(int $id)
     {
-        $article = Article::withTrash()->find($id);
+        $article = Article::withTrashed()->find($id);
         $delete = is_null($article->deleted_at);
         ($delete) ? $article->delete() : $article->restore();
         $message = ($delete) ? 'adminTemplate.article.list.deleted' : 'adminTemplate.article.list.restored';
-        return redirect()->route('article.index')->with('success', __($message));
-    }
-
-    /**
-     * Get latests 20 articles by category
-     * @version     1.0.0
-     * @author      Anderson Arruda < andmarruda@gmail.com >
-     * @param       int $category_id
-     * @return      Object
-     */
-    public function getByCategory(int $category_id, bool $usesPremiereDate=false)
-    {
-        if($usesPremiereDate){
-            return Article::where(function($q){
-                $q->where('premiere_date', '<=', date('Y-m-d H:i:s'));
-                $q->orWhereNull('premiere_date');
-            })->where('category_id', '=', $category_id)->orderBy('created_at', 'DESC')->paginate(20);
-        }
-
-        return Article::where('category_id', '=', $category_id)->orderBy('created_at', 'DESC')->paginate(20);
-    }
-
-    /**
-     * Search article by title or by text
-     * @version     1.0.0
-     * @author      Anderson Arruda < andmarruda@gmail.com >
-     * @param       string $search
-     * @return      Object
-     */
-    public function searchArticle(string $search, bool $usesPremiereDate=false)
-    {
-        if($usesPremiereDate){
-            return Article::where(function($q){
-                $q->where('premiere_date', '<=', date('Y-m-d H:i:s'));
-                $q->orWhereNull('premiere_date');
-            })->where(function($q) use($search){
-                $q->where('title', 'ILIKE', '%'. $search. '%');
-                $q->orWhere('article', 'ILIKE', '%'. $search. '%');
-            })->orderBy('created_at', 'DESC')->paginate(20);
-        }
-
-        return Article::where('title', 'ILIKE', '%'. $search. '%')->orWhere('article', 'ILIKE', '%'. $search. '%')->orderBy('created_at', 'DESC')->paginate(20);
-    }
-
-    /**
-     * Get last 20 articles created_at desc
-     * @version     1.0.0
-     * @author      Anderson Arruda < andmarruda@gmail.com >
-     * @param       bool $usesPremiereDate=false
-     * @return      Object
-     */
-    public function getLasts(bool $usesPremiereDate=false)
-    {
-        if($usesPremiereDate)
-            return Article::where('premiere_date', '<=', date('Y-m-d H:i:s'))->orWhereNull('premiere_date')->orderBy('created_at', 'DESC')->paginate(20);
-        
-        return Article::orderBy('created_at', 'DESC')->paginate(20);
+        return response()->json(['success' => __($message)]);
     }
 
     /**

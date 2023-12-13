@@ -39,13 +39,24 @@
 <script src="{{asset('js/adminsb.js')}}"></script>
 
 <script>
-    const confirm_destroy = @json($confirm_destroy);
-    console.log(confirm_destroy);
+    const {title, body_delete, body_restore, cancel_label, confirm_label} = @json($confirm_destroy);
 
     document.addEventListener('DOMContentLoaded', () => {
         Array.from(document.querySelectorAll('a[data-toogle="article-destroy"]')).forEach((element) => {
-            element.addEventListener('click', (event) => {
-                confirmModal(confirm_destroy);
+            element.addEventListener('click', ({ target }) => {
+                const dataDelete = target.getAttribute('data-delete');
+                confirmModal(title, body_delete, body_restore, cancel_label, confirm_label, dataDelete, async () => {
+                    console.log(target.getAttribute('data-url'));
+                    const f = await fetch(target.getAttribute('data-url'), {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    });
+
+                    if(f.ok)
+                        location.reload();
+                });
             });
         });
     });

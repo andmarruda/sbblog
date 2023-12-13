@@ -10,34 +10,6 @@ use App\Models\Article;
 class PublicController extends Controller
 {
     /**
-     * Get basic informations for the public template
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          array
-     */
-    private function basicInfo() : array
-    {
-        return ['category' => Category::all(), 'gen' => General::find(1)];
-    }
-
-    /**
-     * Returns the layout of the list of articles with text search
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           Request $req
-     * @return          view
-     */
-    public function latestPageSearch(Request $req)
-    {
-        $infos = $this->basicInfo();
-        $ac = new ArticleController();
-        $infos['articles'] = $ac->searchArticle($req->input('searchArticle'), true);
-
-        return view('public.main', $infos);
-    }
-
-    /**
      * Returns the layout of the list of articles into public Blog
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
@@ -45,13 +17,19 @@ class PublicController extends Controller
      * @param           ?int $id=NULL
      * @return          view
      */
-    public function latestPage(?string $category=NULL, ?int $id=NULL)
+    public function latestPage(Request $request, ?string $category=NULL, ?int $id=NULL)
     {
-        $infos = $this->basicInfo();
-        $ac = new ArticleController();
-        $infos['articles'] = (is_null($category) || is_null($id)) ? $ac->getLasts(true) : $ac->getByCategory($id, true);
+        $search = $request->input('search');
+        if(!is_null($search))
+        {
+            $articles = Article::premiere()->latests()->search($search)->paginate(config('sbblog.page_limit'));
+        } else {
+            $articles = is_null($id) 
+                ? Article::premiere()->latests()->paginate(config('sbblog.page_limit')) 
+                : Article::premiere()->latests()->where('category_id', $id)->paginate(config('sbblog.page_limit'));
+        }
 
-        return view('public.main', $infos);
+        return view('public.main', compact('articles', 'search'));
     }
 
     /**
@@ -64,7 +42,7 @@ class PublicController extends Controller
      */
     public function articlePage(string $friendly, int $id)
     {
-        $infos = $this->basicInfo();
+        $infos = [];
         $article = Article::find($id);
         if(is_null($article))
             return view('public.articleNotFound', $infos);

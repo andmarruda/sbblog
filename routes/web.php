@@ -6,10 +6,10 @@ use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PublicController;
 
-Route::get('/', '\App\Http\Controllers\PublicController@latestPage')->name('latestPage');
+Route::get('/', [PublicController::Class, 'latestPage'])->name('latestPage');
 Route::get('/byCategory/{category?}/{id?}', '\App\Http\Controllers\PublicController@latestPage')->name('latestPageCategory')->where('id', '[0-9]+');
-Route::post('/search', '\App\Http\Controllers\PublicController@latestPageSearch')->name('latestPageSearch');
 
 Route::get('/article/{friendly}/{id}', '\App\Http\Controllers\PublicController@articlePage')->name('article')->where('id', '[0-9]+')->where('friendly', '[0-9\-A-Za-z]+');
 Route::post('/article', '\App\Http\Controllers\PublicController@articlePageComment')->name('articleComment');

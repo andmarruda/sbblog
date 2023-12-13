@@ -15,4 +15,4 @@ yarn-error.log
 /.vscode
 *.log
 .env
-sitemap.xml
+public/sitemap.xml

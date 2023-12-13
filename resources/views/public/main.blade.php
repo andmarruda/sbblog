@@ -1,10 +1,9 @@
-@extends('templates.publicTemplate', ['category' => $category])
+@extends('templates.publicTemplate')
 
 @section('page')
-<form method="post" action="{{route('latestPageSearch')}}">
-    @csrf
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" id="searchArticle" name="searchArticle" placeholder="Pesquisar artigo" aria-label="Pesquisar artigo">
+<form method="get" action="{{ route('latestPage') }}">
+    <div class="input-group mb-5">
+        <input type="text" class="form-control" id="search" name="search" placeholder="Pesquisar artigo" aria-label="Pesquisar artigo" value="{{ $search }}">
         <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Pesquisar</button>
     </div>
 </form>
@@ -17,21 +16,17 @@
         </a>
         <div class="card-body">
             <h5 class="card-title">{{$article->title}}</h5>
-            <small>Escrito por {{$article->user()->get()->first()->name}} em {{date('d/m/Y H:i', strtotime($article->created_at))}}</small>
+            <small>Escrito por {{$article->user->name}} em {{date('d/m/Y H:i', strtotime($article->created_at))}}</small>
             
-            @if(($tags=$article->tags()->get())->count() > 0)
             <div style="font-size:12px;">
                 <span>Tags: </span>
-                @foreach($tags as $tag)
+                @foreach($article->tags as $tag)
                 <span class="badge bg-info text-dark">{{$tag->tag}}</span>
                 @endforeach
             </div>
-            @endif
-            @if(!is_null($article->description))
-            <p class="card-text">{{$article->description}}</p>
-            @else
-            <p class="card-text">{!!mb_substr($article->article, 0, 300, 'UTF-8').'...'!!}</p>
-            @endif
+            
+            <p class="card-text">{!!mb_substr(($article->article ?? ''), 0, 300, 'UTF-8').'...'!!}</p>
+
             <div class="row">
                 <div class="col-md-6">
                     <a href="{{route('article', ['friendly' => $article->url_friendly, 'id' => $article->id])}}" class="btn btn-outline-primary"><i class="fa-solid fa-eye"></i> Ler artigo completo</a>

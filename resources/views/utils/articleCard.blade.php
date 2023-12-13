@@ -26,7 +26,13 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <a href="{{route('admin.newArticle')}}/{{$article->id}}" class="btn btn-outline-primary"><i class="fa-regular fa-pen-to-square"></i> {{__('adminTemplate.form.btn.change')}}</a>
-                            <a href="#" data-url="{{route('article.destroy', ['article' => $article->id])}}" data-toogle="article-destroy" class="btn btn-outline-danger"><i class="fa-regular fa-trash-can"></i> {{__('adminTemplate.articleList.softDelete')}}</a>
+                            <a href="#" data-url="{{ route('article.destroy', ['article' => $article->id]) }}" data-toogle="article-destroy" data-delete="{{ is_null($article->deleted_at) }}" class="btn {{ is_null($article->deleted_at) ? 'btn-outline-danger' : 'btn-outline-success' }}">
+                                @if(is_null($article->deleted_at))
+                                    <i class="fa-regular fa-trash-can"></i> {{__('adminTemplate.articleList.softDelete')}}
+                                @else
+                                    <i class="fa-solid fa-trash-can-arrow-up"></i> {{__('adminTemplate.articleList.restore')}}
+                                @endif
+                            </a>
                         </div>
 
                         <div>

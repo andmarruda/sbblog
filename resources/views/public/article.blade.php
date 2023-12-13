@@ -1,4 +1,28 @@
-@extends('templates.publicTemplate', ['category' => $category, 'article' => $article])
+@extends('templates.publicTemplate')
+
+@section('article-head')
+    <meta name="keywords" content="{{$article->stringTags()}}">
+    <meta name="description" content="{{$article->description}}">
+    <meta property="og:title" content="{{$article->title. ' '. config('app.name')}}" />
+    <meta property="og:description" content="{{$article->description}}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content="{{$article->created_at}}" />
+    <meta property="og:article:modified_time" content="{{$article->updated_at}}" />
+    <meta property="og:article:author" content="{{$article->user()->get()->first()->name}}" />
+    <meta property="og:article:tag" content="{{$article->stringTags()}}" />
+    <meta property="og:url" content="{{url('/')}}" />
+    <meta property="og:image" content="{{asset('storage/'. $article->cover_path)}}" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="{{request()->getHttpHost();}}">
+    <meta property="twitter:url" content="{{url('/')}}">
+    <meta name="twitter:title" content="{{$article->title. ' '. config('app.name')}}">
+    <meta name="twitter:description" content="{{$article->description}}">
+    <meta name="twitter:image" content="{{asset('storage/'. $article->cover_path)}}">
+    <title>{{$article->title}}</title>
+    <link rel="stylesheet" href="{{asset('css/monokai-sublime.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/quill.snow.css')}}">
+    {!! RecaptchaV3::initJs() !!}
+@endsection
 
 @section('recaptcha')
     @if(config('app.RECAPTCHAV3_SITEKEY') != '')
@@ -11,17 +35,15 @@
 <div class="card">
     <img src="{{asset('storage/'. $article->cover_path)}}" class="card-img-top" alt="{{$article->title}}">
     <div class="card-body">
-        @if(($tags=$article->tags()->get())->count() > 0)
         <div style="text-align: center;">
-        @foreach($tags as $tag)
-            <span class="badge bg-info text-dark">{{$tag->tag}}</span>
-        @endforeach
+            @foreach($article->tags as $tag)
+                <span class="badge bg-info text-dark">{{$tag->tag}}</span>
+            @endforeach
         </div>
-        @endif
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{route('latestPage', ['id' => $article->category()->first()->id, 'category' => $article->category()->first()->category])}}">{{$article->category()->first()->category}}</a></li>
+                <li class="breadcrumb-item"><a href="{{route('latestPage', ['id' => $article->category_id, 'category' => $article->category->category])}}">{{$article->category->category}}</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{$article->title}}</li>
             </ol>
         </nav>

@@ -21,4 +21,5 @@ return [
     'auth.oldPasswordInvalid'       => 'The current password is invalid!',
     'unexpected'                    => 'Unexpected error!',
     'auth.passwordChanged'          => 'Password changed successfully!',
+    'no.category'                   => 'No category found!',
 ];

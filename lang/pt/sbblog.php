@@ -21,4 +21,5 @@ return [
     'auth.oldPasswordInvalid'       => 'A senha atual está incorreta!',
     'unexpected'                    => 'Erro inesperado!',
     'auth.passwordChanged'          => 'Senha alterada com sucesso!',
+    'no.category'                   => 'Nenhuma categoria encontrada!',
 ];

@@ -122,6 +122,7 @@ return [
     'articleList.searchInput.small' => 'Title or content',
     'articleList.commentNumber'     => 'Amout of comments',
     'articleList.softDelete'        => 'Disable',
+    'articleList.restore'           => 'Restore',
 
     'article.title'                 => 'Article',
     'article.form.title'            => 'Title',

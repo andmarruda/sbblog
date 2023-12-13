@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Article;
 
 class AdminController extends Controller
 {
@@ -23,15 +24,16 @@ class AdminController extends Controller
      */
     public function dashboardInterface()
     {
-        $c = new ArticleController();
-        $lasts = $c->getLasts();
-
         $cat = new \App\Models\Category();
         $catStat = $cat->statistics()->toJson();
 
-        $art = new \App\Models\Article();
+        $art = new Article();
         $artStat = $art->statistics();
 
-        return view('dashboard', ['articles' => $lasts, 'catStat' => $catStat, 'artStat' => $artStat]);
+        return view('dashboard', [
+            'articles' => Article::latests()->paginate(config('sbblog.page_limit')), 
+            'catStat' => $catStat, 
+            'artStat' => $artStat]
+        );
     }
 }

@@ -27,6 +27,43 @@ class Article extends Model
     }
 
     /**
+     * Scope premire filter
+     * @version     1.0.0
+     * @author      Anderson Arruda < andmarruda@gmail.com >
+     * @param       \Illuminate\Database\Eloquent\Builder $query
+     * @return      \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePremiere($query) : \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('premiere_date', '<=', date('Y-m-d H:i:s'))->orWhereNull('premiere_date');
+    }
+
+    /**
+     * Scope latests order by created at
+     * @version     1.0.0
+     * @author      Anderson Arruda < andmarruda@gmail.com >
+     * @param       \Illuminate\Database\Eloquent\Builder $query
+     * @return      \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeLatests($query) : \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->orderBy('created_at', 'DESC');
+    }
+
+    /**
+     * Scope search by title or article
+     * @version     1.0.0
+     * @author      Anderson Arruda < andmarruda@gmail.com >
+     * @param       \Illuminate\Database\Eloquent\Builder $query
+     * @param       string $search
+     * @return      \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch($query, string $search) : \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('title', 'ILIKE', "%{$search}%")->orWhere('article', 'ILIKE', "%{$search}%");
+    }
+
+    /**
      * Get all tags for selected article
      * @version     1.0.0
      * @author      Anderson Arruda < andmarruda@gmail.com >

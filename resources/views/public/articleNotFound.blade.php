@@ -1,4 +1,4 @@
-@extends('templates.publicTemplate', ['category' => $category])
+@extends('templates.publicTemplate')
 
 @section('page')
 <div class="card" style="text-align:center;">
