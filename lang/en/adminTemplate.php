@@ -125,6 +125,8 @@ return [
     'articleList.restore'           => 'Restore',
 
     'article.title'                 => 'Article',
+    'article.new.title'             => 'New',
+    'article.edit.title'            => 'Edit',
     'article.form.title'            => 'Title',
     'article.form.previewFolder'    => 'Cover preview',
     'article.form.cover'            => 'Cover',

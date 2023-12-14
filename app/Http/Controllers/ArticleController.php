@@ -41,6 +41,27 @@ class ArticleController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('form.article.create', ['article' => new Article()]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  Article $article
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Article $article)
+    {
+        return view('form.article.edit', compact('article'));
+    }
+
+    /**
      * Soft delete article by id
      * @version     1.0.0
      * @param       int $id
@@ -151,23 +172,22 @@ class ArticleController extends Controller
      * @param       Request $req
      * @return      bool
      */
-    public function articleComment(Request $req) : bool
+    public function articleComment(Request $request) : bool
     {
-        $req->validate([
+        $request->validate([
             'name'                  => 'required|max:255',
             'text'                  => 'required|max:255',
             'g-recaptcha-response'  => config('app.RECAPTCHAV3_SITEKEY')=='' ? 'nullable' : 'required|recaptchav3:comment,0.5'
         ]);
 
-        $comm = new ArticleComments();
-        $comm->fill([
-            'article_id' => $req->input('id'),
+        $ac = ArticleComments::create([
+            'article_id' => $request->input('id'),
             'user_ip' => $_SERVER['REMOTE_ADDR'],
-            'comment_name' => $req->input('name'),
-            'comment_text' => $req->input('text'),
-            'active' => true
+            'comment_name' => $request->input('name'),
+            'comment_text' => $request->input('text')
         ]);
-        return $comm->save();
+
+        return !is_null($ac);
     }
 
     /**

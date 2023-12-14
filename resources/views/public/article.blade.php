@@ -69,10 +69,12 @@
 </div>
 
 <div>
-    <h5>{{($artComm = $article->comments()->where('active', '=', true)->paginate(20))->count()}} Comentário(s)</h5>
+    <h5>{{ $article->comments->count() }} Comentário(s)</h5>
 </div>
 
 <div class="comments">
+    @php $artComm = $article->comments()->orderBy('created_at', 'desc')->paginate(config('sbblog.page_limit_comment')); @endphp
+    
     @forelse($artComm as $comm)
     @include('utils.commentCard', ['name' => $comm->comment_name, 'comment' => $comm->comment_text, 'created_at' => $comm->created_at])
     @empty

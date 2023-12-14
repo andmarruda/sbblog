@@ -126,6 +126,8 @@ return [
 
     'article.title'                 => 'Artigo',
     'article.form.title'            => 'Título',
+    'article.new.title'             => 'Novo',
+    'article.edit.title'            => 'Edição',
     'article.form.previewFolder'    => 'Pré visualização da capa',
     'article.form.cover'            => 'Capa',
     'article.form.category'         => 'Categoria',

@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card mb-3">
     <div class="card-body">
         <div class="d-flex justify-content-between">
             <div>
@@ -12,9 +12,9 @@
         @if(isset($admin) && $admin)
         <p style="text-align:right;">
             @if($active)
-            <a href="javascript: void(0);" onclick="javascript: commentAction(event, {{$id}});" class="btn btn-danger" role="button">{{__('adminTemplate.article.commentList.disable')}}</a>
+                <a href="javascript: void(0);" onclick="javascript: commentAction(event, {{$id}});" class="btn btn-danger" role="button">{{__('adminTemplate.article.commentList.disable')}}</a>
             @else
-            <a href="javascript: void(0);" onclick="javascript: commentAction(event, {{$id}});" class="btn btn-success" role="button">{{__('adminTemplate.article.commentList.enable')}}</a>
+                <a href="javascript: void(0);" onclick="javascript: commentAction(event, {{$id}});" class="btn btn-success" role="button">{{__('adminTemplate.article.commentList.enable')}}</a>
             @endif
         </p>
         @endif

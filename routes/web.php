@@ -27,10 +27,13 @@ Route::prefix('/admin')->middleware(['auth', 'firstUserRedirect', 'language'])->
 
     Route::get('/changeLang/{id}', [UserController::class, 'setPreferredLang'])->where('id', '[0-9]+')->name('admin.changeLang');
     Route::get('/dashboard', [AdminController::class, 'dashboardInterface'])->name('admin.dashboard');
+    Route::post('/userAlterPass', [UserController::class, 'alterPassword'])->name('admin.userAlterPass');
+
+    Route::resource('article', ArticleController::class)->only(['create', 'edit']);
+    
     Route::resource('general', GeneralController::class)->only(['edit', 'update']);
     Route::resource('category', CategoryController::class)->except(['show']);
-    Route::resource('user', UserController::class);    
-    Route::post('/userAlterPass', [UserController::class, 'alterPassword'])->name('admin.userAlterPass');
+    Route::resource('user', UserController::class);
 
     //Article
     Route::get('/newArticle/{id?}', '\App\Http\Controllers\ArticleController@articleFormInterface')->where('id', '[0-9]+')->name('admin.newArticle');
