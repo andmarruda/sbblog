@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
         View::composer(['templates.adminTemplate'], AdminTemplateComposer::class);
-        View::composer(['newArticle'], ArticleFundamentalsComposer::class);
+        View::composer(['newArticle', 'form.article.include.form'], ArticleFundamentalsComposer::class);
         View::composer(['articleList'], ArticleListComposer::class);
         View::composer(['templates.publicTemplate'], PublicTemplateComposer::class);
     }

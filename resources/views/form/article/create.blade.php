@@ -21,7 +21,7 @@
 <div class="tab-content" id="nav-tabContent" style="margin-bottom:20px;">
     <div class="tab-pane fade show active" id="nav-form" role="tabpanel" aria-labelledby="nav-form-tab">
         <form method="post" id="formArticleSave" action="" style="margin-top:20px;" autocomplete="off" enctype="multipart/form-data">
-            
+            @include('form.article.include.form')
         </form>
     </div>
     <div class="tab-pane fade mt-3" id="nav-comment" role="tabpanel" aria-labelledby="nav-comment-tab" style="padding-top:20px;">

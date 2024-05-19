@@ -36,7 +36,7 @@
             <select class="form-control" id="category" name="category" required>
                 <option value="">{{__('adminTemplate.article.form.category.select')}}</option>
                 @foreach($categories as $category)
-                    <option value="{{$category->id}}"{{ ($cat->id == ($article->category_id ?? -1)) ? ' selected="selected"' : '' }}>{{$category->category}}</option>
+                    <option value="{{$category->id}}"{{ ($category->id == ($article->category_id ?? -1)) ? ' selected="selected"' : '' }}>{{$category->category}}</option>
                 @endforeach
             </select>
         </div>

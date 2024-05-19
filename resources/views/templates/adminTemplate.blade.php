@@ -29,7 +29,7 @@
                                             {{__('adminTemplate.menu.article')}}
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="navbarArticleDropDownMenu">
-                                            <li><a class="dropdown-item" href="{{route('admin.newArticle')}}">{{__('adminTemplate.menu.article.new')}}</a></li>
+                                            <li><a class="dropdown-item" href="{{route('article.create')}}">{{__('adminTemplate.menu.article.new')}}</a></li>
                                             <li><a class="dropdown-item" href="{{route('article.index')}}">{{__('adminTemplate.menu.article.list')}}</a></li>
                                             <li><a class="dropdown-item" href="{{route('category.create')}}">{{__('adminTemplate.menu.article.category')}}</a></li>
                                         </ul>
