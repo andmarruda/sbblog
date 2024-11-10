@@ -46,25 +46,6 @@ class Utils {
     }
 
     /**
-     * Ping google url with the sitemap
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           string $xmlName
-     * @return          void
-     */
-    public static function sendSiteMapGoogle(string $xmlName) : void
-    {
-        try
-        {
-            $client = new \GuzzleHttp\Client();
-            $client->request('GET', 'https://www.google.com/ping', ['query' => ['sitemap' => route('latestPage'). '/'. $xmlName]]);
-        } catch(\Exception $err)
-        {
-            Log::channel('sitemap')->error($err->getFile(). ':'. $err->getLine(). ' - '. $err->getMessage());
-        }
-    }
-
-    /**
      * Get modal interesting data
      * @version         1.0.0
      * @author          Anderson Arruda < andmarruda@gmail.com >
