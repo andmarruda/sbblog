@@ -2,37 +2,49 @@
 
 namespace App\Providers;
 
-use App\Http\View\Composers\AdminTemplateComposer;
-use App\Http\View\Composers\ArticleFundamentalsComposer;
-use App\Http\View\Composers\ArticleListComposer;
+use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\View;
-use App\Http\View\Composers\PublicTemplateComposer;
+use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        Paginator::useBootstrapFive();
-        View::composer(['templates.adminTemplate'], AdminTemplateComposer::class);
-        View::composer(['newArticle'], ArticleFundamentalsComposer::class);
-        View::composer(['articleList'], ArticleListComposer::class);
-        View::composer(['templates.publicTemplate'], PublicTemplateComposer::class);
+        $this->configureDefaults();
+    }
+
+    /**
+     * Configure default behaviors for production-ready applications.
+     */
+    protected function configureDefaults(): void
+    {
+        Date::use(CarbonImmutable::class);
+
+        DB::prohibitDestructiveCommands(
+            app()->isProduction(),
+        );
+
+        Password::defaults(fn (): ?Password => app()->isProduction()
+            ? Password::min(12)
+                ->mixedCase()
+                ->letters()
+                ->numbers()
+                ->symbols()
+                ->uncompromised()
+            : null,
+        );
     }
 }

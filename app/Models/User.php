@@ -2,100 +2,42 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Builder;
-use App\Events\DisableFirstUser;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property Carbon|null $email_verified_at
+ * @property string $password
+ * @property string|null $remember_token
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
+#[Fillable(['name', 'email', 'password'])]
+#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    /** @use HasFactory<UserFactory> */
+    use HasFactory, Notifiable;
 
     /**
-     * First user email
-     * @var string
-     */
-    const FIRST_USER_EMAIL = 'admin@admin.com';
-
-    /**
-     * The attributes that are mass assignable.
+     * Get the attributes that should be cast.
      *
-     * @var array<int, string>
+     * @return array<string, string>
      */
-    protected $fillable = ['name', 'email', 'password', 'language_id'];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    protected static function boot()
+    protected function casts(): array
     {
-        parent::boot();
-        static::created(function () {
-            event(new DisableFirstUser());
-        });
-
-        static::saving(function (&$user) {
-            if (!$user->originalIsEquivalent('password')) {
-                $user->password = Hash::make($user->password);
-            }
-        });
-    }
-
-    /**
-     * Get the preferred language parent
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com >
-     * @param           
-     * @return          Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function language() : \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(\App\Models\Language::class);
-    }
-
-    /**
-     * Scope check if is the first user
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com > 
-     * @param           Builder $query
-     * @return          void
-     */
-    public function scopeFirstUser(Builder $query) : void
-    {
-        $query->where('email', self::FIRST_USER_EMAIL);
-    }
-
-    /**
-     * Scope check if is the first user logged
-     * @version         1.0.0
-     * @author          Anderson Arruda < andmarruda@gmail.com > 
-     * @param           Builder $query
-     * @return          void
-     */
-    public function scopeFirstUserLogged(Builder $query) : void
-    {
-        $query->where('email', self::FIRST_USER_EMAIL)
-            ->where('id', auth()->check() ? auth()->user()->id : -1);
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 }
