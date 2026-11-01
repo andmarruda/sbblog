@@ -13,6 +13,29 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: sbblog
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: sbblog_testing
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: sbblog_testing
+      DB_USERNAME: sbblog
+      DB_PASSWORD: secret
+
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -22,7 +45,8 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
+          extensions: pdo_pgsql
           tools: composer:v2
           coverage: none
 
@@ -31,8 +55,21 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist
+          pnpm install --frozen-lockfile
+
       - name: Setup Application
-        run: composer setup
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan migrate --force
+          php artisan wayfinder:generate --with-form
+          pnpm build
 
       - name: Run CI Checks
         run: composer ci:check
