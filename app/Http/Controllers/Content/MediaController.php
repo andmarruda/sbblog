@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers\Content;
 
+use App\Actions\Content\RepublishArticles;
 use App\Actions\Content\StoreMedia;
 use App\Http\Controllers\Controller;
+use App\Models\Article;
+use App\Models\AuthorProfile;
 use App\Models\Blog;
 use App\Models\Media;
 use App\Models\User;
 use App\Models\Workspace;
+use App\Publishing\EventRecorder;
+use App\Publishing\Events\AuthorUpserted;
+use App\Publishing\Events\BlogUpdated;
 use App\Support\AuditLogger;
 use App\Support\MediaUsage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -15,6 +21,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -62,11 +69,27 @@ class MediaController extends Controller
         return back();
     }
 
-    public function update(Request $request, Workspace $workspace, Blog $blog, Media $media, AuditLogger $audit): RedirectResponse
+    public function update(Request $request, Workspace $workspace, Blog $blog, Media $media, AuditLogger $audit, RepublishArticles $republish, EventRecorder $events): RedirectResponse
     {
         Gate::authorize('update', $media);
 
-        $media->update($request->validate(['alt_text' => ['nullable', 'string', 'max:500']]));
+        $validated = $request->validate(['alt_text' => ['nullable', 'string', 'max:500']]);
+
+        DB::transaction(function () use ($media, $validated, $blog, $republish, $events) {
+            $media->update($validated);
+
+            // Payloads embed the media with its alt text: refresh everything readers see it in.
+            $republish->handle($blog, Article::query()->whereIn('published_revision_id', MediaUsage::revisionsUsing($media)));
+
+            AuthorProfile::query()->whereBelongsTo($blog)->where('avatar_media_id', $media->id)->each(
+                fn (AuthorProfile $author) => $events->record($blog, new AuthorUpserted($author)),
+            );
+
+            if ($blog->brand_media_id === $media->id) {
+                $events->record($blog, new BlogUpdated($blog));
+            }
+        });
+
         $audit->record('media.updated', $media, blog: $blog);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Saved.')]);

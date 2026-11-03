@@ -63,6 +63,11 @@ parameters (custom dimensions). Every snippet carries a consent category (`analy
 `functional`): load it only after the reader consents to that category. The console's integrations
 page previews the exact HTML.
 
+**Embedded copies.** An article carries copies of its author, category and tags as they were when
+it was last published. Keep authors, categories and tags in their own tables, updated by the
+`*.upserted` events, and prefer those when rendering. Changing a media's alt text re-publishes the
+live articles, authors and blog that use it.
+
 Translations of an article share `translation_group_id`; build `hreflang` links from the articles
 you hold with the same group. Media appear inside the payloads that use them (cover, body images,
 avatars, brand), with absolute URLs and their variants (`webp`, `thumb`).

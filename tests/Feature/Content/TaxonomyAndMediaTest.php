@@ -145,6 +145,29 @@ class TaxonomyAndMediaTest extends TestCase
         Storage::disk('public')->assertMissing($media->path);
     }
 
+    public function test_changing_alt_text_refreshes_live_content_using_the_media(): void
+    {
+        [$owner, $workspace, $blog] = $this->tenant();
+        $media = Media::factory()->for($blog)->create(['alt_text' => 'Old']);
+        $unrelated = Article::factory()->for($blog)->create();
+        $article = Article::factory()->for($blog)->create();
+        app(ArticleEditor::class)->saveDraft($article, $owner, [
+            'title' => 'x', 'description' => null, 'cover_media_id' => $media->id, 'body' => ['type' => 'doc', 'content' => []],
+        ]);
+        app(ArticleEditor::class)->publish($article);
+        app(ArticleEditor::class)->publish($unrelated);
+        AuthorProfile::factory()->for($blog)->create(['avatar_media_id' => $media->id]);
+        $blog->update(['brand_media_id' => $media->id]);
+        $before = OutboxEvent::query()->whereBelongsTo($blog)->max('sequence');
+
+        $this->actingAs($owner)->patch("/{$workspace->slug}/{$blog->slug}/media/{$media->id}", ['alt_text' => 'New'])->assertSessionHasNoErrors();
+
+        $new = OutboxEvent::query()->whereBelongsTo($blog)->where('sequence', '>', $before)->orderBy('sequence')->get();
+        $this->assertSame(['article.published', 'author.upserted', 'blog.updated'], $new->pluck('type')->all());
+        $this->assertSame($article->id, $new->first()?->aggregate_id);
+        $this->assertSame('New', $new->first()?->payload['article']['cover']['alt']);
+    }
+
     public function test_uploads_are_limited_to_images(): void
     {
         Storage::fake('public');
