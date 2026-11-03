@@ -1,4 +1,7 @@
 import { Form } from '@inertiajs/react';
+import { Fingerprint } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 import { FormField } from '@/components/app/form-field';
 import { PasswordInput } from '@/components/app/password-input';
 import { StatusMessage } from '@/components/app/status-message';
@@ -9,12 +12,39 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PageTitle } from '@/components/app/page-title';
 import { useTranslation } from '@/hooks/use-translation';
+import { HttpError } from '@/lib/http';
+import { authenticate, cancelled, passkeysSupported } from '@/lib/passkeys';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
+import { login as passkeyLogin } from '@/routes/passkeys';
+import { options as passkeyLoginOptions } from '@/routes/passkeys/login';
 import { request } from '@/routes/password';
 
 export default function Login({ status }: { status?: string }) {
     const { t } = useTranslation();
+    const [busy, setBusy] = useState(false);
+
+    const signInWithPasskey = async () => {
+        setBusy(true);
+
+        try {
+            const { redirect } = await authenticate<{ redirect: string }>(
+                passkeyLoginOptions().url,
+                passkeyLogin().url,
+            );
+            window.location.assign(redirect);
+        } catch (error) {
+            setBusy(false);
+
+            if (!cancelled(error)) {
+                toast.error(
+                    error instanceof HttpError
+                        ? (error.first() ?? t('Something went wrong.'))
+                        : t('The passkey could not be verified. Try again.'),
+                );
+            }
+        }
+    };
 
     return (
         <>
@@ -82,6 +112,17 @@ export default function Login({ status }: { status?: string }) {
                         </>
                     )}
                 </Form>
+                {passkeysSupported() && (
+                    <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        disabled={busy}
+                        onClick={signInWithPasskey}
+                    >
+                        <Fingerprint /> {t('Sign in with a passkey')}
+                    </Button>
+                )}
                 <p className="text-center text-sm text-muted-foreground">
                     {t("Don't have an account?")}{' '}
                     <TextLink href={register()}>{t('Sign up')}</TextLink>

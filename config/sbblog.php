@@ -8,13 +8,12 @@ return [
     |--------------------------------------------------------------------------
     |
     | Permissions and roles flagged `requires_two_factor`, and workspaces with a
-    | strict two-factor policy, deny access to users without 2FA. Off until the
-    | 2FA setup screens ship (console plan, phase 10).
+    | strict two-factor policy, send users without 2FA to the security settings.
     |
     */
 
     'two_factor' => [
-        'enforce' => (bool) env('SBBLOG_ENFORCE_TWO_FACTOR', false),
+        'enforce' => (bool) env('SBBLOG_ENFORCE_TWO_FACTOR', true),
     ],
 
     /*

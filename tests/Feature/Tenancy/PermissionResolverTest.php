@@ -89,13 +89,13 @@ class PermissionResolverTest extends TestCase
         $this->assertFalse(Gate::forUser($owner)->allows('members.manage', $workspace));
         $this->assertTrue(Gate::forUser($owner)->allows('articles.publish', $blog));
 
-        $owner->forceFill(['two_factor_confirmed_at' => now()])->save();
+        $owner->forceFill(['two_factor_secret' => 'JBSWY3DPEHPK3PXP', 'two_factor_confirmed_at' => now()])->save();
         app()->forgetScopedInstances();
 
         $this->assertTrue(Gate::forUser($owner)->allows('members.manage', $workspace));
     }
 
-    public function test_required_all_policy_blocks_every_page_without_two_factor(): void
+    public function test_required_all_policy_sends_users_without_two_factor_to_setup(): void
     {
         config(['sbblog.two_factor.enforce' => true]);
         [$owner, $workspace, $blog] = $this->tenant();
@@ -103,7 +103,10 @@ class PermissionResolverTest extends TestCase
 
         $this->actingAs($owner)
             ->get("/{$workspace->slug}/{$blog->slug}")
-            ->assertForbidden()
-            ->assertInertia(fn ($page) => $page->component('errors/two-factor-required'));
+            ->assertRedirect('/account/security');
+
+        $owner->forceFill(['two_factor_secret' => 'JBSWY3DPEHPK3PXP', 'two_factor_confirmed_at' => now()])->save();
+
+        $this->actingAs($owner)->get("/{$workspace->slug}/{$blog->slug}")->assertOk();
     }
 }

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         {{-- Apply the system theme before the first paint to avoid a light flash. --}}
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             (function () {
                 const appearance = '{{ $appearance ?? 'system' }}';
 

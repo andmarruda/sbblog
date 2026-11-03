@@ -25,7 +25,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $password
  * @property string|null $language_id
  * @property string|null $two_factor_secret
- * @property string|null $two_factor_recovery_codes
+ * @property list<string>|null $two_factor_recovery_codes
  * @property Carbon|null $two_factor_confirmed_at
  * @property Carbon|null $email_verified_at
  * @property Carbon|null $last_login_at
@@ -52,6 +52,8 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     {
         return [
             'email_verified_at' => 'datetime',
+            'two_factor_secret' => 'encrypted',
+            'two_factor_recovery_codes' => 'encrypted:array',
             'two_factor_confirmed_at' => 'datetime',
             'last_login_at' => 'datetime',
             'preferences' => 'array',
@@ -150,8 +152,16 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->language?->code;
     }
 
+    /**
+     * A confirmed authenticator app or at least one passkey.
+     */
     public function hasTwoFactorEnabled(): bool
     {
-        return $this->two_factor_confirmed_at !== null;
+        return $this->hasTotpEnabled() || once(fn () => $this->webauthnCredentials()->exists());
+    }
+
+    public function hasTotpEnabled(): bool
+    {
+        return $this->two_factor_confirmed_at !== null && $this->two_factor_secret !== null;
     }
 }

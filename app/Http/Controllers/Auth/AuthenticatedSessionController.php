@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Auth\PendingLogin;
+use App\Auth\TrustedDevices;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -19,11 +21,18 @@ class AuthenticatedSessionController extends Controller
         ]);
     }
 
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request, PendingLogin $login, TrustedDevices $devices): RedirectResponse
     {
-        $request->authenticate();
+        $user = $request->validateCredentials();
+        $remember = $request->boolean('remember');
 
-        $request->session()->regenerate();
+        if ($user->hasTwoFactorEnabled() && ! $devices->isTrusted($user, $request)) {
+            $login->start($request, $user, $remember);
+
+            return to_route('two-factor.challenge');
+        }
+
+        $login->complete($request, $user, $remember);
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

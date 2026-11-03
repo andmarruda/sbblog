@@ -42,7 +42,9 @@ class EnsureTenant
         }
 
         if ($this->twoFactor->blocks($user, $blog instanceof Blog ? $blog : $workspace)) {
-            return Inertia::render('errors/two-factor-required')->toResponse($request)->setStatusCode(403);
+            Inertia::flash('toast', ['type' => 'warning', 'message' => __('This workspace requires two-factor authentication. Turn it on to continue.')]);
+
+            return to_route('security.edit');
         }
 
         if ($blog instanceof Blog && $request->isMethod('GET')) {

@@ -9,7 +9,13 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property string $credential_id Base64url, as the browser sends it.
+ * @property string $public_key PEM.
+ * @property Carbon|null $last_used_at
+ */
 #[Fillable(['user_id', 'name', 'credential_id', 'public_key', 'sign_count', 'last_used_at'])]
 #[Hidden(['public_key'])]
 class WebauthnCredential extends Model
