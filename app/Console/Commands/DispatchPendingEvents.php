@@ -18,7 +18,7 @@ class DispatchPendingEvents extends Command
 
         EventTransport::query()
             ->where('enabled', true)
-            ->whereHas('blog', fn ($query) => $query->whereColumn('blogs.event_sequence', '>', 'event_transports.last_dispatched_sequence'))
+            ->whereHas('blog', fn ($query) => $query->active()->whereColumn('blogs.event_sequence', '>', 'event_transports.last_dispatched_sequence'))
             ->each(function (EventTransport $transport) use (&$queued) {
                 DispatchEvents::dispatch($transport);
                 $queued++;

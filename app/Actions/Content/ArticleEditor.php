@@ -280,6 +280,7 @@ class ArticleEditor
         Article::query()
             ->where('status', ArticleStatus::Scheduled)
             ->where('scheduled_at', '<=', now())
+            ->whereHas('blog', fn ($query) => $query->active())
             ->orderBy('scheduled_at')
             ->each(function (Article $article) use (&$published) {
                 try {

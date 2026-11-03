@@ -187,6 +187,24 @@ class PipelineTest extends TestCase
         $this->actingAs($editor)->get("/{$workspace->slug}/{$blog->slug}/publishing/events")->assertForbidden();
     }
 
+    public function test_deleted_workspaces_stop_all_background_work(): void
+    {
+        [$owner, $workspace, $blog] = $this->tenant();
+        [, $token] = $this->frontendFor($blog);
+        $this->publishArticles($blog, 1);
+        EventTransport::factory()->for($blog)->create(['last_dispatched_sequence' => 0]);
+        $scheduled = Article::factory()->for($blog)->create();
+        app(ArticleEditor::class)->schedule($scheduled, now()->addMinute()->toImmutable(), $owner);
+
+        $workspace->delete();
+        $this->travel(5)->minutes();
+
+        $this->withToken($token)->getJson('/api/sync')->assertUnauthorized();
+        $this->artisan('events:dispatch')->expectsOutput('Queued 0 transport(s).');
+        $this->artisan('snapshots:build')->expectsOutput('Queued 0 snapshot(s).');
+        $this->artisan('articles:publish-scheduled')->expectsOutput('Published 0 article(s).');
+    }
+
     public function test_dispatch_command_queues_only_transports_behind(): void
     {
         [, , $blog] = $this->tenant();

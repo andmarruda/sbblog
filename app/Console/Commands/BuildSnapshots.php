@@ -17,6 +17,7 @@ class BuildSnapshots extends Command
         $queued = 0;
 
         Blog::query()
+            ->active()
             ->whereHas('frontends')
             ->where('event_sequence', '>', fn ($query) => $query->selectRaw('coalesce(max(up_to_sequence), 0)')->from('snapshots')->whereColumn('snapshots.blog_id', 'blogs.id'))
             ->each(function (Blog $blog) use (&$queued) {

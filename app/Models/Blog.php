@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\CommentPolicy;
 use Database\Factories\BlogFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -40,6 +42,18 @@ class Blog extends Model
             'autoconvert_webp' => 'boolean',
             'event_sequence' => 'integer',
         ];
+    }
+
+    /**
+     * Blogs that still run: neither the blog nor its workspace is deleted. Background work
+     * (scheduling, delivery, snapshots, sync) only touches these.
+     *
+     * @param  Builder<self>  $query
+     */
+    #[Scope]
+    protected function active(Builder $query): void
+    {
+        $query->whereHas('workspace');
     }
 
     /**

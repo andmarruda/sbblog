@@ -22,7 +22,11 @@ class AuthenticateFrontend
         $token = (string) $request->bearerToken();
 
         $frontend = str_starts_with($token, SyncToken::PREFIX)
-            ? Frontend::query()->where('sync_token_hash', SyncToken::hash($token))->with('blog')->first()
+            ? Frontend::query()
+                ->where('sync_token_hash', SyncToken::hash($token))
+                ->whereHas('blog', fn ($query) => $query->active())
+                ->with('blog')
+                ->first()
             : null;
 
         if ($frontend === null || $frontend->blog === null) {
