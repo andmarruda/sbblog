@@ -50,6 +50,19 @@ class TiptapDocumentTest extends TestCase
     }
 
     /**
+     * A document captured from the real editor (Tiptap 3) in the browser: whatever the editor
+     * produces must pass the schema.
+     */
+    public function test_real_editor_output_is_valid(): void
+    {
+        $document = json_decode((string) file_get_contents(base_path('tests/fixtures/tiptap-editor-output.json')), true);
+
+        TiptapDocument::validate($document);
+
+        $this->assertStringContainsString('<table>', (new HtmlRenderer)->render($document));
+    }
+
+    /**
      * @return array<string, array{array<string, mixed>}>
      */
     public static function invalidDocuments(): array

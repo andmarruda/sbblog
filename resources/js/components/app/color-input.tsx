@@ -1,5 +1,6 @@
 import type { ComponentProps } from 'react';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 type Props = Omit<
     ComponentProps<typeof Input>,
@@ -20,7 +21,11 @@ export function ColorInput({ value, onChange, id, ...props }: Props) {
                 tabIndex={-1}
                 value={/^#[0-9a-f]{6}$/i.test(color) ? color : '#000000'}
                 onChange={(event) => onChange(event.target.value)}
-                className="size-9 shrink-0 cursor-pointer rounded-md border bg-transparent p-1"
+                className={cn(
+                    'size-9 shrink-0 cursor-pointer rounded-md border bg-transparent p-1',
+                    // No color yet: a faded swatch instead of a misleading black one.
+                    color === '' && 'opacity-30',
+                )}
             />
             <Input
                 {...props}

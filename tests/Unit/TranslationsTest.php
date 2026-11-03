@@ -30,7 +30,8 @@ class TranslationsTest extends TestCase
         $root = dirname(__DIR__, 2);
         $keys = [...$this->reactKeys($root.'/resources/js'), ...$this->phpKeys($root.'/app'), ...$this->phpKeys($root.'/routes')];
         $keys = [...$keys, ...$this->catalogKeys()];
-        $keys = array_values(array_unique(array_filter($keys, fn (string $key) => ! str_contains($key, '.') || str_contains($key, ' '))));
+        // Skip PHP file keys such as "auth.failed" or "passwords.sent_if_exists".
+        $keys = array_values(array_unique(array_filter($keys, fn (string $key) => ! preg_match('/^[a-z_]+\.[a-z_.]+$/', $key))));
 
         foreach (self::LOCALES as $locale) {
             /** @var array<string, string> $messages */
@@ -94,7 +95,7 @@ class TranslationsTest extends TestCase
         $keys = [];
 
         foreach ($this->files($dir, ['php']) as $file) {
-            preg_match_all('/\b__\(\s*([\'"])((?:(?!\1)[^\\\\]|\\\\.)*)\1/s', (string) file_get_contents($file), $matches);
+            preg_match_all('/\b(?:__|trans_choice)\(\s*([\'"])((?:(?!\1)[^\\\\]|\\\\.)*)\1/s', (string) file_get_contents($file), $matches);
             $keys = [...$keys, ...array_map(fn (string $key) => stripslashes($key), $matches[2])];
         }
 

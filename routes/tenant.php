@@ -80,6 +80,8 @@ Route::middleware(['auth', 'auth.session', 'verified', EnsureTenant::class])
         Route::prefix('{blog:slug}')->group(function () {
             Route::get('/', BlogDashboardController::class)->name('blogs.dashboard');
 
+            require __DIR__.'/content.php';
+
             Route::prefix('settings')->name('blogs.settings.')->group(function () {
                 Route::get('/', fn (Workspace $workspace, Blog $blog) => to_route('blogs.settings.general', [$workspace->slug, $blog->slug]))->name('index');
 
