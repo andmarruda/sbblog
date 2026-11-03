@@ -1,5 +1,10 @@
 import type { Auth } from '@/types/auth';
 import type { BreadcrumbItem } from '@/types/navigation';
+import type {
+    BlogSummary,
+    CurrentWorkspace,
+    WorkspaceSummary,
+} from '@/types/tenancy';
 
 declare module 'react' {
     interface InputHTMLAttributes<T> {
@@ -15,8 +20,12 @@ declare module '@inertiajs/core' {
             locale: string;
             locales: string[];
             sidebarOpen: boolean;
-            /** Permission keys for the current blog (shared once tenancy lands). */
-            can?: string[];
+            /** Workspaces and blogs the user can open (switcher). */
+            tenants: WorkspaceSummary[];
+            currentWorkspace: CurrentWorkspace | null;
+            currentBlog: BlogSummary | null;
+            /** Permission keys for the current blog, or the current workspace. */
+            can: string[];
             [key: string]: unknown;
         };
         flashDataType: {

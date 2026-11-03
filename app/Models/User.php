@@ -29,10 +29,12 @@ use Laravel\Sanctum\HasApiTokens;
  * @property Carbon|null $two_factor_confirmed_at
  * @property Carbon|null $email_verified_at
  * @property Carbon|null $last_login_at
+ * @property array<string, mixed> $preferences
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read WorkspaceMember|BlogMember|null $pivot
  */
 #[Fillable(['name', 'email', 'password', 'language_id'])]
 #[Hidden(['password', 'remember_token', 'two_factor_secret', 'two_factor_recovery_codes'])]
@@ -52,6 +54,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
             'email_verified_at' => 'datetime',
             'two_factor_confirmed_at' => 'datetime',
             'last_login_at' => 'datetime',
+            'preferences' => 'array',
             'password' => 'hashed',
         ];
     }
@@ -72,6 +75,29 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->belongsToMany(Workspace::class, 'workspace_members')
             ->using(WorkspaceMember::class)
             ->withPivot(['workspace_role', 'joined_at']);
+    }
+
+    /**
+     * Read one UI preference (e.g. "last_blog_id").
+     */
+    public function preference(string $key, mixed $default = null): mixed
+    {
+        return ($this->preferences ?? [])[$key] ?? $default;
+    }
+
+    /**
+     * Save one UI preference without touching updated_at.
+     */
+    public function rememberPreference(string $key, mixed $value): void
+    {
+        if ($this->preference($key) === $value) {
+            return;
+        }
+
+        $this->forceFill(['preferences' => [...($this->preferences ?? []), $key => $value]]);
+        $this->timestamps = false;
+        $this->saveQuietly();
+        $this->timestamps = true;
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Models\Language;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -15,9 +16,12 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-    public function create(): Response
+    public function create(Request $request): Response
     {
-        return Inertia::render('auth/register');
+        return Inertia::render('auth/register', [
+            // Prefilled when arriving from an invitation link.
+            'email' => $request->session()->get('invitation_email'),
+        ]);
     }
 
     public function store(RegisterRequest $request): RedirectResponse
@@ -33,6 +37,6 @@ class RegisteredUserController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard');
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 }

@@ -18,6 +18,7 @@ export function NavMain({
 }) {
     const { t } = useTranslation();
     const { url } = usePage();
+    const path = url.split('?')[0];
 
     return (
         <SidebarGroup>
@@ -27,7 +28,11 @@ export function NavMain({
                     <SidebarMenuItem key={item.href}>
                         <SidebarMenuButton
                             asChild
-                            isActive={url.startsWith(item.href)}
+                            isActive={
+                                item.exact
+                                    ? path === item.href
+                                    : path.startsWith(item.href)
+                            }
                             tooltip={t(item.title)}
                         >
                             <Link href={item.href} prefetch>

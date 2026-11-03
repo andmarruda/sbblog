@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Authorization\Permissions;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -28,6 +29,7 @@ class TranslationsTest extends TestCase
     {
         $root = dirname(__DIR__, 2);
         $keys = [...$this->reactKeys($root.'/resources/js'), ...$this->phpKeys($root.'/app'), ...$this->phpKeys($root.'/routes')];
+        $keys = [...$keys, ...$this->catalogKeys()];
         $keys = array_values(array_unique(array_filter($keys, fn (string $key) => ! str_contains($key, '.') || str_contains($key, ' '))));
 
         foreach (self::LOCALES as $locale) {
@@ -39,6 +41,23 @@ class TranslationsTest extends TestCase
 
             $this->assertSame([], $missing, "Missing {$locale} translations:\n".implode("\n", $missing));
         }
+    }
+
+    /**
+     * Permission descriptions, groups and role names are shown through t() in the roles page.
+     *
+     * @return list<string>
+     */
+    private function catalogKeys(): array
+    {
+        $keys = [];
+
+        foreach (Permissions::ALL as [$group, , , $description]) {
+            $keys[] = $group;
+            $keys[] = $description;
+        }
+
+        return $keys;
     }
 
     /**

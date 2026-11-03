@@ -22,6 +22,8 @@ return new class extends Migration
             $table->timestampTz('two_factor_confirmed_at')->nullable();
             $table->timestampTz('email_verified_at')->nullable();
             $table->timestampTz('last_login_at')->nullable();
+            // UI state kept across devices, e.g. the last blog opened.
+            $table->jsonb('preferences')->default('{}');
             $table->rememberToken();
             $table->timestampsTz();
             $table->softDeletesTz();

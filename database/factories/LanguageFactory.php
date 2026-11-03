@@ -19,7 +19,8 @@ class LanguageFactory extends Factory
     public function definition(): array
     {
         return [
-            'code' => Str::replace('_', '-', fake()->unique()->locale()),
+            // Never a real locale, so it can't clash with seeded languages (pt-BR, en-US…).
+            'code' => 'x-'.Str::lower(Str::random(10)),
             'label' => fake()->country(),
         ];
     }

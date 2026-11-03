@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property TwoFactorPolicy $two_factor_policy
+ */
 #[Fillable(['name', 'slug', 'owner_user_id', 'two_factor_policy', 'plan'])]
 class Workspace extends Model
 {
@@ -73,6 +76,14 @@ class Workspace extends Model
     public function apps(): HasMany
     {
         return $this->hasMany(App::class);
+    }
+
+    /**
+     * @return HasMany<Invitation, $this>
+     */
+    public function invitations(): HasMany
+    {
+        return $this->hasMany(Invitation::class);
     }
 
     /**

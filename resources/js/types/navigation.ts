@@ -9,7 +9,10 @@ export type BreadcrumbItem = {
 };
 
 export type NavItem = {
+    /** Translation key. */
     title: string;
     href: string;
     icon?: LucideIcon;
+    /** Active only on this exact URL, not its children. */
+    exact?: boolean;
 };

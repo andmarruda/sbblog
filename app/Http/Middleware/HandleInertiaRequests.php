@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
+use App\Support\TenantDirectory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Inertia\Middleware;
@@ -47,6 +49,11 @@ class HandleInertiaRequests extends Middleware
             'locale' => App::getLocale(),
             'locales' => config('app.supported_locales'),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            // The workspace/blog switcher. Overridden per request by EnsureTenant for the current ones.
+            'tenants' => fn () => $user instanceof User && $user->hasVerifiedEmail() ? TenantDirectory::for($user) : [],
+            'currentWorkspace' => null,
+            'currentBlog' => null,
+            'can' => [],
         ];
     }
 }

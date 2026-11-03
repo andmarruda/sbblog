@@ -71,7 +71,7 @@ class LocaleTest extends TestCase
 
         $this->actingAs($user)
             ->withHeader('Accept-Language', 'pt-BR')
-            ->get('/dashboard')
+            ->get('/account/profile')
             ->assertInertia(fn (Assert $page) => $page->where('locale', 'en-US'));
     }
 

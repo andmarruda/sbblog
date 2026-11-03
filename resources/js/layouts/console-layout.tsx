@@ -24,7 +24,7 @@ export default function ConsoleLayout({ children, breadcrumbs = [] }: Props) {
         <TooltipProvider delayDuration={0}>
             <SidebarProvider defaultOpen={sidebarOpen}>
                 <AppSidebar />
-                <SidebarInset>
+                <SidebarInset className="min-w-0">
                     <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
                         <SidebarTrigger className="-ml-1" />
                         <Separator
@@ -33,7 +33,7 @@ export default function ConsoleLayout({ children, breadcrumbs = [] }: Props) {
                         />
                         <Breadcrumbs items={breadcrumbs} />
                     </header>
-                    <main className="flex flex-1 flex-col gap-6 p-4 md:p-6">
+                    <main className="flex min-w-0 flex-1 flex-col gap-6 p-4 md:p-6">
                         {children}
                     </main>
                 </SidebarInset>

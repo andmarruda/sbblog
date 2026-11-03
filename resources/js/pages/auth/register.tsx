@@ -9,7 +9,7 @@ import { useTranslation } from '@/hooks/use-translation';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
 
-export default function Register() {
+export default function Register({ email }: { email?: string | null }) {
     const { t } = useTranslation();
 
     return (

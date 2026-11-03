@@ -1,0 +1,47 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Two-factor enforcement
+    |--------------------------------------------------------------------------
+    |
+    | Permissions and roles flagged `requires_two_factor`, and workspaces with a
+    | strict two-factor policy, deny access to users without 2FA. Off until the
+    | 2FA setup screens ship (console plan, phase 10).
+    |
+    */
+
+    'two_factor' => [
+        'enforce' => (bool) env('SBBLOG_ENFORCE_TWO_FACTOR', false),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Invitations
+    |--------------------------------------------------------------------------
+    */
+
+    'invitations' => [
+        'expire_days' => 7,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reserved slugs
+    |--------------------------------------------------------------------------
+    |
+    | Workspace slugs are the first URL segment, so they can't take the name of
+    | a top-level route.
+    |
+    */
+
+    'reserved_slugs' => [
+        'account', 'admin', 'api', 'app', 'assets', 'build', 'confirm-password', 'dashboard',
+        'email', 'forgot-password', 'help', 'invitations', 'locale', 'login', 'logout',
+        'onboarding', 'register', 'reset-password', 'sanctum', 'settings', 'storage',
+        'support', 'sync', 'up', 'verify-email', 'www',
+    ],
+
+];

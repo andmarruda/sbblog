@@ -14,6 +14,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property CommentPolicy $comment_policy
+ * @property bool $autoconvert_webp
+ * @property int $event_sequence
+ */
 #[Fillable([
     'workspace_id', 'name', 'slug', 'canonical_url', 'title', 'slogan', 'description',
     'brand_media_id', 'default_language_id', 'comment_policy', 'autoconvert_webp',

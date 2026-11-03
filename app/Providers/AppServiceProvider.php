@@ -2,13 +2,18 @@
 
 namespace App\Providers;
 
+use App\Authorization\PermissionResolver;
+use App\Authorization\Permissions;
+use App\Authorization\TwoFactorRequirement;
 use App\Listeners\AuthEventSubscriber;
 use App\Models;
 use Carbon\CarbonImmutable;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -19,7 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->scoped(PermissionResolver::class);
+        $this->app->scoped(TwoFactorRequirement::class);
     }
 
     /**
@@ -31,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
         $this->configureModels();
 
         Event::subscribe(AuthEventSubscriber::class);
+
+        $this->configureAuthorization();
     }
 
     /**
@@ -64,6 +72,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'app' => Models\App::class,
             'app_installation' => Models\AppInstallation::class,
+            'invitation' => Models\Invitation::class,
             'article' => Models\Article::class,
             'article_revision' => Models\ArticleRevision::class,
             'article_suggestion' => Models\ArticleSuggestion::class,
@@ -81,5 +90,30 @@ class AppServiceProvider extends ServiceProvider
             'user' => Models\User::class,
             'workspace' => Models\Workspace::class,
         ]);
+    }
+
+    /**
+     * Permission keys ("articles.publish") are gate abilities, checked against a Blog or
+     * Workspace: `$user->can('articles.publish', $blog)` or `->can('blog.settings', 'blog')`.
+     */
+    protected function configureAuthorization(): void
+    {
+        Gate::before(function (Models\User $user, string $ability, array $arguments) {
+            if (! Permissions::exists($ability)) {
+                return null;
+            }
+
+            $scope = $arguments[0] ?? null;
+
+            if (! $scope instanceof Models\Blog && ! $scope instanceof Models\Workspace) {
+                return false;
+            }
+
+            if (app(TwoFactorRequirement::class)->blocks($user, $scope, $ability)) {
+                return Response::deny(__('Enable two-factor authentication to do this.'));
+            }
+
+            return app(PermissionResolver::class)->has($user, $ability, $scope);
+        });
     }
 }
