@@ -45,6 +45,7 @@ export default function Register({ email }: { email?: string | null }) {
                                     id="email"
                                     name="email"
                                     type="email"
+                                    defaultValue={email ?? undefined}
                                     autoComplete="email"
                                     required
                                 />

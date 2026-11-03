@@ -6,7 +6,7 @@ import { useCallback } from 'react';
  * The server is still the authority; this only hides UI.
  */
 export function useCan() {
-    const { can = [] } = usePage().props;
+    const { can } = usePage().props;
 
     return useCallback(
         (...permissions: string[]) =>
