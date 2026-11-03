@@ -8,6 +8,7 @@ use App\Http\Controllers\Content\ArticleRevisionController;
 use App\Http\Controllers\Content\ArticleTranslationController;
 use App\Http\Controllers\Content\AuthorController;
 use App\Http\Controllers\Content\CategoryController;
+use App\Http\Controllers\Content\CommentController as ContentCommentController;
 use App\Http\Controllers\Content\IntegrationController;
 use App\Http\Controllers\Content\MediaController;
 use App\Http\Controllers\Content\SuggestionController;
@@ -108,4 +109,13 @@ Route::prefix('publishing')->name('publishing.')->middleware('can:frontends.mana
     Route::patch('transports/{eventTransport:id}', [PublishingController::class, 'updateTransport'])->name('transports.update');
     Route::post('transports/{eventTransport:id}/test', [PublishingController::class, 'testTransport'])->middleware('throttle:10,1')->name('transports.test');
     Route::delete('transports/{eventTransport:id}', [PublishingController::class, 'destroyTransport'])->name('transports.destroy');
+});
+
+Route::prefix('comments')->name('comments.')->middleware('can:comments.moderate,blog')->group(function () {
+    Route::get('/', [ContentCommentController::class, 'index'])->name('index');
+    Route::post('bulk', [ContentCommentController::class, 'bulk'])->name('bulk');
+    Route::post('{comment:id}/moderate', [ContentCommentController::class, 'moderate'])->name('moderate');
+    Route::post('{comment:id}/reply', [ContentCommentController::class, 'reply'])->name('reply');
+    Route::delete('{comment:id}', [ContentCommentController::class, 'destroy'])->name('destroy');
+    Route::post('{comment:id}/restore', [ContentCommentController::class, 'restore'])->withTrashed()->name('restore');
 });

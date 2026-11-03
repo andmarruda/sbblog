@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\SyncController;
 use App\Http\Middleware\AuthenticateFrontend;
 use Illuminate\Support\Facades\Route;
@@ -10,3 +11,7 @@ Route::middleware([AuthenticateFrontend::class, 'throttle:sync'])->prefix('sync'
     Route::post('ack', [SyncController::class, 'ack'])->name('sync.ack');
     Route::get('snapshot', [SyncController::class, 'snapshot'])->name('sync.snapshot');
 });
+
+Route::post('comments', [CommentController::class, 'store'])
+    ->middleware([AuthenticateFrontend::class, 'throttle:sync'])
+    ->name('api.comments.store');

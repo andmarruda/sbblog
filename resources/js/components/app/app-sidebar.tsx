@@ -5,6 +5,7 @@ import {
     FolderTree,
     Image,
     LayoutDashboard,
+    MessageSquare,
     Plug,
     Radio,
     Settings,
@@ -26,6 +27,7 @@ import { index as articles } from '@/routes/articles';
 import { index as authors } from '@/routes/authors';
 import { dashboard as blogDashboard } from '@/routes/blogs';
 import { index as categories } from '@/routes/categories';
+import { index as comments } from '@/routes/comments';
 import { index as integrations } from '@/routes/integrations';
 import { index as publishing } from '@/routes/publishing';
 import { index as media } from '@/routes/media';
@@ -70,6 +72,15 @@ export function AppSidebar() {
                   : []),
               ...(can('tags.manage')
                   ? [{ title: 'Tags', href: tags(blogArgs).url, icon: Tags }]
+                  : []),
+              ...(can('comments.moderate')
+                  ? [
+                        {
+                            title: 'Comments',
+                            href: comments(blogArgs).url,
+                            icon: MessageSquare,
+                        },
+                    ]
                   : []),
               ...(can('authors.manage')
                   ? [

@@ -85,6 +85,15 @@ Each `article` also carries `html`, rendered and escaped by the console, for fro
 want to render the JSON themselves, plus `excerpt` (plain text) and `media` (every image the body
 references).
 
+## Comments
+
+Frontends are read-only, so they `POST /api/comments` (same sync token) with `article_id`,
+optional `parent_id`, `author_name`, optional `author_email`, `body`, and an empty `website` field
+as a honeypot. Send the reader's IP in `X-SBBlog-Client-IP`; the console stores only a daily-salted
+hash. The answer is `201 {id, status}`: `approved` on open blogs (a `comment.approved` event
+follows), `pending` on moderated ones, `403` when comments are disabled, `429` when a reader posts
+too often.
+
 ## Getting events
 
 `GET /api/sync?after={sequence}` with the frontend's sync token. New frontends first load the
