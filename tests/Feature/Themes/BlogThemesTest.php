@@ -47,6 +47,20 @@ class BlogThemesTest extends TestCase
         $this->assertArrayNotHasKey('unknown', $config);
     }
 
+    public function test_missing_settings_get_defaults_on_activation(): void
+    {
+        [$owner, $workspace, $blog] = $this->tenant();
+        $installed = BlogTheme::factory()->for($blog)->create(['config' => ['primary_color' => '#abcdef']]);
+        $base = "/{$workspace->slug}/{$blog->slug}/settings/themes";
+
+        $this->actingAs($owner)->get($base)->assertInertia(fn ($page) => $page->where('installed.0.config.home_layout', 'list'));
+        $this->actingAs($owner)->post("{$base}/{$installed->id}/activate");
+
+        $config = OutboxEvent::query()->where('type', 'theme.updated')->sole()->payload['theme']['config'];
+        $this->assertSame('#abcdef', $config['primary_color']);
+        $this->assertSame('list', $config['home_layout']);
+    }
+
     public function test_invalid_values_are_rejected(): void
     {
         [$owner, $workspace, $blog] = $this->tenant();

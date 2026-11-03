@@ -56,7 +56,10 @@ class BlogThemes
             Blog::query()->whereKey($blog->id)->lockForUpdate()->first();
 
             $blog->themes()->whereKeyNot($installed->id)->where('is_active', true)->update(['is_active' => false]);
-            $installed->update(['is_active' => true]);
+            $installed->update([
+                'is_active' => true,
+                'config' => $this->config->migrate($installed->theme, (array) $installed->config),
+            ]);
 
             $this->publish($blog, $installed);
             $this->audit->record('theme.activated', $installed, ['theme' => $installed->theme->slug], blog: $blog);

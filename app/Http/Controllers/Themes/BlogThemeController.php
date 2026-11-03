@@ -8,6 +8,7 @@ use App\Models\Blog;
 use App\Models\BlogTheme;
 use App\Models\Theme;
 use App\Models\Workspace;
+use App\Themes\ThemeConfig;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -16,7 +17,7 @@ use Inertia\Response;
 
 class BlogThemeController extends Controller
 {
-    public function __construct(private readonly BlogThemes $themes) {}
+    public function __construct(private readonly BlogThemes $themes, private readonly ThemeConfig $config) {}
 
     public function index(Workspace $workspace, Blog $blog): Response
     {
@@ -40,7 +41,8 @@ class BlogThemeController extends Controller
                 'latest_version' => $item->theme->latest_version,
                 'is_active' => $item->is_active,
                 'fields' => $item->theme->fields(),
-                'config' => (object) ($item->config ?? []),
+                // Fields added since the theme was installed show their defaults.
+                'config' => (object) $this->config->migrate($item->theme, (array) $item->config),
             ]),
         ]);
     }
