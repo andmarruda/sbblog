@@ -189,6 +189,20 @@ class ArticleLifecycleTest extends TestCase
         $this->assertSame(['article.published'], $this->events());
     }
 
+    public function test_scheduler_skips_articles_changed_after_being_picked(): void
+    {
+        $article = $this->createArticle();
+        app(ArticleEditor::class)->schedule($article, now()->addMinute()->toImmutable(), $this->owner);
+        $this->travel(2)->minutes();
+
+        // An editor moves it back to draft between the scheduler's query and its lock.
+        $article->forceFill(['status' => ArticleStatus::Draft, 'scheduled_at' => null])->save();
+
+        $this->assertNull(app(ArticleEditor::class)->publish($article, onlyIfDue: true));
+        $this->assertSame(ArticleStatus::Draft, $article->refresh()->status);
+        $this->assertSame([], $this->events());
+    }
+
     public function test_past_dates_cannot_be_scheduled(): void
     {
         $article = $this->createArticle();

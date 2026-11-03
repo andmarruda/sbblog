@@ -15,7 +15,10 @@ use App\Publishing\Events\ArticleUnpublished;
 use App\Support\AuditLogger;
 use App\Support\Slug;
 use Carbon\CarbonInterface;
+use Closure;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -39,14 +42,16 @@ class ArticleEditor
         return DB::transaction(function () use ($blog, $user, $title, $languageId) {
             $languageId ??= $blog->default_language_id;
 
-            $article = Article::query()->create([
+            $authorId = $this->authors->forUser($blog, $user)->id;
+
+            $article = $this->withUniqueSlug(fn (bool $randomize) => Article::query()->create([
                 'blog_id' => $blog->id,
-                'author_profile_id' => $this->authors->forUser($blog, $user)->id,
+                'author_profile_id' => $authorId,
                 'language_id' => $languageId,
-                'slug' => $this->uniqueSlug($blog, $languageId, $title),
+                'slug' => $this->uniqueSlug($blog, $languageId, $title, $randomize),
                 'status' => ArticleStatus::Draft,
                 'created_by' => $user->id,
-            ]);
+            ]));
 
             $this->newRevision($article, $user, ['title' => $title, 'description' => null, 'body' => TiptapDocument::empty(), 'cover_media_id' => null]);
             $this->audit->record('article.created', $article, ['title' => $title], blog: $blog, actor: $user);
@@ -110,10 +115,19 @@ class ArticleEditor
         });
     }
 
-    public function publish(Article $article, ?User $user = null): Article
+    /**
+     * @param  bool  $onlyIfDue  Scheduler mode: publish only if still scheduled and due once locked,
+     *                           since an editor may have changed it after the article was picked.
+     */
+    public function publish(Article $article, ?User $user = null, bool $onlyIfDue = false): ?Article
     {
-        return DB::transaction(function () use ($article, $user) {
+        return DB::transaction(function () use ($article, $user, $onlyIfDue) {
             $article = Article::query()->lockForUpdate()->findOrFail($article->id);
+
+            if ($onlyIfDue && ($article->status !== ArticleStatus::Scheduled || $article->scheduled_at === null || $article->scheduled_at->isFuture())) {
+                return null;
+            }
+
             $revision = $article->currentRevision;
 
             if ($revision === null || trim($revision->title) === '') {
@@ -214,17 +228,19 @@ class ArticleEditor
         return DB::transaction(function () use ($source, $languageId, $user, $blog) {
             $revision = $source->currentRevision;
 
-            $article = Article::query()->create([
+            $authorId = $this->authors->forUser($blog, $user)->id;
+
+            $article = $this->withUniqueSlug(fn (bool $randomize) => Article::query()->create([
                 'blog_id' => $blog->id,
-                'author_profile_id' => $this->authors->forUser($blog, $user)->id,
+                'author_profile_id' => $authorId,
                 'category_id' => $source->category_id,
                 'language_id' => $languageId,
                 'translation_group_id' => $source->translation_group_id,
-                'slug' => $this->uniqueSlug($blog, $languageId, $source->slug),
+                'slug' => $this->uniqueSlug($blog, $languageId, $source->slug, $randomize),
                 'status' => ArticleStatus::Draft,
                 'bgcolor' => $source->bgcolor,
                 'created_by' => $user->id,
-            ]);
+            ]));
 
             $article->tags()->sync($source->tags()->pluck('tags.id'));
 
@@ -267,8 +283,9 @@ class ArticleEditor
             ->orderBy('scheduled_at')
             ->each(function (Article $article) use (&$published) {
                 try {
-                    $this->publish($article);
-                    $published++;
+                    if ($this->publish($article, onlyIfDue: true) !== null) {
+                        $published++;
+                    }
                 } catch (ValidationException $exception) {
                     // Leave it scheduled; the editor shows why it didn't go out.
                     report($exception);
@@ -352,10 +369,32 @@ class ArticleEditor
         });
     }
 
-    private function uniqueSlug(Blog $blog, string $languageId, string $source): string
+    /**
+     * Two articles with the same title created at once can both pass the slug check. On a
+     * collision, retry the insert (in a savepoint, so the outer transaction survives) with a
+     * random suffix, which concurrent writers can't predict.
+     *
+     * @param  Closure(bool): Article  $create  Receives whether to randomize the slug.
+     */
+    private function withUniqueSlug(Closure $create): Article
     {
+        for ($attempt = 1; ; $attempt++) {
+            try {
+                return DB::transaction(fn () => $create($attempt > 1));
+            } catch (UniqueConstraintViolationException $exception) {
+                if ($attempt >= 5) {
+                    throw $exception;
+                }
+            }
+        }
+    }
+
+    private function uniqueSlug(Blog $blog, string $languageId, string $source, bool $randomize = false): string
+    {
+        $source = $source !== '' ? $source : 'untitled';
+
         return Slug::unique(
-            $source !== '' ? $source : 'untitled',
+            $randomize ? $source.' '.Str::lower(Str::random(5)) : $source,
             fn (string $slug) => Article::withTrashed()->whereBelongsTo($blog)->where('language_id', $languageId)->where('slug', $slug)->exists(),
             maxLength: 120,
         );
