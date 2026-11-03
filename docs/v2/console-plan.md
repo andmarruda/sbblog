@@ -4,10 +4,10 @@ The console is the admin app: Laravel 13 + Inertia 3 + React 19, the write side 
 [ERD](./erd.md). This plan covers the full v2 scope as a sequence of phases. Each task is meant
 to fit in one PR.
 
-**Status:** the data layer and **phases 0–6 are done** (foundation, authentication, tenancy and
-access control, publishing core, content, integrations, publishing pipeline), followed by 20 review
-cycles. Kafka, NATS and Redis transports are stubbed (webhook only). Next: phase 7 (comments and
-home dashboard).
+**Status:** the data layer and **phases 0–9 are done** (foundation, authentication, tenancy and
+access control, publishing core, content, integrations, publishing pipeline, engagement, apps and
+API, themes), followed by 20 review cycles for phases 0–6. Kafka, NATS and Redis transports are
+stubbed (webhook only). Next: phase 10 (security hardening).
 
 ## Decisions
 

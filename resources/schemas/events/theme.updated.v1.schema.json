@@ -1,0 +1,33 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/theme.updated.v1.schema.json",
+    "title": "theme.updated (v1) payload",
+    "description": "The blog's active theme, its version or its settings changed. null means no active theme: use your default.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["theme"],
+    "properties": {
+        "theme": {
+            "oneOf": [
+                { "type": "null" },
+                {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["slug", "package_name", "version", "config"],
+                    "properties": {
+                        "slug": { "type": "string" },
+                        "package_name": { "type": "string" },
+                        "version": { "type": "string" },
+                        "config": {
+                            "description": "Values for the theme's declared settings fields.",
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": ["string", "boolean"]
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

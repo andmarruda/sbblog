@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * theme_id is required and themes cannot be deleted while installed (restrictOnDelete).
+ *
+ * @property-read Theme $theme
+ */
 #[Fillable(['blog_id', 'theme_id', 'version', 'config', 'is_active'])]
 class BlogTheme extends Model
 {

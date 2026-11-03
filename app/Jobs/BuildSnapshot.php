@@ -86,6 +86,11 @@ class BuildSnapshot implements ShouldBeUnique, ShouldQueue
     {
         $events = [new Events\BlogUpdated($blog)];
 
+        $theme = $blog->activeTheme()->with('theme')->first();
+        if ($theme !== null) {
+            $events[] = new Events\ThemeUpdated($blog->id, $theme);
+        }
+
         Category::query()->whereBelongsTo($blog)->orderBy('position')->each(function (Category $category) use (&$events) {
             $events[] = new Events\CategoryUpserted($category);
         });

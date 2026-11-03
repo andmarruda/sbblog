@@ -86,6 +86,7 @@ class AppServiceProvider extends ServiceProvider
             'article_suggestion' => Models\ArticleSuggestion::class,
             'author_profile' => Models\AuthorProfile::class,
             'blog' => Models\Blog::class,
+            'blog_theme' => Models\BlogTheme::class,
             'category' => Models\Category::class,
             'comment' => Models\Comment::class,
             'event_transport' => Models\EventTransport::class,

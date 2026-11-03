@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Theme;
+use Database\Seeders\ThemeSeeder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -23,6 +24,7 @@ class ThemeFactory extends Factory
             'name' => Str::title(Str::replace('-', ' ', $slug)),
             'package_name' => '@sbblog/theme-'.$slug,
             'latest_version' => '1.0.0',
+            'config_schema' => ThemeSeeder::DEFAULT_FIELDS,
             'is_premium' => false,
             'price_cents' => 0,
             'currency' => 'USD',

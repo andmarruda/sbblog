@@ -55,6 +55,7 @@ these files in CI, so a schema change is always a visible diff.
 | `blog.updated` | `{ blog }` | Replace blog-level settings: title, languages, brand, social links, comment policy |
 | `comment.approved` / `comment.removed` | `{ comment }` / `{ id, article_id }` | Show / hide a comment |
 | `integrations.updated` | `{ scope, author_profile_id, article_id, integrations }` | Replace the integration list of that scope |
+| `theme.updated` | `{ theme: { slug, package_name, version, config } \| null }` | Switch to that theme package and version with those settings; `null` means use your default |
 
 **Integrations.** Combine blog, author and article lists for a page, keep the most specific scope
 when two entries have the same provider and ID, and load GA4 and Google Ads through one gtag
@@ -71,6 +72,11 @@ live articles, authors and blog that use it.
 Translations of an article share `translation_group_id`; build `hreflang` links from the articles
 you hold with the same group. Media appear inside the payloads that use them (cover, body images,
 avatars, brand), with absolute URLs and their variants (`webp`, `thumb`).
+
+**Themes.** A blog has at most one active theme. `config` holds values for the fields the theme
+declares (colors as `#rrggbb`, choices, switches, short texts); the console fills missing fields
+with the theme's defaults, so a frontend can read every declared key. The event is sent when a
+theme is activated, upgraded or reconfigured while active.
 
 ## Article body
 

@@ -3,7 +3,14 @@ import type { ReactNode } from 'react';
 import { useCan } from '@/hooks/use-can';
 import { useTranslation } from '@/hooks/use-translation';
 import { SectionLayout, type SectionNavItem } from '@/layouts/section-layout';
-import { apps, audit, general, members, social } from '@/routes/blogs/settings';
+import {
+    apps,
+    audit,
+    general,
+    members,
+    social,
+    themes,
+} from '@/routes/blogs/settings';
 
 export default function BlogSettingsLayout({
     children,
@@ -24,6 +31,7 @@ export default function BlogSettingsLayout({
             title: 'Social links',
             href: social(args).url,
         },
+        can('themes.configure') && { title: 'Theme', href: themes(args).url },
         can('members.manage') && { title: 'Members', href: members(args).url },
         can('apps.install') && { title: 'Apps', href: apps(args).url },
         can('audit.view') && { title: 'Audit log', href: audit(args).url },

@@ -6,6 +6,7 @@ use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Blogs\BlogDashboardController;
 use App\Http\Controllers\Blogs\BlogMemberController;
 use App\Http\Controllers\Blogs\BlogSettingsController;
+use App\Http\Controllers\Themes\BlogThemeController;
 use App\Http\Controllers\Workspaces\InvitationController;
 use App\Http\Controllers\Workspaces\MemberController;
 use App\Http\Controllers\Workspaces\RoleController;
@@ -114,6 +115,15 @@ Route::middleware(['auth', 'auth.session', 'verified', EnsureTenant::class])
                 Route::get('audit', [AuditLogController::class, 'blog'])
                     ->middleware('can:audit.view,blog')
                     ->name('audit');
+
+                Route::middleware('can:themes.configure,blog')->prefix('themes')->name('themes')->group(function () {
+                    Route::get('/', [BlogThemeController::class, 'index']);
+                    Route::post('/', [BlogThemeController::class, 'store'])->name('.store');
+                    Route::put('{theme:id}', [BlogThemeController::class, 'update'])->name('.update');
+                    Route::post('{theme:id}/activate', [BlogThemeController::class, 'activate'])->name('.activate');
+                    Route::post('{theme:id}/upgrade', [BlogThemeController::class, 'upgrade'])->name('.upgrade');
+                    Route::delete('{theme:id}', [BlogThemeController::class, 'destroy'])->name('.destroy');
+                });
 
                 Route::get('apps', [AppInstallationController::class, 'index'])->middleware('can:apps.install,blog')->name('apps');
                 Route::delete('apps/{appInstallation:id}', [AppInstallationController::class, 'destroy'])->middleware('can:apps.install,blog')->name('apps.destroy');

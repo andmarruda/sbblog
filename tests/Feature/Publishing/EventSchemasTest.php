@@ -6,6 +6,7 @@ use App\Enums\IntegrationScope;
 use App\Models\Article;
 use App\Models\AuthorProfile;
 use App\Models\Blog;
+use App\Models\BlogTheme;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Integration;
@@ -78,6 +79,8 @@ class EventSchemasTest extends TestCase
             new Events\CommentApproved($comment),
             new Events\CommentRemoved($comment),
             new Events\IntegrationsUpdated($blog->id, IntegrationScope::Blog, null, collect([$integration])),
+            new Events\ThemeUpdated($blog->id, BlogTheme::factory()->active()->for($blog)->create(['config' => ['primary_color' => '#112233', 'show_author' => true]])),
+            new Events\ThemeUpdated($blog->id, null),
         ];
     }
 
@@ -96,7 +99,7 @@ class EventSchemasTest extends TestCase
         $envelope = json_decode((string) file_get_contents(resource_path('schemas/events/envelope.schema.json')), true);
         $types = array_map(fn (PublishableEvent $event) => $event::type(), $this->sampleEvents());
 
-        $this->assertEqualsCanonicalizing($envelope['properties']['type']['enum'], $types);
+        $this->assertEqualsCanonicalizing($envelope['properties']['type']['enum'], array_values(array_unique($types)));
     }
 
     public function test_recorded_events_fit_the_envelope(): void

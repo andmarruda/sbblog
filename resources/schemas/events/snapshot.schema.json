@@ -45,7 +45,8 @@
                             "blog.updated",
                             "comment.approved",
                             "comment.removed",
-                            "integrations.updated"
+                            "integrations.updated",
+                            "theme.updated"
                         ]
                     },
                     "schema_version": {

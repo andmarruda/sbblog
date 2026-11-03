@@ -9,7 +9,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['slug', 'name', 'package_name', 'latest_version', 'is_premium', 'price_cents', 'currency'])]
+/**
+ * @property array<array-key, mixed>|null $config_schema Settings fields, see App\Themes\ThemeConfig.
+ */
+#[Fillable(['slug', 'name', 'description', 'preview_url', 'package_name', 'latest_version', 'config_schema', 'is_premium', 'price_cents', 'currency'])]
 class Theme extends Model
 {
     /** @use HasFactory<ThemeFactory> */
@@ -25,7 +28,18 @@ class Theme extends Model
         return [
             'is_premium' => 'boolean',
             'price_cents' => 'integer',
+            'config_schema' => 'array',
         ];
+    }
+
+    /**
+     * The theme's settings fields (see App\Themes\ThemeConfig).
+     *
+     * @return list<array<array-key, mixed>>
+     */
+    public function fields(): array
+    {
+        return array_values(array_filter($this->config_schema ?? [], is_array(...)));
     }
 
     /**
