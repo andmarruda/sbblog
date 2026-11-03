@@ -99,6 +99,22 @@ return [
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
+        // The v1 database, read by `sbblog:import-v1 v1` (console plan, M-01).
+        'v1' => [
+            'driver' => 'pgsql',
+            'url' => env('V1_DB_URL'),
+            'host' => env('V1_DB_HOST', '127.0.0.1'),
+            'port' => env('V1_DB_PORT', '5432'),
+            'database' => env('V1_DB_DATABASE', 'sbblog_v1'),
+            'username' => env('V1_DB_USERNAME', 'root'),
+            'password' => env('V1_DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => env('V1_DB_SCHEMA', 'public'),
+            'sslmode' => env('V1_DB_SSLMODE', 'prefer'),
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),
