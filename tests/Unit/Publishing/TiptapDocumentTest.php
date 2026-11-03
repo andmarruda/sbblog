@@ -73,6 +73,12 @@ class TiptapDocumentTest extends TestCase
             'javascript link' => [['type' => 'doc', 'content' => [['type' => 'paragraph', 'content' => [
                 ['type' => 'text', 'text' => 'x', 'marks' => [['type' => 'link', 'attrs' => ['href' => 'javascript:alert(1)']]]],
             ]]]]],
+            'protocol-relative link' => [['type' => 'doc', 'content' => [['type' => 'paragraph', 'content' => [
+                ['type' => 'text', 'text' => 'x', 'marks' => [['type' => 'link', 'attrs' => ['href' => '//evil.test']]]],
+            ]]]]],
+            'backslash link' => [['type' => 'doc', 'content' => [['type' => 'paragraph', 'content' => [
+                ['type' => 'text', 'text' => 'x', 'marks' => [['type' => 'link', 'attrs' => ['href' => '/\\evil.test']]]],
+            ]]]]],
             'h1 heading' => [['type' => 'doc', 'content' => [['type' => 'heading', 'attrs' => ['level' => 1]]]]],
             'image by url' => [['type' => 'doc', 'content' => [['type' => 'image', 'attrs' => ['src' => 'https://evil.test/x.png']]]]],
             'unknown embed' => [['type' => 'doc', 'content' => [['type' => 'embed', 'attrs' => ['provider' => 'evil', 'videoId' => 'x']]]]],
@@ -111,6 +117,14 @@ class TiptapDocumentTest extends TestCase
 
     public function test_renderer_drops_links_with_unsafe_schemes(): void
     {
+        foreach (['//evil.test', '/\\evil.test', 'JAVASCRIPT:alert(1)', 'data:text/html,x'] as $href) {
+            $html = (new HtmlRenderer)->render($this->doc($this->paragraph(
+                ['type' => 'text', 'text' => 'x', 'marks' => [['type' => 'link', 'attrs' => ['href' => $href]]]],
+            )));
+
+            $this->assertSame('<p>x</p>', $html, $href);
+        }
+
         $html = (new HtmlRenderer)->render($this->doc($this->paragraph(
             ['type' => 'text', 'text' => 'x', 'marks' => [['type' => 'link', 'attrs' => ['href' => 'javascript:alert(1)']]]],
         )));

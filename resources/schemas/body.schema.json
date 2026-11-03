@@ -470,7 +470,7 @@
                         "href": {
                             "type": "string",
                             "maxLength": 2048,
-                            "pattern": "^(https?://|mailto:|/|#)"
+                            "pattern": "^(https?://|mailto:|/(?![/\\\\])|#)"
                         },
                         "target": {
                             "enum": ["_blank", null]

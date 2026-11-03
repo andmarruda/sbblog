@@ -47,7 +47,7 @@ export function RichTextEditor({
                     autolink: true,
                     defaultProtocol: 'https',
                     isAllowedUri: (url) =>
-                        /^(https?:\/\/|mailto:|\/|#)/i.test(url),
+                        /^(https?:\/\/|mailto:|\/(?![/\\])|#)/i.test(url),
                 },
             }),
             TextAlign.configure({ types: ['heading', 'paragraph'] }),

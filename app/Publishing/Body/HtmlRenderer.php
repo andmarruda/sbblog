@@ -101,7 +101,8 @@ class HtmlRenderer
         $href = (string) ($attrs['href'] ?? '');
 
         // The schema already restricts schemes; this is a second line of defence.
-        if (! preg_match('#^(https?://|mailto:|/|\#)#i', $href)) {
+        // "//host" and "/\host" are other sites in disguise, not relative links.
+        if (! preg_match('#^(https?://|mailto:|/(?![/\\\\])|\#)#i', $href)) {
             return $html;
         }
 

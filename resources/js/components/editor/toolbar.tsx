@@ -96,7 +96,7 @@ function LinkButton({ editor }: { editor: Editor }) {
 
         if (value === '') {
             editor.chain().focus().extendMarkRange('link').unsetLink().run();
-        } else if (/^(https?:\/\/|mailto:|\/|#)/i.test(value)) {
+        } else if (/^(https?:\/\/|mailto:|\/(?![/\\])|#)/i.test(value)) {
             editor
                 .chain()
                 .focus()
