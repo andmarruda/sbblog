@@ -168,6 +168,17 @@ function IntegrationDialog({
     const [consent, setConsent] = useState<Integration['consent_category']>(
         integration?.consent_category ?? 'analytics',
     );
+    const fieldLabels: Record<string, string> = {
+        name: t('Name'),
+        measurement_id: t('Measurement ID'),
+        conversion_id: t('Conversion ID'),
+        conversion_label: t('Conversion label'),
+        container_id: t('Container ID'),
+        pixel_id: t('Pixel ID'),
+        project_id: t('Project ID'),
+        domain: t('Domain'),
+        script_url: t('Script URL'),
+    };
     const [pageRule, setPageRule] = useState<Integration['page_rule']>(
         integration?.page_rule ?? 'all',
     );
@@ -264,13 +275,7 @@ function IntegrationDialog({
                                 <FormField
                                     key={field.key}
                                     id={`config-${field.key}`}
-                                    label={
-                                        field.key === 'name'
-                                            ? t('Name')
-                                            : field.key
-                                                  .replace(/_/g, ' ')
-                                                  .toUpperCase()
-                                    }
+                                    label={fieldLabels[field.key] ?? field.key}
                                     hint={
                                         field.optional
                                             ? t('Optional')
