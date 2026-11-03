@@ -16,6 +16,10 @@ tests for every table in the ERD). **Phase 0 is done.** Next up: phase 1 (authen
 | i18n            | **From day one, pt-BR by default** and en-US as the second language. No string is hard-coded in a component or in a validation message.                                                                        |
 | Routes in TS    | **Wayfinder** (already installed). The frontend never hard-codes a URL.                                                                                                                                        |
 | Package manager | **pnpm** (`pnpm-workspace.yaml` is already in the repo).                                                                                                                                                       |
+| Hosting | **Console and API on the same host**: console at `/`, `/api/v1` for apps, `/api/sync` (plus comment ingest) for blog frontends. Session cookies stay same-origin; only the frontend-facing endpoints need CORS. |
+| Billing | **Not in 2.0; planned for 2.6** (see Roadmap). Features that depend on a paid plan move with it. |
+| Analytics | **The blog's own analytics tool** (Google Analytics etc. via integrations). No page-view storage on our side; the scripts loader sends article, author and category as custom dimensions. |
+| Article body | **Tiptap (ProseMirror) JSON**, stored in `article_revisions.body`. Validated server-side against an allow-list of nodes and marks. Images reference media by ID. `@sbblog/core` renders it to HTML. |
 | Tests           | Pest/PHPUnit on PostgreSQL. Every task ships with feature tests for its endpoints and policies.                                                                                                                |
 
 ## Conventions (apply to every task)
@@ -75,7 +79,7 @@ tests for every table in the ERD). **Phase 0 is done.** Next up: phase 1 (authen
 | T-06 | Workspace settings            | Name, slug, two-factor policy, plan (read-only), and delete workspace with type-to-confirm.                                                                                                                                                                   |
 | T-07 | Blog settings                 | General settings (name, slug, title, slogan, description, canonical URL, brand image, `autoconvert_webp`), languages (`blog_languages` plus the default language), comment policy, and delete/restore blog.                                                   |
 | T-08 | Members & invites             | Invite by email with a role and a signed, expiring link. Invites to unregistered emails lead to sign-up and then join. Also covers changing roles, removing members and transferring workspace ownership. Needs an `invitations` table (new migration).       |
-| T-09 | Roles                         | Lists built-in roles (read-only) and custom roles. Create/edit custom roles with a permission matrix grouped by `permissions.group`, gated by plan (paid feature).                                                                                            |
+| T-09 | Roles | Lists the 7 built-in roles (read-only) with their permission matrix grouped by `permissions.group`. Custom roles move to 2.6 with billing. |
 | T-10 | Audit log viewer              | Filters by actor, action, subject and date, scoped to the workspace or blog, gated by `audit.view`.                                                                                                                                                           |
 
 ## Phase 3 — Publishing core (backend, needed before content)
@@ -85,7 +89,7 @@ tests for every table in the ERD). **Phase 0 is done.** Next up: phase 1 (authen
 | P-01 | `EventRecorder`           | Runs inside the caller's transaction. It locks the blog row with `SELECT … FOR UPDATE`, increments `event_sequence`, and inserts into `outbox_events`. Tests show sequences stay gapless and ordered under concurrent writers.                                                                 |
 | P-02 | Event catalog & schemas   | A typed event class per type (`article.published`, `article.unpublished`, `article.deleted`, `category.*`, `tag.*`, `author.*`, `media.*`, `blog.updated`, `integrations.updated`, `comment.approved`, `theme.updated`…), each with a `schema_version` and a JSON Schema in `docs/v2/events/`. |
 | P-03 | Snapshot payload builders | Build the full rendered payload for each aggregate (article + author + category + tags + media URLs). This is shared with `@sbblog/core`.                                                                                                                                                      |
-| P-04 | Body format               | Resolve ERD open question 1. Recommended: a **Tiptap/ProseMirror JSON** document, validated server-side against an allow-listed node/mark schema, with an HTML renderer in PHP for previews and the payload.                                                                                   |
+| P-04 | Body schema | Define the allowed Tiptap nodes and marks (paragraph, heading 2–4, lists, quote, code block, image by `mediaId`, embed, table, link, bold/italic/code…) as a JSON Schema in `docs/v2/events/`, a PHP validator, and a PHP renderer to HTML for previews and payloads. Shared with `@sbblog/core`. |
 
 ## Phase 4 — Content
 
@@ -110,7 +114,7 @@ tests for every table in the ERD). **Phase 0 is done.** Next up: phase 1 (authen
 | ---- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | I-01 | Integrations UI   | One page with blog / author / article tabs, plus panels in the author profile and the article editor. Per-provider forms with validated `config` (GA4 measurement ID, Ads conversion ID/label, GTM container, Meta Pixel, Clarity, Plausible), along with placement, consent category, page rule and an enabled toggle. |
 | I-02 | Raw scripts       | `custom` provider at blog scope only (also enforced by a DB check). Requires `scripts.raw`, 2FA and password confirmation, and is audited.                                                                                                                                                                              |
-| I-03 | Effective scripts | A resolver for one page combines blog, author and article integrations, de-duplicated by `(provider, config id)`, with a single gtag loader. A preview in the console shows the result. Any change emits `integrations.updated`.                                                                                        |
+| I-03 | Effective scripts | A resolver for one page combines blog, author and article integrations, de-duplicated by `(provider, config id)`, with a single gtag loader. On article pages the loader sends `article_id`, `author_profile_id` and `category_id` as custom dimensions (this replaces our own analytics). A preview in the console shows the result. Any change emits `integrations.updated`. |
 
 ## Phase 6 — Publishing pipeline (console + sync API)
 
@@ -126,12 +130,9 @@ tests for every table in the ERD). **Phase 0 is done.** Next up: phase 1 (authen
 
 | ID   | Task                 | Notes / acceptance                                                                                                                                                                                    |
 | ---- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| E-01 | Comment ingest API   | `POST /api/comments` from frontends, authenticated by the frontend token. Respects `comment_policy`. The IP is hashed with a daily salt and the email is hashed. Includes a honeypot and rate limits. |
+| E-01 | Comment ingest API   | `POST /api/comments` from frontends, authenticated by the frontend token. Respects `comment_policy`. The IP and the email are stored only as hashes. Includes a honeypot and rate limits. |
 | E-02 | Comment moderation   | A queue of pending comments, approve/reject/spam (single and bulk), reply as the blog, and soft delete/restore. Approving emits `comment.approved`.                                                   |
-| E-03 | Page view ingest     | `POST /api/views` (batched), with `visitor_hash` using a daily salt. No raw IP or user agent is stored.                                                                                               |
-| E-04 | Partitions & rollups | A monthly job creates `page_views` partitions ahead of time and drops old ones (retention setting). A nightly job rolls views up into `article_daily_stats`.                                          |
-| E-05 | Dashboards           | Blog dashboard (views, unique visitors, top articles, referrers, countries, devices, date range) and author dashboard (the same, scoped to one author). Charts come from the rollup table only.       |
-| E-06 | Home dashboard       | Drafts, pending reviews and suggestions, pending comments, scheduled articles, frontends that are behind, and a 7-day views sparkline.                                                                |
+| E-03 | Home dashboard | Drafts, pending reviews and suggestions, pending comments, scheduled articles, frontends that are behind, and a link to the blog's analytics. |
 
 ## Phase 8 — Apps & API
 
@@ -146,8 +147,7 @@ tests for every table in the ERD). **Phase 0 is done.** Next up: phase 1 (authen
 
 | ID   | Task          | Notes / acceptance                                                                                                                                                                                                 |
 | ---- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| H-01 | Theme catalog | Browse free and premium themes with previews and prices.                                                                                                                                                           |
-| H-02 | Licenses      | Record a purchase and its validity (`theme_licenses`). Payment-provider integration is out of scope; see open questions.                                                                                           |
+| H-01 | Theme catalog | Browse free themes with previews. Premium themes move to 2.6. |
 | H-03 | Blog theme    | Install a version, activate it (one active per blog, also enforced by the DB), and edit its `config` with a form generated from the theme's config schema (colors, layout, header options). Emits `theme.updated`. |
 
 ## Phase 10 — Security hardening
@@ -163,7 +163,7 @@ tests for every table in the ERD). **Phase 0 is done.** Next up: phase 1 (authen
 
 | ID   | Task           | Notes / acceptance                                                                                                                                                                                                                                                                                              |
 | ---- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| M-01 | Import command | `sbblog:import-v1 {connection}`, idempotent, following the mapping table in the ERD: users, then members and author profiles; `generals` becomes the blog and its integrations; articles become article + revision #1; tags are normalized; comments and visits have their IPs hashed. Prints a dry-run report. |
+| M-01 | Import command | `sbblog:import-v1 {connection}`, idempotent, following the mapping table in the ERD: users, then members and author profiles; `generals` becomes the blog and its integrations; articles become article + revision #1; tags are normalized; comments have their IPs hashed; visits are not imported. Prints a dry-run report. |
 | M-02 | Verification   | Count and checksum report for v1 against v2, plus a spot-check of rendered articles.                                                                                                                                                                                                                            |
 | M-03 | Deploy         | CI/CD with the Sysborg VPS skills (`sysborg-vps-environment`, `sysborg-auto-deploy`): Postgres backup, migrations, scheduler and queue workers, health check.                                                                                                                                                   |
 
@@ -195,12 +195,13 @@ Phases 5, 8, 9 and 10 can run in parallel once their dependencies are done.
   expires_at, accepted_at.
 - `user_preferences` or a `users.preferences jsonb` column (T-02): stores the last
   workspace/blog used and the appearance setting.
-- Retention settings for events, page views and snapshots (S-03, E-04): either a `blogs.settings jsonb`
+- Retention settings for events and snapshots (S-03): either a `blogs.settings jsonb`
   column or config values.
 
 ## Open questions
 
-1. **Body format:** confirm Tiptap/ProseMirror JSON (P-04). This choice blocks C-07.
-2. **Billing:** which provider handles plans and premium themes, and is it in scope for v2.0?
-3. **Cross-workspace authors and analytics hosting:** still open in the ERD; neither one blocks phases 0–6.
-4. **Console domain:** a separate console host (e.g. `console.sbblog…`) or the same host as the API?
+1. **Cross-workspace authors:** still open in the ERD; doesn't block phases 0–6.
+
+## Roadmap after 2.0
+
+- **2.6 — Billing:** plans and payment provider, custom roles (T-09) and premium themes with licenses (`theme_licenses`).

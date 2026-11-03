@@ -17,7 +17,9 @@ frontends (SQLite / SQLCipher / D1 / R2) is defined by the event schema, not by 
    **same transaction**.
 6. **All times are `timestamptz`.** Soft deletes only where restore is a product feature
    (articles, categories, comments, blogs, users).
-7. **No raw IPs at rest.** Visitors are identified by a daily-salted hash (LGPD/GDPR).
+7. **No raw IPs at rest.** Commenters' IPs and emails are stored only as hashes (LGPD/GDPR).
+8. **Traffic analytics are not stored here.** Page views go to the blog's own analytics
+   (Google Analytics and similar, through `integrations`).
 
 ## Domains
 
@@ -30,7 +32,7 @@ flowchart LR
   INT[Integrations<br/>analytics: blog / author / article]
   PUB[Publishing<br/>outbox · transports · frontends · snapshots]
   APP[Apps & API<br/>apps · installations · tokens]
-  ENG[Engagement<br/>comments · page views · stats]
+  ENG[Engagement<br/>comments]
   THM[Themes<br/>catalog · licenses]
 
   ID --> TEN --> ACL
@@ -257,7 +259,7 @@ erDiagram
     int number "UK per article"
     string title
     string description "meta description"
-    jsonb body "block document"
+    jsonb body "Tiptap JSON document"
     uuid cover_media_id FK
     uuid created_by_user_id FK
     uuid created_by_app_installation_id FK
@@ -329,6 +331,9 @@ erDiagram
   job at `scheduled_at`.
 - **Accepting a suggestion** creates a new revision on top of the latest one. If `base_revision_id`
   is no longer current, the suggestion must be rebased or marked `superseded`.
+- **Body format:** a Tiptap (ProseMirror) JSON document, validated against an allow-list of
+  nodes and marks. Images reference `media` by ID, so moving disks or adding variants never breaks
+  an article. Frontends render it to HTML with `@sbblog/core`.
 - AI and external apps can only create `article_suggestions` or draft revisions. They never set
   `published_revision_id`.
 
@@ -371,6 +376,8 @@ CHECK (provider <> 'custom' OR scope = 'blog')   -- raw scripts: global only
 - `custom` (raw script) needs the `scripts.raw` permission, which has `requires_two_factor = true`.
 - **Effective scripts for a page** = blog + that author's + that article's integrations,
   deduplicated by `(provider, config id)`. A single gtag loader serves every GA4/Ads ID.
+- The gtag loader sends `article_id`, `author_profile_id` and `category_id` as custom dimensions
+  on article pages; that is how author and article analytics work (see §7).
 - Any change emits `integrations.updated` for its scope. Frontends resolve the scripts at render
   time.
 
@@ -484,9 +491,6 @@ erDiagram
 erDiagram
   articles ||--o{ comments : receives
   comments |o--o{ comments : replies
-  articles ||--o{ page_views : "viewed in"
-  articles ||--o{ article_daily_stats : "rolled up"
-  author_profiles ||--o{ article_daily_stats : "rolled up"
 
   comments {
     uuid id PK
@@ -503,34 +507,14 @@ erDiagram
     timestamptz moderated_at
     timestamptz deleted_at
   }
-  page_views {
-    bigint id PK
-    uuid blog_id FK
-    uuid article_id FK
-    uuid author_profile_id FK
-    uuid frontend_id FK
-    string visitor_hash "daily-salted"
-    string referrer_host
-    string country
-    string device
-    int duration_ms
-    timestamptz viewed_at "monthly partitions"
-  }
-  article_daily_stats {
-    uuid article_id PK,FK
-    date day PK
-    uuid blog_id FK
-    uuid author_profile_id FK
-    int views
-    int unique_visitors
-    int avg_duration_ms
-  }
 ```
 
-- Frontends are read-only, so comments and views are **POSTed to the console API**. An approved
-  comment emits `comment.approved` and reaches the frontend through the normal event flow.
-- `page_views` is raw and partitioned by month, with short retention. `article_daily_stats` is
-  the rollup used by the blog and per-author dashboards.
+- Frontends are read-only, so comments are **POSTed to the console API**. An approved comment
+  emits `comment.approved` and reaches the frontend through the normal event flow.
+- **No page views here.** Traffic is measured by the blog's analytics integration (rule 8). The
+  scripts loader sends `article_id`, `author_profile_id` and `category_id` as custom dimensions, so
+  per-article and per-author reports work in the analytics tool. Showing those numbers inside the
+  console (e.g. through the GA4 Data API) is a later feature.
 
 ## 8. Themes
 
@@ -584,15 +568,11 @@ erDiagram
 | `articles` | `articles` + `article_revisions` | title, description and body move to revision #1. `url_friendly` → `slug`, `premiere_date` → `scheduled_at` / `published_at`, `cover_path` → `media` |
 | `article_tags` (free text) | `tags` + `article_tag` | Normalized and unique per blog |
 | `article_comments` | `comments` | `authorized_public` → `status`; raw IP → `ip_hash` |
-| `article_visits` | `page_views` + `article_daily_stats` | Raw IPs and user agents are dropped |
+| `article_visits` | dropped | Traffic history stays in v1 backups; v2 relies on the blog's analytics |
 | `languages` | `languages` + `blog_languages` | |
 | `social_networks`, `social_network_urls` | `social_networks`, `social_links` | Links can also belong to authors |
 
 ## Open questions
 
-1. **Article body format:** a JSON block document (recommended, since any frontend can render it)
-   or HTML as in v1? This decides how much rendering moves into `@sbblog/core`.
-2. **Cross-workspace authors:** can one person author in two workspaces? The model allows it
+1. **Cross-workspace authors:** can one person author in two workspaces? The model allows it
    (one user, many `author_profiles`), but should billing count them once or per workspace?
-3. **Analytics hosting:** should `page_views` live in Postgres, or go to a separate store
-   (ClickHouse / Tinybird) for larger installs, with only the rollup kept here?

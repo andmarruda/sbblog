@@ -163,14 +163,6 @@ class Article extends Model
     }
 
     /**
-     * @return HasMany<ArticleDailyStat, $this>
-     */
-    public function dailyStats(): HasMany
-    {
-        return $this->hasMany(ArticleDailyStat::class);
-    }
-
-    /**
      * @param  Builder<self>  $query
      */
     #[Scope]

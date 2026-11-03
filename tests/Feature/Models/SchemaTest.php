@@ -7,7 +7,6 @@ use App\Enums\IntegrationScope;
 use App\Models\App;
 use App\Models\AppInstallation;
 use App\Models\Article;
-use App\Models\ArticleDailyStat;
 use App\Models\ArticleRevision;
 use App\Models\ArticleSuggestion;
 use App\Models\AuditLog;
@@ -21,7 +20,6 @@ use App\Models\Frontend;
 use App\Models\Integration;
 use App\Models\Media;
 use App\Models\OutboxEvent;
-use App\Models\PageView;
 use App\Models\Role;
 use App\Models\Snapshot;
 use App\Models\SocialLink;
@@ -55,8 +53,8 @@ class SchemaTest extends TestCase
             Category::class, Article::class, ArticleRevision::class, ArticleSuggestion::class,
             SuggestionComment::class, Tag::class, SocialLink::class, Integration::class, OutboxEvent::class,
             EventTransport::class, Frontend::class, Snapshot::class, App::class, AppInstallation::class,
-            AuditLog::class, WebauthnCredential::class, TrustedDevice::class, Comment::class, PageView::class,
-            ArticleDailyStat::class, ThemeLicense::class, BlogTheme::class,
+            AuditLog::class, WebauthnCredential::class, TrustedDevice::class, Comment::class,
+            ThemeLicense::class, BlogTheme::class,
         ])->mapWithKeys(fn (string $class) => [class_basename($class) => [$class]])->all();
     }
 
