@@ -12,6 +12,8 @@ use App\Http\Controllers\Content\IntegrationController;
 use App\Http\Controllers\Content\MediaController;
 use App\Http\Controllers\Content\SuggestionController;
 use App\Http\Controllers\Content\TagController;
+use App\Http\Controllers\Publishing\EventLogController;
+use App\Http\Controllers\Publishing\PublishingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -92,4 +94,18 @@ Route::prefix('integrations')->name('integrations.')->middleware('can:integratio
     Route::patch('{integration:id}', [IntegrationController::class, 'update'])->name('update');
     Route::post('{integration:id}/toggle', [IntegrationController::class, 'toggle'])->name('toggle');
     Route::delete('{integration:id}', [IntegrationController::class, 'destroy'])->name('destroy');
+});
+
+Route::prefix('publishing')->name('publishing.')->middleware('can:frontends.manage,blog')->group(function () {
+    Route::get('/', [PublishingController::class, 'index'])->name('index');
+    Route::get('events', EventLogController::class)->name('events');
+    Route::post('frontends', [PublishingController::class, 'storeFrontend'])->name('frontends.store');
+    Route::patch('frontends/{frontend:id}', [PublishingController::class, 'updateFrontend'])->name('frontends.update');
+    Route::post('frontends/{frontend:id}/token', [PublishingController::class, 'rotateToken'])->middleware('throttle:10,1')->name('frontends.token');
+    Route::delete('frontends/{frontend:id}', [PublishingController::class, 'destroyFrontend'])->name('frontends.destroy');
+    Route::post('snapshots', [PublishingController::class, 'buildSnapshot'])->middleware('throttle:6,1')->name('snapshots.store');
+    Route::post('transports', [PublishingController::class, 'storeTransport'])->name('transports.store');
+    Route::patch('transports/{eventTransport:id}', [PublishingController::class, 'updateTransport'])->name('transports.update');
+    Route::post('transports/{eventTransport:id}/test', [PublishingController::class, 'testTransport'])->middleware('throttle:10,1')->name('transports.test');
+    Route::delete('transports/{eventTransport:id}', [PublishingController::class, 'destroyTransport'])->name('transports.destroy');
 });

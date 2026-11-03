@@ -1,0 +1,69 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/snapshot.schema.json",
+    "title": "A blog snapshot (gzipped JSON from GET /api/sync/snapshot)",
+    "description": "The live state as events without sequence numbers. Apply them in order, then pull events after up_to_sequence.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["blog_id", "up_to_sequence", "created_at", "events"],
+    "properties": {
+        "blog_id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "up_to_sequence": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "events": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "type",
+                    "schema_version",
+                    "aggregate_type",
+                    "aggregate_id",
+                    "payload"
+                ],
+                "properties": {
+                    "type": {
+                        "enum": [
+                            "article.published",
+                            "article.unpublished",
+                            "category.upserted",
+                            "category.deleted",
+                            "tag.upserted",
+                            "tag.deleted",
+                            "author.upserted",
+                            "author.deleted",
+                            "blog.updated",
+                            "comment.approved",
+                            "comment.removed",
+                            "integrations.updated"
+                        ]
+                    },
+                    "schema_version": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "aggregate_type": {
+                        "type": "string"
+                    },
+                    "aggregate_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "payload": {
+                        "type": "object"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -9,11 +9,14 @@ use App\Listeners\AuthEventSubscriber;
 use App\Models;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -39,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
         Event::subscribe(AuthEventSubscriber::class);
 
         $this->configureAuthorization();
+        $this->configureRateLimits();
     }
 
     /**
@@ -84,6 +88,7 @@ class AppServiceProvider extends ServiceProvider
             'frontend' => Models\Frontend::class,
             'integration' => Models\Integration::class,
             'media' => Models\Media::class,
+            'snapshot' => Models\Snapshot::class,
             'role' => Models\Role::class,
             'social_link' => Models\SocialLink::class,
             'tag' => Models\Tag::class,
@@ -114,6 +119,15 @@ class AppServiceProvider extends ServiceProvider
             }
 
             return app(PermissionResolver::class)->has($user, $ability, $scope);
+        });
+    }
+
+    protected function configureRateLimits(): void
+    {
+        RateLimiter::for('sync', function (Request $request) {
+            $frontend = $request->attributes->get('frontend');
+
+            return Limit::perMinute(120)->by($frontend instanceof Models\Frontend ? $frontend->id : (string) $request->ip());
         });
     }
 }

@@ -6,6 +6,7 @@ import {
     Image,
     LayoutDashboard,
     Plug,
+    Radio,
     Settings,
     Tags,
     UserRound,
@@ -26,6 +27,7 @@ import { index as authors } from '@/routes/authors';
 import { dashboard as blogDashboard } from '@/routes/blogs';
 import { index as categories } from '@/routes/categories';
 import { index as integrations } from '@/routes/integrations';
+import { index as publishing } from '@/routes/publishing';
 import { index as media } from '@/routes/media';
 import { index as tags } from '@/routes/tags';
 import { index as blogSettings } from '@/routes/blogs/settings';
@@ -96,6 +98,15 @@ export function AppSidebar() {
                             title: 'Integrations',
                             href: integrations(blogArgs).url,
                             icon: Plug,
+                        },
+                    ]
+                  : []),
+              ...(can('frontends.manage')
+                  ? [
+                        {
+                            title: 'Publishing',
+                            href: publishing(blogArgs).url,
+                            icon: Radio,
                         },
                     ]
                   : []),
