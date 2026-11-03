@@ -10,6 +10,7 @@ use App\Models\Workspace;
 use App\Support\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -52,6 +53,8 @@ class WorkspaceSettingsController extends Controller
         $user = $request->user();
 
         abort_unless($workspace->owner_user_id === $user->id, 403);
+        // Through the gate too, so the 2FA rule for destructive permissions applies.
+        Gate::authorize('blogs.delete', $workspace);
 
         $request->validate([
             'confirmation' => ['required', Rule::in([$workspace->slug])],

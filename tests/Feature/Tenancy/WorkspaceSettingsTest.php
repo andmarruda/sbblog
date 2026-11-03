@@ -73,6 +73,20 @@ class WorkspaceSettingsTest extends TestCase
         $this->assertSoftDeleted($workspace);
     }
 
+    public function test_owner_only_actions_respect_two_factor_enforcement(): void
+    {
+        config(['sbblog.two_factor.enforce' => true]);
+        [$owner, $workspace] = $this->tenant();
+        $admin = $this->member($workspace, WorkspaceRole::Admin);
+
+        $this->actingAs($owner)->delete("/{$workspace->slug}/settings", ['confirmation' => $workspace->slug, 'password' => 'password'])
+            ->assertForbidden();
+        $this->actingAs($owner)->post("/{$workspace->slug}/settings/members/{$admin->id}/transfer-ownership", ['password' => 'password'])
+            ->assertForbidden();
+
+        $this->assertNotSoftDeleted($workspace);
+    }
+
     public function test_admins_create_blogs_and_members_cannot(): void
     {
         [, $workspace, $blog] = $this->tenant();

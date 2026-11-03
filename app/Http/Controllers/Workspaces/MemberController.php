@@ -12,6 +12,7 @@ use App\Support\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -111,6 +112,7 @@ class MemberController extends Controller
         $owner = $request->user();
 
         abort_unless($workspace->owner_user_id === $owner->id, 403);
+        Gate::authorize('members.manage', $workspace);
         abort_unless($workspace->members()->whereKey($member->id)->exists(), 404);
 
         $request->validate(['password' => ['required', 'current_password']]);
