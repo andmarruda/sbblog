@@ -3,6 +3,7 @@
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SetLocale;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -42,8 +43,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 return $response;
             }
 
-            if ($status === 419) {
-                Inertia::flash('toast', ['type' => 'error', 'message' => __('The page expired, please try again.')]);
+            if ($status === 419 || $status === 429) {
+                Inertia::flash('toast', ['type' => 'error', 'message' => $status === 419
+                    ? __('The page expired, please try again.')
+                    : __('Too many attempts. Wait a moment and try again.')]);
 
                 return back();
             }
@@ -55,7 +58,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 App::setLocale(SetLocale::resolve($request));
                 Inertia::share(app(HandleInertiaRequests::class)->share($request));
 
-                return Inertia::render('errors/error', ['status' => $status])
+                // Authorization denials can carry a reason worth showing (e.g. 2FA required).
+                $reason = $status === 403 && $e->getPrevious() instanceof AuthorizationException ? $e->getMessage() : null;
+
+                return Inertia::render('errors/error', ['status' => $status, 'reason' => $reason !== 'This action is unauthorized.' ? $reason : null])
                     ->toResponse($request)
                     ->setStatusCode($status);
             }

@@ -14,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -49,7 +50,10 @@ class BlogMemberController extends Controller
         $workspaceRole = $workspace->members()->whereKey($member->id)->first()?->pivot?->getAttribute('workspace_role');
 
         abort_if($workspaceRole === null, 404);
-        abort_unless($workspaceRole === WorkspaceRole::Member, 422, __('Owners and admins already have access to every blog.'));
+
+        if ($workspaceRole !== WorkspaceRole::Member) {
+            throw ValidationException::withMessages(['role_id' => __('Owners and admins already have access to every blog.')]);
+        }
 
         DB::table('blog_members')->upsert(
             [['blog_id' => $blog->id, 'user_id' => $member->id, 'role_id' => $validated['role_id'], 'invited_by' => $request->user()?->id, 'created_at' => now()]],

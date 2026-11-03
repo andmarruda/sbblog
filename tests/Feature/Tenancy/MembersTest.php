@@ -227,7 +227,7 @@ class MembersTest extends TestCase
         $editor = Role::query()->builtIn()->where('key', 'editor')->value('id');
 
         $this->actingAs($owner)->put("/{$workspace->slug}/{$blog->slug}/settings/members/{$admin->id}", ['role_id' => $editor])
-            ->assertStatus(422);
+            ->assertSessionHasErrors('role_id');
         $this->actingAs($owner)->put("/{$workspace->slug}/{$blog->slug}/settings/members/".User::factory()->create()->id, ['role_id' => $editor])
             ->assertNotFound();
     }

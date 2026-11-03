@@ -23,7 +23,13 @@ const messages: Record<number, { title: string; description: string }> = {
     },
 };
 
-export default function Error({ status }: { status: number }) {
+export default function Error({
+    status,
+    reason,
+}: {
+    status: number;
+    reason?: string | null;
+}) {
     const { t } = useTranslation();
     const message = messages[status] ?? messages[500];
 
@@ -41,7 +47,7 @@ export default function Error({ status }: { status: number }) {
                     {t(message.title)}
                 </h1>
                 <p className="max-w-md text-muted-foreground">
-                    {t(message.description)}
+                    {reason ?? t(message.description)}
                 </p>
                 <div className="flex gap-2">
                     <Button
