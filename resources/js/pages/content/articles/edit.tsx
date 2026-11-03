@@ -52,6 +52,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useBlogRoute } from '@/hooks/use-blog-route';
+import { slugify } from '@/lib/slug';
 import { useTranslation } from '@/hooks/use-translation';
 import {
     archive,
@@ -218,6 +219,24 @@ export default function EditArticle({
         },
         [canEdit, article.id], // eslint-disable-line react-hooks/exhaustive-deps
     );
+
+    // The color picker has no blur: save the accent color shortly after it changes.
+    useEffect(() => {
+        if (
+            !canEdit ||
+            color === (article.bgcolor ?? '') ||
+            (color !== '' && !/^#[0-9a-f]{6}$/i.test(color))
+        ) {
+            return;
+        }
+
+        const timeout = setTimeout(
+            () => updateDetails({ bgcolor: color || null }),
+            600,
+        );
+
+        return () => clearTimeout(timeout);
+    }, [color]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Autosave after a pause in typing.
     useEffect(() => {
@@ -695,10 +714,14 @@ export default function EditArticle({
                                 value={slug}
                                 onChange={setSlug}
                                 disabled={!canEdit}
-                                onBlurCapture={() =>
-                                    slug !== article.slug &&
-                                    updateDetails({ slug })
-                                }
+                                onBlurCapture={() => {
+                                    // Capture runs before SlugInput normalizes on blur.
+                                    const next = slugify(slug);
+
+                                    if (next !== '' && next !== article.slug) {
+                                        updateDetails({ slug: next });
+                                    }
+                                }}
                             />
                         </FormField>
                         <FormField id="category" label={t('Category')}>
@@ -774,10 +797,6 @@ export default function EditArticle({
                                 value={color}
                                 onChange={setColor}
                                 disabled={!canEdit}
-                                onBlur={() =>
-                                    color !== (article.bgcolor ?? '') &&
-                                    updateDetails({ bgcolor: color || null })
-                                }
                             />
                         </FormField>
                     </section>
@@ -822,9 +841,15 @@ export default function EditArticle({
                                         size="sm"
                                         className="w-full"
                                         onClick={() =>
-                                            router.post(
-                                                storeTranslation(args).url,
-                                                { language_id: language.id },
+                                            // Save first: the visit leaves this article.
+                                            runAction(() =>
+                                                router.post(
+                                                    storeTranslation(args).url,
+                                                    {
+                                                        language_id:
+                                                            language.id,
+                                                    },
+                                                ),
                                             )
                                         }
                                     >
