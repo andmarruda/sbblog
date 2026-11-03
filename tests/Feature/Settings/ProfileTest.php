@@ -5,6 +5,7 @@ namespace Tests\Feature\Settings;
 use App\Models\AuditLog;
 use App\Models\User;
 use App\Models\Workspace;
+use App\Notifications\EmailChanged;
 use Database\Seeders\LanguageSeeder;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -53,10 +54,19 @@ class ProfileTest extends TestCase
             'name' => $user->name,
             'email' => 'new@example.com',
             'locale' => 'pt-BR',
+        ])->assertSessionHasErrors('current_password');
+
+        $old = $user->email;
+        $this->actingAs($user)->patch('/account/profile', [
+            'name' => $user->name,
+            'email' => 'new@example.com',
+            'locale' => 'pt-BR',
+            'current_password' => 'password',
         ])->assertSessionHasNoErrors();
 
         $this->assertNull($user->refresh()->email_verified_at);
         Notification::assertSentTo($user, VerifyEmail::class);
+        Notification::assertSentOnDemand(EmailChanged::class, fn ($notification, $channels, $notifiable) => $notifiable->routes['mail'] === $old);
     }
 
     public function test_email_must_stay_unique(): void
@@ -68,6 +78,7 @@ class ProfileTest extends TestCase
             'name' => $user->name,
             'email' => 'taken@example.com',
             'locale' => 'pt-BR',
+            'current_password' => 'password',
         ])->assertSessionHasErrors('email');
     }
 

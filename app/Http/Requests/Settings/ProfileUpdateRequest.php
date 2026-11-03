@@ -26,6 +26,8 @@ class ProfileUpdateRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
             'locale' => ['required', 'string', Rule::in(config('app.supported_locales'))],
+            // Changing the address opens the door to a password reset: confirm it's really you.
+            'current_password' => [Rule::requiredIf(fn () => $this->input('email') !== mb_strtolower($user->email)), 'nullable', 'current_password'],
         ];
     }
 }

@@ -7,12 +7,14 @@ use App\Http\Middleware\SetLocale;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
 use App\Models\Language;
 use App\Models\User;
+use App\Notifications\EmailChanged;
 use App\Support\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -45,6 +47,7 @@ class ProfileController extends Controller
         ]);
 
         $emailChanged = $user->isDirty('email');
+        $previousEmail = (string) $user->getOriginal('email');
 
         if ($emailChanged) {
             $user->email_verified_at = null;
@@ -55,6 +58,7 @@ class ProfileController extends Controller
 
         if ($emailChanged) {
             $user->sendEmailVerificationNotification();
+            Notification::route('mail', $previousEmail)->notify((new EmailChanged($user->email))->locale(App::getLocale()));
         }
 
         if ($changed !== []) {

@@ -223,6 +223,7 @@
     "How the blog is named and found.": "Como o blog é chamado e encontrado.",
     "HTML": "HTML",
     "If you did not create an account, no further action is required.": "Se você não criou uma conta, nenhuma ação é necessária.",
+    "If you did not do this, reset your password right away and contact us.": "Se não foi você, redefina sua senha imediatamente e fale com a gente.",
     "If you did not request a password reset, no further action is required.": "Se você não pediu a redefinição de senha, nenhuma ação é necessária.",
     "If you were not expecting it, you can ignore this email.": "Se você não esperava por isso, pode ignorar este e-mail.",
     "If you're having trouble clicking the \":actionText\" button, copy and paste the URL below\ninto your web browser:": "Se você tiver problemas para clicar no botão \":actionText\", copie e cole a URL abaixo\nno seu navegador:",
@@ -303,6 +304,7 @@
     "Moved back to drafts.": "Voltou para os rascunhos.",
     "Name": "Nome",
     "Name, address and security policy.": "Nome, endereço e política de segurança.",
+    "Needed to change your email address.": "Necessária para alterar seu endereço de e-mail.",
     "Never synced": "Nunca sincronizou",
     "New article": "Novo artigo",
     "New author": "Novo autor",
@@ -489,6 +491,7 @@
     "The blog's profiles, shown by the theme.": "Os perfis do blog, exibidos pelo tema.",
     "The cover image changed.": "A imagem de capa mudou.",
     "The current token stops working at once. Update the frontend with the new one.": "O token atual para de funcionar na hora. Atualize o frontend com o novo.",
+    "The email address of your :app account was changed to :email.": "O endereço de e-mail da sua conta no :app foi alterado para :email.",
     "The owner can only change by transferring ownership.": "O dono só muda por transferência de propriedade.",
     "The page expired, please try again.": "A página expirou, tente novamente.",
     "The page you're looking for doesn't exist or was moved.": "A página que você procura não existe ou foi movida.",
@@ -592,6 +595,7 @@
     "Your account will be deactivated and you will be logged out.": "Sua conta será desativada e você será desconectado.",
     "Your company, team or your own name.": "Sua empresa, equipe ou seu próprio nome.",
     "Your email address is unverified.": "Seu endereço de e-mail não foi verificado.",
+    "Your email address was changed": "Seu endereço de e-mail foi alterado",
     "Your name, email address and language.": "Seu nome, endereço de e-mail e idioma.",
     "YouTube or Vimeo link.": "Link do YouTube ou do Vimeo."
 }

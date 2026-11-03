@@ -12,7 +12,7 @@ Route::put('/locale', [LocaleController::class, 'update'])->name('locale.update'
 
 Route::get('invitations/{token}', [InvitationAcceptController::class, 'show'])->name('invitations.show');
 Route::post('invitations/{token}', [InvitationAcceptController::class, 'accept'])
-    ->middleware(['auth', 'throttle:6,1'])
+    ->middleware(['auth', 'auth.session', 'throttle:6,1'])
     ->name('invitations.accept');
 
 Route::middleware(['auth', 'auth.session', 'verified'])->group(function () {

@@ -49,6 +49,9 @@ export default function Profile({
     const { auth, locales } = usePage().props;
     const { appearance, updateAppearance } = useAppearance();
     const [locale, setLocale] = useState(currentLocale);
+    const [email, setEmail] = useState(auth.user?.email ?? '');
+    const emailChanged =
+        email.trim().toLowerCase() !== (auth.user?.email ?? '').toLowerCase();
 
     return (
         <>
@@ -88,10 +91,30 @@ export default function Profile({
                                     name="email"
                                     type="email"
                                     defaultValue={auth.user?.email}
+                                    onChange={(event) =>
+                                        setEmail(event.target.value)
+                                    }
                                     autoComplete="email"
                                     required
                                 />
                             </FormField>
+                            {emailChanged && (
+                                <FormField
+                                    id="profile-current-password"
+                                    label={t('Current password')}
+                                    hint={t(
+                                        'Needed to change your email address.',
+                                    )}
+                                    error={errors.current_password}
+                                >
+                                    <PasswordInput
+                                        id="profile-current-password"
+                                        name="current_password"
+                                        autoComplete="current-password"
+                                        required
+                                    />
+                                </FormField>
+                            )}
                             {mustVerifyEmail && (
                                 <Alert>
                                     <AlertDescription>
