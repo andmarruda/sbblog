@@ -8,6 +8,7 @@ use App\Http\Controllers\Content\ArticleRevisionController;
 use App\Http\Controllers\Content\ArticleTranslationController;
 use App\Http\Controllers\Content\AuthorController;
 use App\Http\Controllers\Content\CategoryController;
+use App\Http\Controllers\Content\IntegrationController;
 use App\Http\Controllers\Content\MediaController;
 use App\Http\Controllers\Content\SuggestionController;
 use App\Http\Controllers\Content\TagController;
@@ -84,3 +85,11 @@ Route::prefix('authors')->name('authors.')->middleware('can:authors.manage,blog'
 
 Route::get('settings/social', [BlogSocialLinkController::class, 'edit'])->middleware('can:blog.settings,blog')->name('blogs.settings.social');
 Route::put('settings/social', [BlogSocialLinkController::class, 'update'])->middleware('can:blog.settings,blog')->name('blogs.settings.social.update');
+
+Route::prefix('integrations')->name('integrations.')->middleware('can:integrations.manage,blog')->group(function () {
+    Route::get('/', [IntegrationController::class, 'index'])->name('index');
+    Route::post('/', [IntegrationController::class, 'store'])->name('store');
+    Route::patch('{integration:id}', [IntegrationController::class, 'update'])->name('update');
+    Route::post('{integration:id}/toggle', [IntegrationController::class, 'toggle'])->name('toggle');
+    Route::delete('{integration:id}', [IntegrationController::class, 'destroy'])->name('destroy');
+});

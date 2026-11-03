@@ -5,6 +5,7 @@ import {
     FolderTree,
     Image,
     LayoutDashboard,
+    Plug,
     Settings,
     Tags,
     UserRound,
@@ -24,6 +25,7 @@ import { index as articles } from '@/routes/articles';
 import { index as authors } from '@/routes/authors';
 import { dashboard as blogDashboard } from '@/routes/blogs';
 import { index as categories } from '@/routes/categories';
+import { index as integrations } from '@/routes/integrations';
 import { index as media } from '@/routes/media';
 import { index as tags } from '@/routes/tags';
 import { index as blogSettings } from '@/routes/blogs/settings';
@@ -88,6 +90,15 @@ export function AppSidebar() {
                   icon: LayoutDashboard,
                   exact: true,
               },
+              ...(can('integrations.manage')
+                  ? [
+                        {
+                            title: 'Integrations',
+                            href: integrations(blogArgs).url,
+                            icon: Plug,
+                        },
+                    ]
+                  : []),
               ...(can('blog.settings') ||
               can('members.manage') ||
               can('audit.view')
