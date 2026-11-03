@@ -6,6 +6,8 @@ use App\Enums\CommentPolicy;
 use App\Enums\WorkspaceRole;
 use App\Models\AuditLog;
 use App\Models\Language;
+use App\Models\Media;
+use App\Models\OutboxEvent;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\Concerns\BuildsTenants;
@@ -51,6 +53,21 @@ class BlogSettingsTest extends TestCase
         $this->assertFalse($blog->autoconvert_webp);
         $this->assertCount(2, $blog->languages);
         $this->assertTrue(AuditLog::query()->where('action', 'blog.updated')->where('blog_id', $blog->id)->exists());
+    }
+
+    public function test_brand_image_must_belong_to_the_blog(): void
+    {
+        [$owner, $workspace, $blog] = $this->tenant();
+        $own = Media::factory()->for($blog)->create();
+        $foreign = Media::factory()->create();
+        $url = "/{$workspace->slug}/{$blog->slug}/settings/general";
+
+        $this->actingAs($owner)->patch($url, $this->payload(['brand_media_id' => $foreign->id]))->assertSessionHasErrors('brand_media_id');
+        $this->actingAs($owner)->patch($url, $this->payload(['brand_media_id' => $own->id]))->assertSessionHasNoErrors();
+
+        $this->assertSame($own->id, $blog->refresh()->brand_media_id);
+        $event = OutboxEvent::query()->whereBelongsTo($blog)->latest('sequence')->firstOrFail();
+        $this->assertSame($own->id, $event->payload['blog']['brand']['id']);
     }
 
     public function test_default_language_must_be_enabled(): void

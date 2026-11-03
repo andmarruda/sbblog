@@ -40,6 +40,7 @@ class UpdateBlogRequest extends FormRequest
             'language_ids.*' => ['uuid', 'distinct', Rule::exists(Language::class, 'id')],
             'comment_policy' => ['required', Rule::enum(CommentPolicy::class)],
             'autoconvert_webp' => ['boolean'],
+            'brand_media_id' => ['nullable', 'uuid', Rule::exists('media', 'id')->where('blog_id', $blog->id)],
         ];
     }
 }

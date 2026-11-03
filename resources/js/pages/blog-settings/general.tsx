@@ -5,6 +5,7 @@ import { FormField } from '@/components/app/form-field';
 import { PageTitle } from '@/components/app/page-title';
 import { SettingsSection } from '@/components/app/settings-section';
 import { SlugInput } from '@/components/app/slug-input';
+import { MediaPicker } from '@/components/content/media-picker';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -48,6 +49,8 @@ type Props = {
         autoconvert_webp: boolean;
         comment_policy: string;
         language_ids: string[];
+        brand_media_id: string | null;
+        brand: { url: string } | null;
     };
     languages: Language[];
     commentPolicies: string[];
@@ -71,6 +74,10 @@ export default function BlogGeneral({
     );
     const [commentPolicy, setCommentPolicy] = useState(blog.comment_policy);
     const [webp, setWebp] = useState(blog.autoconvert_webp);
+    const [brand, setBrand] = useState<{
+        id: string | null;
+        url: string | null;
+    }>({ id: blog.brand_media_id, url: blog.brand?.url ?? null });
 
     const toggleLanguage = (id: string, checked: boolean) =>
         setLanguageIds((current) =>
@@ -90,6 +97,7 @@ export default function BlogGeneral({
                     default_language_id: defaultLanguageId,
                     comment_policy: commentPolicy,
                     autoconvert_webp: webp,
+                    brand_media_id: brand.id,
                 })}
                 options={{ preserveScroll: true }}
                 className="max-w-2xl space-y-10"
@@ -183,6 +191,59 @@ export default function BlogGeneral({
                                     />
                                 </FormField>
                             </div>
+                        </SettingsSection>
+
+                        <SettingsSection
+                            title={t('Brand')}
+                            description={t(
+                                'Logo or image that represents the blog.',
+                            )}
+                        >
+                            <div className="flex items-center gap-4">
+                                {brand.url ? (
+                                    <img
+                                        src={brand.url}
+                                        alt=""
+                                        className="size-16 rounded-md border object-cover"
+                                    />
+                                ) : (
+                                    <div className="size-16 rounded-md border border-dashed" />
+                                )}
+                                <MediaPicker
+                                    trigger={
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                        >
+                                            {t('Choose image')}
+                                        </Button>
+                                    }
+                                    onSelect={(media) =>
+                                        setBrand({
+                                            id: media.id,
+                                            url: media.thumb_url,
+                                        })
+                                    }
+                                />
+                                {brand.id && (
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() =>
+                                            setBrand({ id: null, url: null })
+                                        }
+                                    >
+                                        {t('Remove')}
+                                    </Button>
+                                )}
+                            </div>
+                            {errors.brand_media_id && (
+                                <p className="text-sm text-destructive">
+                                    {errors.brand_media_id}
+                                </p>
+                            )}
                         </SettingsSection>
 
                         <SettingsSection

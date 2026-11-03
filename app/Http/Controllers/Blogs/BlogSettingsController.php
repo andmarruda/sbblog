@@ -30,6 +30,8 @@ class BlogSettingsController extends Controller
                 ]),
                 'comment_policy' => $blog->comment_policy->value,
                 'language_ids' => $blog->languages()->pluck('languages.id'),
+                'brand_media_id' => $blog->brand_media_id,
+                'brand' => $blog->brandMedia === null ? null : ['url' => $blog->brandMedia->url('thumb')],
             ],
             'languages' => Language::query()->orderBy('label')->get(['id', 'code', 'label']),
             'commentPolicies' => array_map(fn (CommentPolicy $policy) => $policy->value, CommentPolicy::cases()),
