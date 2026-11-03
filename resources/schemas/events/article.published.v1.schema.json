@@ -1,0 +1,16 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/article.published.v1.schema.json",
+    "title": "article.published (v1) payload",
+    "description": "A revision went live (first publish or an update). Replace the whole article.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "article"
+    ],
+    "properties": {
+        "article": {
+            "$ref": "https://schemas.sbblog.dev/events/common.schema.json#/$defs/article"
+        }
+    }
+}

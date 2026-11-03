@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Database\Factories\ArticleRevisionFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -10,6 +11,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use LogicException;
 
+/**
+ * @property array<string, mixed> $body
+ * @property CarbonImmutable|null $created_at
+ */
 #[Fillable([
     'article_id', 'number', 'title', 'description', 'body', 'cover_media_id',
     'created_by_user_id', 'created_by_app_installation_id',

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\TransportDriver;
+use Carbon\CarbonImmutable;
 use Database\Factories\EventTransportFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -11,6 +12,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property TransportDriver $driver
+ * @property array<string, mixed>|null $config
+ * @property bool $enabled
+ * @property int $last_dispatched_sequence
+ * @property CarbonImmutable|null $last_error_at
+ */
 #[Fillable([
     'blog_id', 'driver', 'config', 'enabled', 'last_dispatched_sequence', 'last_error_at', 'last_error',
 ])]

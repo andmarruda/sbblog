@@ -1,0 +1,56 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/envelope.schema.json",
+    "title": "An event as returned by GET /api/sync",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "sequence",
+        "type",
+        "schema_version",
+        "aggregate_type",
+        "aggregate_id",
+        "occurred_at",
+        "payload"
+    ],
+    "properties": {
+        "sequence": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "type": {
+            "enum": [
+                "article.published",
+                "article.unpublished",
+                "category.upserted",
+                "category.deleted",
+                "tag.upserted",
+                "tag.deleted",
+                "author.upserted",
+                "author.deleted",
+                "blog.updated",
+                "comment.approved",
+                "comment.removed",
+                "integrations.updated"
+            ]
+        },
+        "schema_version": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "aggregate_type": {
+            "type": "string"
+        },
+        "aggregate_id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "occurred_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "payload": {
+            "type": "object"
+        }
+    }
+}

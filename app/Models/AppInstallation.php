@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Database\Factories\AppInstallationFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -12,6 +13,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @property list<string> $granted_scopes
+ * @property CarbonImmutable|null $revoked_at
+ */
 #[Fillable(['app_id', 'blog_id', 'granted_scopes', 'installed_by', 'revoked_at'])]
 class AppInstallation extends Model
 {

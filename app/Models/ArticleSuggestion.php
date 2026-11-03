@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\SuggestionSource;
 use App\Enums\SuggestionStatus;
+use Carbon\CarbonImmutable;
 use Database\Factories\ArticleSuggestionFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -12,6 +13,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property SuggestionStatus $status
+ * @property SuggestionSource $source
+ * @property CarbonImmutable|null $reviewed_at
+ */
 #[Fillable([
     'article_id', 'base_revision_id', 'proposed_revision_id', 'status', 'source',
     'requested_by_user_id', 'requested_by_app_installation_id', 'reviewed_by', 'reviewed_at', 'note',

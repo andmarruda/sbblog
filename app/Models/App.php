@@ -11,6 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property bool $is_first_party
+ * @property list<string> $redirect_uris
+ * @property list<string> $requested_scopes
+ */
 #[Fillable([
     'workspace_id', 'name', 'slug', 'is_first_party', 'client_id', 'client_secret_hash',
     'redirect_uris', 'requested_scopes',

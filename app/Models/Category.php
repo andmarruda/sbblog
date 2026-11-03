@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $position
+ */
 #[Fillable(['blog_id', 'parent_id', 'name', 'slug', 'bgcolor', 'position'])]
 class Category extends Model
 {

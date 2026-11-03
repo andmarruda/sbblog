@@ -1,0 +1,323 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/body.schema.json",
+    "title": "SBBlog article body",
+    "description": "A Tiptap (ProseMirror) document restricted to the nodes and marks SBBlog renders. Images reference media by ID; embeds name a provider and a video ID, never a raw URL or HTML.",
+    "type": "object",
+    "required": ["type", "content"],
+    "additionalProperties": false,
+    "properties": {
+        "type": { "const": "doc" },
+        "content": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/block" }
+        }
+    },
+    "$defs": {
+        "block": {
+            "oneOf": [
+                { "$ref": "#/$defs/paragraph" },
+                { "$ref": "#/$defs/heading" },
+                { "$ref": "#/$defs/bulletList" },
+                { "$ref": "#/$defs/orderedList" },
+                { "$ref": "#/$defs/blockquote" },
+                { "$ref": "#/$defs/codeBlock" },
+                { "$ref": "#/$defs/horizontalRule" },
+                { "$ref": "#/$defs/image" },
+                { "$ref": "#/$defs/embed" },
+                { "$ref": "#/$defs/table" }
+            ]
+        },
+        "inline": {
+            "oneOf": [{ "$ref": "#/$defs/text" }, { "$ref": "#/$defs/hardBreak" }]
+        },
+        "textAlign": {
+            "enum": ["left", "center", "right", "justify", null]
+        },
+        "paragraph": {
+            "type": "object",
+            "required": ["type"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "const": "paragraph" },
+                "attrs": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": { "textAlign": { "$ref": "#/$defs/textAlign" } }
+                },
+                "content": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/inline" }
+                }
+            }
+        },
+        "heading": {
+            "type": "object",
+            "required": ["type", "attrs"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "const": "heading" },
+                "attrs": {
+                    "type": "object",
+                    "required": ["level"],
+                    "additionalProperties": false,
+                    "properties": {
+                        "level": { "enum": [2, 3, 4] },
+                        "textAlign": { "$ref": "#/$defs/textAlign" }
+                    }
+                },
+                "content": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/inline" }
+                }
+            }
+        },
+        "listItem": {
+            "type": "object",
+            "required": ["type", "content"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "const": "listItem" },
+                "content": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "oneOf": [
+                            { "$ref": "#/$defs/paragraph" },
+                            { "$ref": "#/$defs/bulletList" },
+                            { "$ref": "#/$defs/orderedList" }
+                        ]
+                    }
+                }
+            }
+        },
+        "bulletList": {
+            "type": "object",
+            "required": ["type", "content"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "const": "bulletList" },
+                "content": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/listItem" }
+                }
+            }
+        },
+        "orderedList": {
+            "type": "object",
+            "required": ["type", "content"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "const": "orderedList" },
+                "attrs": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "start": { "type": "integer", "minimum": 1 },
+                        "type": { "type": ["string", "null"] }
+                    }
+                },
+                "content": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/listItem" }
+                }
+            }
+        },
+        "blockquote": {
+            "type": "object",
+            "required": ["type", "content"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "const": "blockquote" },
+                "content": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/block" }
+                }
+            }
+        },
+        "codeBlock": {
+            "type": "object",
+            "required": ["type"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "const": "codeBlock" },
+                "attrs": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "language": {
+                            "type": ["string", "null"],
+                            "pattern": "^[a-z0-9+#-]{0,32}$"
+                        }
+                    }
+                },
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": ["type", "text"],
+                        "additionalProperties": false,
+                        "properties": {
+                            "type": { "const": "text" },
+                            "text": { "type": "string", "minLength": 1 }
+                        }
+                    }
+                }
+            }
+        },
+        "horizontalRule": {
+            "type": "object",
+            "required": ["type"],
+            "additionalProperties": false,
+            "properties": { "type": { "const": "horizontalRule" } }
+        },
+        "image": {
+            "type": "object",
+            "required": ["type", "attrs"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "const": "image" },
+                "attrs": {
+                    "type": "object",
+                    "required": ["mediaId"],
+                    "additionalProperties": false,
+                    "properties": {
+                        "mediaId": { "type": "string", "format": "uuid" },
+                        "alt": { "type": ["string", "null"], "maxLength": 500 },
+                        "caption": { "type": ["string", "null"], "maxLength": 500 }
+                    }
+                }
+            }
+        },
+        "embed": {
+            "type": "object",
+            "required": ["type", "attrs"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "const": "embed" },
+                "attrs": {
+                    "type": "object",
+                    "required": ["provider", "videoId"],
+                    "additionalProperties": false,
+                    "properties": {
+                        "provider": { "enum": ["youtube", "vimeo"] },
+                        "videoId": {
+                            "type": "string",
+                            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                        }
+                    }
+                }
+            }
+        },
+        "tableCell": {
+            "type": "object",
+            "required": ["type", "content"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "enum": ["tableCell", "tableHeader"] },
+                "attrs": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "colspan": { "type": "integer", "minimum": 1, "maximum": 20 },
+                        "rowspan": { "type": "integer", "minimum": 1, "maximum": 50 },
+                        "colwidth": {
+                            "type": ["array", "null"],
+                            "items": { "type": "integer", "minimum": 0 }
+                        }
+                    }
+                },
+                "content": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/paragraph" }
+                }
+            }
+        },
+        "table": {
+            "type": "object",
+            "required": ["type", "content"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "const": "table" },
+                "content": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "required": ["type", "content"],
+                        "additionalProperties": false,
+                        "properties": {
+                            "type": { "const": "tableRow" },
+                            "content": {
+                                "type": "array",
+                                "minItems": 1,
+                                "items": { "$ref": "#/$defs/tableCell" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "hardBreak": {
+            "type": "object",
+            "required": ["type"],
+            "additionalProperties": false,
+            "properties": { "type": { "const": "hardBreak" } }
+        },
+        "text": {
+            "type": "object",
+            "required": ["type", "text"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "const": "text" },
+                "text": { "type": "string", "minLength": 1 },
+                "marks": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/mark" }
+                }
+            }
+        },
+        "mark": {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "required": ["type"],
+                    "additionalProperties": false,
+                    "properties": {
+                        "type": {
+                            "enum": ["bold", "italic", "underline", "strike", "code", "subscript", "superscript"]
+                        }
+                    }
+                },
+                { "$ref": "#/$defs/link" }
+            ]
+        },
+        "link": {
+            "type": "object",
+            "required": ["type", "attrs"],
+            "additionalProperties": false,
+            "properties": {
+                "type": { "const": "link" },
+                "attrs": {
+                    "type": "object",
+                    "required": ["href"],
+                    "additionalProperties": false,
+                    "properties": {
+                        "href": {
+                            "type": "string",
+                            "maxLength": 2048,
+                            "pattern": "^(https?://|mailto:|/|#)"
+                        },
+                        "target": { "enum": ["_blank", null] },
+                        "rel": { "type": ["string", "null"] },
+                        "class": { "type": "null" }
+                    }
+                }
+            }
+        }
+    }
+}

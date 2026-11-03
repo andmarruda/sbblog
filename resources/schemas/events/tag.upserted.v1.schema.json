@@ -1,0 +1,16 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/tag.upserted.v1.schema.json",
+    "title": "tag.upserted (v1) payload",
+    "description": "A tag was created or changed.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "tag"
+    ],
+    "properties": {
+        "tag": {
+            "$ref": "https://schemas.sbblog.dev/events/common.schema.json#/$defs/tag"
+        }
+    }
+}

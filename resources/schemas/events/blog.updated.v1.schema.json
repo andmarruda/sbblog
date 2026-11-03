@@ -1,0 +1,16 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/blog.updated.v1.schema.json",
+    "title": "blog.updated (v1) payload",
+    "description": "Blog-level settings changed.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "blog"
+    ],
+    "properties": {
+        "blog": {
+            "$ref": "https://schemas.sbblog.dev/events/common.schema.json#/$defs/blog"
+        }
+    }
+}

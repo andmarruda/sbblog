@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\CommentStatus;
+use Carbon\CarbonImmutable;
 use Database\Factories\CommentFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -13,6 +14,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property CommentStatus $status
+ * @property bool $is_public
+ * @property CarbonImmutable|null $moderated_at
+ */
 #[Fillable([
     'blog_id', 'article_id', 'parent_id', 'author_name', 'author_email_hash', 'body',
     'status', 'is_public', 'ip_hash', 'moderated_by', 'moderated_at',

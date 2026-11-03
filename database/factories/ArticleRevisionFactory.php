@@ -26,11 +26,14 @@ class ArticleRevisionFactory extends Factory
             'title' => fake()->sentence(6),
             'description' => fake()->sentence(18),
             'body' => [
-                'version' => 1,
-                'blocks' => [
-                    ['type' => 'heading', 'level' => 2, 'text' => fake()->sentence(4)],
-                    ['type' => 'paragraph', 'text' => fake()->paragraph(5)],
-                    ['type' => 'paragraph', 'text' => fake()->paragraph(5)],
+                'type' => 'doc',
+                'content' => [
+                    ['type' => 'heading', 'attrs' => ['level' => 2], 'content' => [['type' => 'text', 'text' => fake()->sentence(4)]]],
+                    ['type' => 'paragraph', 'content' => [['type' => 'text', 'text' => fake()->paragraph(5)]]],
+                    ['type' => 'paragraph', 'content' => [
+                        ['type' => 'text', 'text' => fake()->sentence(8).' '],
+                        ['type' => 'text', 'text' => fake()->words(2, true), 'marks' => [['type' => 'bold']]],
+                    ]],
                 ],
             ],
             'cover_media_id' => null,

@@ -8,6 +8,8 @@ use App\Http\Requests\Blogs\UpdateBlogRequest;
 use App\Models\Blog;
 use App\Models\Language;
 use App\Models\Workspace;
+use App\Publishing\EventRecorder;
+use App\Publishing\Events\BlogUpdated;
 use App\Support\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,11 +36,11 @@ class BlogSettingsController extends Controller
         ]);
     }
 
-    public function update(UpdateBlogRequest $request, Workspace $workspace, Blog $blog, AuditLogger $audit): RedirectResponse
+    public function update(UpdateBlogRequest $request, Workspace $workspace, Blog $blog, AuditLogger $audit, EventRecorder $events): RedirectResponse
     {
         $validated = $request->validated();
 
-        DB::transaction(function () use ($blog, $validated, $audit) {
+        DB::transaction(function () use ($blog, $validated, $audit, $events) {
             $blog->fill(collect($validated)->except('language_ids')->all());
             $changed = array_keys($blog->getDirty());
             $blog->save();
@@ -51,6 +53,7 @@ class BlogSettingsController extends Controller
 
             if ($changed !== []) {
                 $audit->record('blog.updated', $blog, ['fields' => $changed], blog: $blog);
+                $events->record($blog, new BlogUpdated($blog->unsetRelation('languages')));
             }
         });
 

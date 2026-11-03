@@ -13,6 +13,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property IntegrationScope $scope
+ * @property IntegrationProvider $provider
+ * @property IntegrationPlacement $placement
+ * @property ConsentCategory $consent_category
+ * @property array<string, mixed> $config
+ * @property array<string, mixed>|null $page_rule
+ * @property bool $enabled
+ */
 #[Fillable([
     'blog_id', 'scope', 'author_profile_id', 'article_id', 'provider', 'config',
     'placement', 'consent_category', 'page_rule', 'enabled', 'created_by',

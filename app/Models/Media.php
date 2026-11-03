@@ -10,7 +10,12 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
+/**
+ * @property MediaDisk $disk
+ * @property array<string, string>|null $variants
+ */
 #[Fillable([
     'blog_id', 'uploaded_by', 'disk', 'path', 'mime_type', 'size_bytes',
     'width', 'height', 'alt_text', 'variants', 'checksum',
@@ -51,5 +56,23 @@ class Media extends Model
     public function uploader(): BelongsTo
     {
         return $this->belongsTo(User::class, 'uploaded_by');
+    }
+
+    /**
+     * Filesystem disk name for our `disk` value: local files are served from the public disk.
+     */
+    public function filesystemDisk(): string
+    {
+        return $this->disk === MediaDisk::Local ? 'public' : $this->disk->value;
+    }
+
+    /**
+     * Public URL of the original, or of a variant ("webp", "thumb") when it exists.
+     */
+    public function url(?string $variant = null): string
+    {
+        $path = $variant === null ? $this->path : ($this->variants[$variant] ?? $this->path);
+
+        return Storage::disk($this->filesystemDisk())->url($path);
     }
 }

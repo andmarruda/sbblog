@@ -1,0 +1,17 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/author.deleted.v1.schema.json",
+    "title": "author.deleted (v1) payload",
+    "description": "An author profile was deleted.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "id"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        }
+    }
+}

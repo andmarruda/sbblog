@@ -1,0 +1,17 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/category.deleted.v1.schema.json",
+    "title": "category.deleted (v1) payload",
+    "description": "A category was deleted. Its articles no longer have a category.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "id"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        }
+    }
+}

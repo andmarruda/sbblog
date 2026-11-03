@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property array<string, mixed>|null $anchor
+ */
 #[Fillable(['suggestion_id', 'user_id', 'body', 'anchor'])]
 class SuggestionComment extends Model
 {

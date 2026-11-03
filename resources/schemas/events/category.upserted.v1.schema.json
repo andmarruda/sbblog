@@ -1,0 +1,16 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/category.upserted.v1.schema.json",
+    "title": "category.upserted (v1) payload",
+    "description": "A category was created or changed.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "category"
+    ],
+    "properties": {
+        "category": {
+            "$ref": "https://schemas.sbblog.dev/events/common.schema.json#/$defs/category"
+        }
+    }
+}

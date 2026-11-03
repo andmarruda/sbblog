@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Database\Factories\OutboxEventFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\WithoutTimestamps;
@@ -10,6 +11,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use LogicException;
 
+/**
+ * @property int $sequence
+ * @property int $schema_version
+ * @property array<string, mixed> $payload
+ * @property CarbonImmutable|null $occurred_at
+ */
 #[Fillable([
     'blog_id', 'sequence', 'type', 'aggregate_type', 'aggregate_id',
     'schema_version', 'payload', 'occurred_at',

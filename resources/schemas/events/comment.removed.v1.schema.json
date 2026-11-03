@@ -1,0 +1,22 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/comment.removed.v1.schema.json",
+    "title": "comment.removed (v1) payload",
+    "description": "A public comment was hidden, rejected, marked as spam or deleted.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "id",
+        "article_id"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "article_id": {
+            "type": "string",
+            "format": "uuid"
+        }
+    }
+}

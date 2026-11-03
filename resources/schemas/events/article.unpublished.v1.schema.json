@@ -1,0 +1,22 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/article.unpublished.v1.schema.json",
+    "title": "article.unpublished (v1) payload",
+    "description": "The article left the public site: unpublished, archived, rescheduled or deleted.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "id",
+        "translation_group_id"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "translation_group_id": {
+            "type": "string",
+            "format": "uuid"
+        }
+    }
+}

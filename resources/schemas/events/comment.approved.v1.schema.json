@@ -1,0 +1,16 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/comment.approved.v1.schema.json",
+    "title": "comment.approved (v1) payload",
+    "description": "A comment became public.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "comment"
+    ],
+    "properties": {
+        "comment": {
+            "$ref": "https://schemas.sbblog.dev/events/common.schema.json#/$defs/comment"
+        }
+    }
+}

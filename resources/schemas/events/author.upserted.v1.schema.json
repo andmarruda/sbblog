@@ -1,0 +1,16 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/author.upserted.v1.schema.json",
+    "title": "author.upserted (v1) payload",
+    "description": "An author profile was created or changed.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "author"
+    ],
+    "properties": {
+        "author": {
+            "$ref": "https://schemas.sbblog.dev/events/common.schema.json#/$defs/author"
+        }
+    }
+}

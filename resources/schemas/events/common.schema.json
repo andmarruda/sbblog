@@ -1,0 +1,520 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schemas.sbblog.dev/events/common.schema.json",
+    "title": "Shared definitions for SBBlog event payloads",
+    "$defs": {
+        "media": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "url",
+                "mime_type",
+                "width",
+                "height",
+                "alt",
+                "variants"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "mime_type": {
+                    "type": "string"
+                },
+                "width": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "height": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "alt": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "variants": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "author": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "display_name",
+                "slug",
+                "bio",
+                "avatar",
+                "social_links"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "display_name": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "bio": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "avatar": {
+                    "oneOf": [
+                        {
+                            "$ref": "#/$defs/media"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "social_links": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                            "network",
+                            "url"
+                        ],
+                        "properties": {
+                            "network": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "url": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "category": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "name",
+                "slug",
+                "parent_id",
+                "bgcolor",
+                "position"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "parent_id": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "format": "uuid"
+                },
+                "bgcolor": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "position": {
+                    "type": "integer"
+                }
+            }
+        },
+        "tag": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "name",
+                "slug"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                }
+            }
+        },
+        "article": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "blog_id",
+                "translation_group_id",
+                "language",
+                "slug",
+                "title",
+                "description",
+                "excerpt",
+                "body",
+                "html",
+                "cover",
+                "media",
+                "author",
+                "category",
+                "tags",
+                "bgcolor",
+                "published_at",
+                "updated_at",
+                "revision"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "blog_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "translation_group_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "language": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "excerpt": {
+                    "type": "string"
+                },
+                "body": {
+                    "$ref": "https://schemas.sbblog.dev/body.schema.json"
+                },
+                "html": {
+                    "type": "string"
+                },
+                "cover": {
+                    "oneOf": [
+                        {
+                            "$ref": "#/$defs/media"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "media": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/media"
+                    }
+                },
+                "author": {
+                    "oneOf": [
+                        {
+                            "$ref": "#/$defs/author"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "category": {
+                    "oneOf": [
+                        {
+                            "$ref": "#/$defs/category"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/tag"
+                    }
+                },
+                "bgcolor": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "published_at": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "format": "date-time"
+                },
+                "updated_at": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "format": "date-time"
+                },
+                "revision": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "id",
+                        "number"
+                    ],
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "number": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                }
+            }
+        },
+        "blog": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "name",
+                "title",
+                "slogan",
+                "description",
+                "canonical_url",
+                "default_language",
+                "languages",
+                "comment_policy",
+                "brand",
+                "social_links"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "slogan": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "canonical_url": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "default_language": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "languages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "comment_policy": {
+                    "enum": [
+                        "disabled",
+                        "moderated",
+                        "open"
+                    ]
+                },
+                "brand": {
+                    "oneOf": [
+                        {
+                            "$ref": "#/$defs/media"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "social_links": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                            "network",
+                            "url"
+                        ],
+                        "properties": {
+                            "network": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "url": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "comment": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "article_id",
+                "parent_id",
+                "author_name",
+                "body",
+                "created_at"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "article_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "parent_id": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "format": "uuid"
+                },
+                "author_name": {
+                    "type": "string"
+                },
+                "body": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "format": "date-time"
+                }
+            }
+        },
+        "integration": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "provider",
+                "config",
+                "placement",
+                "consent_category",
+                "page_rule"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "provider": {
+                    "enum": [
+                        "ga4",
+                        "google_ads",
+                        "gtm",
+                        "meta_pixel",
+                        "clarity",
+                        "plausible",
+                        "custom"
+                    ]
+                },
+                "config": {
+                    "type": "object"
+                },
+                "placement": {
+                    "enum": [
+                        "head",
+                        "body_start",
+                        "body_end"
+                    ]
+                },
+                "consent_category": {
+                    "enum": [
+                        "analytics",
+                        "ads",
+                        "functional"
+                    ]
+                },
+                "page_rule": {
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                }
+            }
+        }
+    }
+}

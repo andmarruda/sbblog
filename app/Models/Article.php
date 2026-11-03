@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ArticleStatus;
+use Carbon\CarbonImmutable;
 use Database\Factories\ArticleFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -18,6 +19,9 @@ use Illuminate\Support\Str;
 
 /**
  * @property ArticleStatus $status
+ * @property CarbonImmutable|null $scheduled_at
+ * @property CarbonImmutable|null $published_at
+ * @property CarbonImmutable|null $deleted_at
  */
 #[Fillable([
     'blog_id', 'author_profile_id', 'category_id', 'language_id', 'translation_group_id',

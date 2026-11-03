@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Database\Factories\AuditLogFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -10,6 +11,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+/**
+ * @property array<string, mixed>|null $metadata
+ * @property CarbonImmutable|null $created_at
+ */
 #[Fillable([
     'workspace_id', 'blog_id', 'actor_user_id', 'actor_app_installation_id',
     'action', 'subject_type', 'subject_id', 'metadata', 'ip_hash',
