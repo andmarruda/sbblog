@@ -26,6 +26,9 @@ class DispatchEvents implements ShouldBeUnique, ShouldQueue
     /** Batches per run, so one slow transport doesn't hold a worker forever. */
     public const MAX_BATCHES = 20;
 
+    /** The model may be gone by the time the job runs; then there's nothing to do. */
+    public bool $deleteWhenMissingModels = true;
+
     public function __construct(public readonly EventTransport $transport) {}
 
     public function uniqueId(): string

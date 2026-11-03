@@ -288,8 +288,9 @@ class ArticleEditor
                         $published++;
                     }
                 } catch (ValidationException $exception) {
-                    // Leave it scheduled; the editor shows why it didn't go out.
-                    report($exception);
+                    // Back to draft, so it isn't retried every minute; the audit log says why.
+                    $article->forceFill(['status' => ArticleStatus::Draft, 'scheduled_at' => null])->save();
+                    $this->audit->record('article.schedule_failed', $article, ['errors' => $exception->errors()], blog: $this->blog($article), actor: null);
                 }
             });
 

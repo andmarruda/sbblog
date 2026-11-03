@@ -7,6 +7,7 @@ use App\Enums\ArticleStatus;
 use App\Enums\WorkspaceRole;
 use App\Models\Article;
 use App\Models\ArticleRevision;
+use App\Models\AuditLog;
 use App\Models\AuthorProfile;
 use App\Models\Blog;
 use App\Models\Language;
@@ -201,6 +202,19 @@ class ArticleLifecycleTest extends TestCase
         $this->assertNull(app(ArticleEditor::class)->publish($article, onlyIfDue: true));
         $this->assertSame(ArticleStatus::Draft, $article->refresh()->status);
         $this->assertSame([], $this->events());
+    }
+
+    public function test_a_scheduled_article_that_cannot_publish_goes_back_to_draft(): void
+    {
+        $article = $this->createArticle();
+        $this->actingAs($this->owner)->put($this->url("/{$article->id}/draft"), $this->content(overrides: ['title' => '']));
+        app(ArticleEditor::class)->schedule($article->refresh(), now()->addMinute()->toImmutable(), $this->owner);
+        $this->travel(2)->minutes();
+
+        $this->artisan('articles:publish-scheduled')->expectsOutput('Published 0 article(s).');
+
+        $this->assertSame(ArticleStatus::Draft, $article->refresh()->status);
+        $this->assertTrue(AuditLog::query()->where('action', 'article.schedule_failed')->where('subject_id', $article->id)->exists());
     }
 
     public function test_past_dates_cannot_be_scheduled(): void

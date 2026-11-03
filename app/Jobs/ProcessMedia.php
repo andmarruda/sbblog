@@ -22,6 +22,9 @@ class ProcessMedia implements ShouldQueue
 
     public const MAX_WIDTH = 2400;
 
+    /** The model may be gone by the time the job runs; then there's nothing to do. */
+    public bool $deleteWhenMissingModels = true;
+
     public int $tries = 3;
 
     public function __construct(public readonly Media $media) {}
@@ -65,7 +68,8 @@ class ProcessMedia implements ShouldQueue
 
     public static function supported(string $mimeType): bool
     {
-        return in_array($mimeType, ['image/jpeg', 'image/png', 'image/gif', 'image/webp'], true);
+        // GIFs are left alone: GD would keep only the first frame of an animation.
+        return in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp'], true);
     }
 
     private static function resize(GdImage $source, int $maxWidth): GdImage

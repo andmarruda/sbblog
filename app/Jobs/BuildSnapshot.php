@@ -30,6 +30,9 @@ class BuildSnapshot implements ShouldBeUnique, ShouldQueue
 {
     use Queueable;
 
+    /** The model may be gone by the time the job runs; then there's nothing to do. */
+    public bool $deleteWhenMissingModels = true;
+
     public function __construct(public readonly Blog $blog) {}
 
     public function uniqueId(): string
