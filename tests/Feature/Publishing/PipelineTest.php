@@ -170,6 +170,7 @@ class PipelineTest extends TestCase
     public function test_webhooks_receive_signed_batches_and_failures_keep_the_position(): void
     {
         [, , $blog] = $this->tenant();
+        config(['sbblog.publishing.allow_private_webhooks' => true]);
         $transport = EventTransport::factory()->for($blog)->create(['config' => ['url' => 'https://hooks.test/in', 'secret' => 'shh']]);
         $this->publishArticles($blog, 2);
 
@@ -190,6 +191,26 @@ class PipelineTest extends TestCase
 
             return $request->hasHeader('X-SBBlog-Signature', $signature) && count($request['events']) === 2;
         });
+    }
+
+    public function test_webhooks_to_private_addresses_are_refused(): void
+    {
+        [$owner, $workspace, $blog] = $this->tenant();
+
+        foreach (['http://127.0.0.1/hook', 'http://10.0.0.5/hook', 'http://169.254.169.254/latest', 'http://[::1]/x', 'http://localhost/x'] as $url) {
+            $this->actingAs($owner)->post("/{$workspace->slug}/{$blog->slug}/publishing/transports", ['url' => $url])
+                ->assertSessionHasErrors('url');
+        }
+
+        // A URL that turned private after being saved is refused at send time.
+        $transport = EventTransport::factory()->for($blog)->create(['config' => ['url' => 'http://127.0.0.1/hook', 'secret' => 's']]);
+        $this->publishArticles($blog, 1);
+        Http::fake();
+
+        DispatchEvents::dispatchSync($transport);
+
+        Http::assertNothingSent();
+        $this->assertStringContainsString('public address', (string) $transport->refresh()->last_error);
     }
 
     public function test_console_creates_frontends_with_a_one_time_token(): void
@@ -241,6 +262,7 @@ class PipelineTest extends TestCase
         [, , $blog] = $this->tenant();
         $this->publishArticles($blog, 1);
         EventTransport::factory()->for($blog)->create(['last_dispatched_sequence' => 1]);
+        config(['sbblog.publishing.allow_private_webhooks' => true]);
         $behind = EventTransport::factory()->for($blog)->create(['last_dispatched_sequence' => 0, 'config' => ['url' => 'https://hooks.test/x', 'secret' => 's']]);
         Http::fake();
 

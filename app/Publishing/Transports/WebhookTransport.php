@@ -3,6 +3,7 @@
 namespace App\Publishing\Transports;
 
 use App\Models\EventTransport;
+use App\Support\SafeUrl;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
@@ -15,6 +16,11 @@ class WebhookTransport implements Transport
     public function send(EventTransport $transport, array $envelopes): void
     {
         $config = $transport->config ?? [];
+
+        if (! SafeUrl::isPublic((string) ($config['url'] ?? ''))) {
+            throw new RuntimeException('The webhook URL does not resolve to a public address.');
+        }
+
         $body = (string) json_encode(['events' => $envelopes], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         $response = Http::timeout(10)

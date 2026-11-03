@@ -53,6 +53,10 @@ return [
 
     'publishing' => [
         'event_retention_days' => (int) env('SBBLOG_EVENT_RETENTION_DAYS', 30),
+
+        // Webhooks to private or loopback addresses are refused (SSRF). Allow them only in
+        // local development.
+        'allow_private_webhooks' => (bool) env('SBBLOG_ALLOW_PRIVATE_WEBHOOKS', false),
     ],
 
     /*

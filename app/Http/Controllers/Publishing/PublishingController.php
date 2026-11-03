@@ -13,6 +13,7 @@ use App\Models\Frontend;
 use App\Models\Snapshot;
 use App\Models\Workspace;
 use App\Support\AuditLogger;
+use App\Support\SafeUrl;
 use App\Support\SyncToken;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -198,6 +199,11 @@ class PublishingController extends Controller
         $schemes = app()->isProduction() ? 'https' : 'https,http';
 
         /** @var array{url: string} */
-        return $request->validate(['url' => ['required', "url:{$schemes}", 'max:500']]);
+        return $request->validate(['url' => [
+            'required', "url:{$schemes}", 'max:500',
+            fn (string $attribute, mixed $value, \Closure $fail) => SafeUrl::isPublic((string) $value)
+                ? null
+                : $fail(__('This address is not reachable from the internet.')),
+        ]]);
     }
 }
