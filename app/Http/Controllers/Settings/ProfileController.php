@@ -93,6 +93,9 @@ class ProfileController extends Controller
         DB::transaction(function () use ($user) {
             $user->tokens()->delete();
             DB::table('sessions')->where('user_id', $user->id)->delete();
+            // Leave every workspace and blog; author profiles stay so articles keep their byline.
+            DB::table('blog_members')->where('user_id', $user->id)->delete();
+            DB::table('workspace_members')->where('user_id', $user->id)->delete();
             $user->delete();
         });
 

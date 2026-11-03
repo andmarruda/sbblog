@@ -3,12 +3,18 @@
 namespace Tests\Feature\Settings;
 
 use App\Models\AuditLog;
+use App\Models\AuthorProfile;
+use App\Models\Blog;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Notifications\EmailChanged;
 use Database\Seeders\LanguageSeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -91,6 +97,24 @@ class ProfileTest extends TestCase
 
         $this->assertGuest();
         $this->assertSoftDeleted($user);
+    }
+
+    public function test_deleting_the_account_leaves_workspaces_but_keeps_bylines(): void
+    {
+        $this->seed([PermissionSeeder::class, RoleSeeder::class]);
+        $owner = User::factory()->create();
+        $workspace = Workspace::factory()->for($owner, 'owner')->create();
+        $blog = Blog::factory()->for($workspace)->create();
+        $user = User::factory()->create();
+        $workspace->members()->attach($user->id, ['workspace_role' => 'member']);
+        DB::table('blog_members')->insert(['blog_id' => $blog->id, 'user_id' => $user->id, 'role_id' => Role::query()->where('key', 'author')->value('id'), 'created_at' => now()]);
+        $profile = AuthorProfile::factory()->for($blog)->for($user)->create();
+
+        $this->actingAs($user)->delete('/account/profile', ['password' => 'password'])->assertRedirect('/login');
+
+        $this->assertDatabaseMissing('workspace_members', ['user_id' => $user->id]);
+        $this->assertDatabaseMissing('blog_members', ['user_id' => $user->id]);
+        $this->assertModelExists($profile);
     }
 
     public function test_deleting_requires_the_correct_password(): void
