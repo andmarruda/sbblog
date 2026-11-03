@@ -104,7 +104,7 @@ export default function Media({ media, query }: Props) {
                                 loading="lazy"
                                 className="aspect-square w-full object-cover"
                             />
-                            <p className="truncate px-2 py-1.5 text-xs text-muted-foreground">
+                            <p className="truncate bg-background px-2 py-1.5 text-xs text-muted-foreground">
                                 {item.alt_text || '—'}
                             </p>
                         </button>
