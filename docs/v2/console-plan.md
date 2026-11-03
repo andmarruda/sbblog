@@ -4,11 +4,12 @@ The console is the admin app: Laravel 13 + Inertia 3 + React 19, the write side 
 [ERD](./erd.md). This plan covers the full v2 scope as a sequence of phases. Each task is meant
 to fit in one PR.
 
-**Status:** the data layer and **phases 0–10 are done** (foundation, authentication, tenancy and
-access control, publishing core, content, integrations, publishing pipeline, engagement, apps and
-API, themes, security hardening; see [security.md](security.md)), followed by 20 review cycles for
-phases 0–6. Kafka, NATS and Redis transports are stubbed (webhook only). Next: phase 11 (v1
-import and launch).
+**Status:** the data layer and **phases 0–11 are done in code** (foundation, authentication,
+tenancy and access control, publishing core, content, integrations, publishing pipeline,
+engagement, apps and API, themes, security hardening, v1 import and launch tooling; see
+[security.md](security.md) and [deploy.md](deploy.md)), followed by 20 review cycles for phases
+0–6. Kafka, NATS and Redis transports are stubbed (webhook only). Left before launch: the VPS
+setup and the real v1 import, both by hand following [deploy.md](deploy.md).
 
 ## Decisions
 

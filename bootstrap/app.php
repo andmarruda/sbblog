@@ -22,6 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // TLS ends at the shared nginx in front of the container (the container port is never
+        // published), so trust its X-Forwarded-* headers for scheme, host and client IP.
+        $middleware->trustProxies(at: '*');
+
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state', SetLocale::COOKIE]);
 
         $middleware->append(SecurityHeaders::class);
@@ -30,7 +34,8 @@ return Application::configure(basePath: dirname(__DIR__))
             SetLocale::class,
             HandleAppearance::class,
             HandleInertiaRequests::class,
-            AddLinkHeadersForPreloadedAssets::class,
+            // Only the first assets: a header with every chunk outgrows proxy buffers (~7 KB).
+            AddLinkHeadersForPreloadedAssets::using(10),
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

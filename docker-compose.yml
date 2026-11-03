@@ -6,7 +6,7 @@ services:
         user: root
         uid: 1000
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: docker/dev.Dockerfile
     image: sbblog-laravel
     container_name: sbblog-dockerized
     restart: unless-stopped

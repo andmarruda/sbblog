@@ -1,0 +1,41 @@
+# /home/deploy/sbblog/docker-compose.yml on the VPS (reference copy; the VPS file is the one in use).
+# App, queue worker and scheduler share one image, swapped together on each deploy.
+x-app: &app
+  image: ghcr.io/andmarruda/sbblog:${IMAGE_TAG}
+  restart: unless-stopped
+  init: true
+  env_file: .env
+  volumes:
+    - sbblog-storage:/var/www/html/storage/app
+  networks:
+    - nginx_default
+    - sysborg-database
+
+services:
+  sbblog-app:
+    <<: *app
+    container_name: sbblog-app
+    # No published ports: only the shared nginx reaches it, on nginx_default.
+
+  sbblog-queue:
+    <<: *app
+    container_name: sbblog-queue
+    command: ["php", "artisan", "queue:work", "--tries=3", "--max-time=3600"]
+    healthcheck:
+      disable: true
+
+  sbblog-scheduler:
+    <<: *app
+    container_name: sbblog-scheduler
+    command: ["php", "artisan", "schedule:work"]
+    healthcheck:
+      disable: true
+
+volumes:
+  sbblog-storage:
+
+networks:
+  nginx_default:
+    external: true
+  sysborg-database:
+    external: true
