@@ -4,6 +4,7 @@ namespace App\Actions\Content;
 
 use App\Enums\MediaDisk;
 use App\Jobs\ProcessMedia;
+use App\Models\AppInstallation;
 use App\Models\Blog;
 use App\Models\Media;
 use App\Models\User;
@@ -18,7 +19,7 @@ class StoreMedia
     /**
      * Store an upload. A file identical to one already in the blog returns that media instead.
      */
-    public function handle(Blog $blog, User $uploader, UploadedFile $file, ?string $alt = null): Media
+    public function handle(Blog $blog, User|AppInstallation $uploader, UploadedFile $file, ?string $alt = null): Media
     {
         $checksum = (string) hash_file('sha256', $file->getRealPath());
 
@@ -40,7 +41,7 @@ class StoreMedia
 
         $media = Media::query()->create([
             'blog_id' => $blog->id,
-            'uploaded_by' => $uploader->id,
+            'uploaded_by' => $uploader instanceof User ? $uploader->id : null,
             'disk' => $disk,
             'path' => $path,
             'mime_type' => $file->getMimeType() ?? 'application/octet-stream',
@@ -53,7 +54,7 @@ class StoreMedia
 
         ProcessMedia::dispatch($media);
 
-        $this->audit->record('media.uploaded', $media, ['name' => $file->getClientOriginalName()], blog: $blog);
+        $this->audit->record('media.uploaded', $media, ['name' => $file->getClientOriginalName()], blog: $blog, app: $uploader instanceof AppInstallation ? $uploader : null);
 
         return $media;
     }

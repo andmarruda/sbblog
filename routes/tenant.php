@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Apps\AppController;
+use App\Http\Controllers\Apps\AppInstallationController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Blogs\BlogDashboardController;
 use App\Http\Controllers\Blogs\BlogMemberController;
@@ -68,6 +70,14 @@ Route::middleware(['auth', 'auth.session', 'verified', EnsureTenant::class])
                 Route::get('roles', [RoleController::class, 'index'])->name('roles');
             });
 
+            Route::middleware('can:apps.manage,workspace')->group(function () {
+                Route::get('apps', [AppController::class, 'index'])->name('apps');
+                Route::post('apps', [AppController::class, 'store'])->name('apps.store');
+                Route::patch('apps/{app}', [AppController::class, 'update'])->name('apps.update');
+                Route::post('apps/{app}/secret', [AppController::class, 'rotateSecret'])->middleware('throttle:10,1')->name('apps.secret');
+                Route::delete('apps/{app}', [AppController::class, 'destroy'])->name('apps.destroy');
+            });
+
             Route::post('members/{member}/transfer-ownership', [MemberController::class, 'transferOwnership'])
                 ->middleware('throttle:6,1')
                 ->name('members.transfer');
@@ -104,6 +114,9 @@ Route::middleware(['auth', 'auth.session', 'verified', EnsureTenant::class])
                 Route::get('audit', [AuditLogController::class, 'blog'])
                     ->middleware('can:audit.view,blog')
                     ->name('audit');
+
+                Route::get('apps', [AppInstallationController::class, 'index'])->middleware('can:apps.install,blog')->name('apps');
+                Route::delete('apps/{appInstallation:id}', [AppInstallationController::class, 'destroy'])->middleware('can:apps.install,blog')->name('apps.destroy');
             });
         });
     });

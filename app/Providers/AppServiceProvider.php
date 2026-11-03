@@ -128,6 +128,13 @@ class AppServiceProvider extends ServiceProvider
 
     protected function configureRateLimits(): void
     {
+        // Per caller: a person or an app installation (not Authenticatable, so use the model key).
+        RateLimiter::for('api', function (Request $request) {
+            $caller = $request->user();
+
+            return Limit::perMinute(120)->by($caller instanceof Model ? $caller::class.'|'.$caller->getKey() : (string) $request->ip());
+        });
+
         RateLimiter::for('sync', function (Request $request) {
             $frontend = $request->attributes->get('frontend');
 

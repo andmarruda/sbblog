@@ -4,6 +4,7 @@ namespace App\Actions\Content;
 
 use App\Enums\SuggestionSource;
 use App\Enums\SuggestionStatus;
+use App\Models\AppInstallation;
 use App\Models\Article;
 use App\Models\ArticleSuggestion;
 use App\Models\SuggestionComment;
@@ -23,15 +24,18 @@ class Suggestions
     /**
      * @param  array{title: string, description: string|null, body: array<string, mixed>, cover_media_id: string|null}  $content
      */
-    public function create(Article $article, User $user, array $content, ?string $note = null): ArticleSuggestion
+    public function create(Article $article, User|AppInstallation $user, array $content, ?string $note = null): ArticleSuggestion
     {
         return DB::transaction(function () use ($article, $user, $content, $note) {
             $article = Article::query()->lockForUpdate()->findOrFail($article->id);
 
+            $isApp = $user instanceof AppInstallation;
+
             $proposed = $article->revisions()->create([
                 ...$content,
                 'number' => (int) $article->revisions()->max('number') + 1,
-                'created_by_user_id' => $user->id,
+                'created_by_user_id' => $isApp ? null : $user->id,
+                'created_by_app_installation_id' => $isApp ? $user->id : null,
             ]);
 
             $suggestion = ArticleSuggestion::query()->create([
@@ -39,12 +43,13 @@ class Suggestions
                 'base_revision_id' => $article->current_revision_id,
                 'proposed_revision_id' => $proposed->id,
                 'status' => SuggestionStatus::Pending,
-                'source' => SuggestionSource::Human,
-                'requested_by_user_id' => $user->id,
+                'source' => $isApp ? SuggestionSource::App : SuggestionSource::Human,
+                'requested_by_user_id' => $isApp ? null : $user->id,
+                'requested_by_app_installation_id' => $isApp ? $user->id : null,
                 'note' => $note,
             ]);
 
-            $this->audit->record('suggestion.created', $suggestion, blog: $article->blog, actor: $user);
+            $this->audit->record('suggestion.created', $suggestion, blog: $article->blog, actor: $isApp ? null : $user, app: $isApp ? $user : null);
 
             return $suggestion;
         });

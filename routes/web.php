@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Apps\OAuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvitationAcceptController;
 use App\Http\Controllers\LocaleController;
@@ -17,6 +18,10 @@ Route::post('invitations/{token}', [InvitationAcceptController::class, 'accept']
 
 Route::middleware(['auth', 'auth.session', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
+
+    // Apps ask for access here (OAuth authorization code); the token exchange is in routes/api.php.
+    Route::get('oauth/authorize', [OAuthController::class, 'show'])->name('oauth.authorize');
+    Route::post('oauth/authorize', [OAuthController::class, 'approve'])->middleware('throttle:20,1')->name('oauth.approve');
 
     Route::get('onboarding', [OnboardingController::class, 'create'])->name('onboarding');
     Route::post('onboarding', [OnboardingController::class, 'store'])

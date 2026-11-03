@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Apps\Scopes;
 use App\Authorization\Permissions;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
@@ -58,7 +59,7 @@ class TranslationsTest extends TestCase
             $keys[] = $description;
         }
 
-        return $keys;
+        return [...$keys, ...array_values(Scopes::ALL)];
     }
 
     /**

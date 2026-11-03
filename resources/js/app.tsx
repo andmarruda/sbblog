@@ -15,6 +15,7 @@ void createInertiaApp({
         if (
             name.startsWith('auth/') ||
             name.startsWith('invitations/') ||
+            name.startsWith('oauth/') ||
             name === 'onboarding'
         ) {
             return AuthLayout;

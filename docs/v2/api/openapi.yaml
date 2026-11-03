@@ -1,0 +1,147 @@
+openapi: 3.1.0
+info:
+  title: SBBlog Content API
+  version: 1.0.0
+  description: |
+    For apps installed on a blog (OAuth authorization code) and personal access tokens.
+    Writes never publish: they create draft revisions and suggestions that people review.
+
+    **Install flow.** Send the user to `GET /oauth/authorize?client_id=…&redirect_uri=…&scope=…&state=…`.
+    They pick a blog and approve; you get `?code=…&state=…` on a registered redirect URI.
+    Exchange the code (valid once, for 10 minutes) at `POST /api/oauth/token`.
+servers:
+  - url: /api
+security:
+  - bearer: []
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+  parameters:
+    blog:
+      name: blog
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    article:
+      name: article
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+  schemas:
+    ArticleSummary:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        slug: { type: string }
+        status: { enum: [draft, in_review, scheduled, published, archived] }
+        language: { type: [string, 'null'] }
+        translation_group_id: { type: string, format: uuid }
+        published_at: { type: [string, 'null'], format: date-time }
+        updated_at: { type: [string, 'null'], format: date-time }
+    Content:
+      type: object
+      required: [title, body]
+      properties:
+        title: { type: string, maxLength: 255 }
+        description: { type: [string, 'null'], maxLength: 500 }
+        cover_media_id: { type: [string, 'null'], format: uuid }
+        body:
+          description: Tiptap document, see resources/schemas/body.schema.json.
+          type: object
+        note: { type: [string, 'null'], description: Suggestions only. }
+paths:
+  /oauth/token:
+    post:
+      summary: Exchange an authorization code for a token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [grant_type, code, client_id, client_secret, redirect_uri]
+              properties:
+                grant_type: { const: authorization_code }
+                code: { type: string }
+                client_id: { type: string }
+                client_secret: { type: string }
+                redirect_uri: { type: string }
+      responses:
+        '200':
+          description: Token bound to one blog.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token: { type: string }
+                  token_type: { const: Bearer }
+                  scope: { type: string }
+                  blog_id: { type: string, format: uuid }
+        '400': { description: invalid_grant (unknown, used or expired code, or another redirect URI) }
+        '401': { description: invalid_client }
+  /v1/me:
+    get:
+      summary: Who the token belongs to
+      responses:
+        '200': { description: '{type: app, app, blog_id, scopes} or {type: user, name, email}' }
+  /v1/blogs/{blog}/articles:
+    get:
+      summary: List articles (articles:read)
+      parameters:
+        - $ref: '#/components/parameters/blog'
+        - { name: status, in: query, schema: { enum: [draft, in_review, scheduled, published, archived] } }
+        - { name: per_page, in: query, schema: { type: integer, maximum: 100 } }
+      responses:
+        '200': { description: Paginated ArticleSummary list. }
+  /v1/blogs/{blog}/articles/{article}:
+    get:
+      summary: An article with its latest draft (articles:read)
+      parameters: [{ $ref: '#/components/parameters/blog' }, { $ref: '#/components/parameters/article' }]
+      responses:
+        '200': { description: ArticleSummary plus category_id, author_profile_id, tag_ids and revision. }
+  /v1/blogs/{blog}/articles/{article}/draft:
+    put:
+      summary: Save a new draft revision (articles:write)
+      parameters: [{ $ref: '#/components/parameters/blog' }, { $ref: '#/components/parameters/article' }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/Content' } } }
+      responses:
+        '201': { description: '{revision_id, number}' }
+        '422': { description: Validation errors, including body nodes that are not allowed. }
+  /v1/blogs/{blog}/articles/{article}/suggestions:
+    post:
+      summary: Suggest changes for review (articles:write)
+      parameters: [{ $ref: '#/components/parameters/blog' }, { $ref: '#/components/parameters/article' }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/Content' } } }
+      responses:
+        '201': { description: '{suggestion_id, status}' }
+  /v1/blogs/{blog}/media:
+    post:
+      summary: Upload an image (media:write)
+      parameters: [{ $ref: '#/components/parameters/blog' }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary }
+                alt_text: { type: string }
+      responses:
+        '201': { description: '{id, url, width, height}' }
+  /v1/blogs/{blog}/taxonomy:
+    get:
+      summary: Categories, tags and authors (taxonomy:read)
+      parameters: [{ $ref: '#/components/parameters/blog' }]
+      responses:
+        '200': { description: '{categories, tags, authors}' }

@@ -4,6 +4,7 @@ import { useCan } from '@/hooks/use-can';
 import { useTranslation } from '@/hooks/use-translation';
 import { SectionLayout, type SectionNavItem } from '@/layouts/section-layout';
 import {
+    apps,
     audit,
     blogs,
     general,
@@ -32,6 +33,7 @@ export default function WorkspaceSettingsLayout({
             href: members(workspace).url,
         },
         can('members.manage') && { title: 'Roles', href: roles(workspace).url },
+        can('apps.manage') && { title: 'Apps', href: apps(workspace).url },
         can('workspace.settings') && {
             title: 'Audit log',
             href: audit(workspace).url,

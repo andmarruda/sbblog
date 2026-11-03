@@ -3,6 +3,7 @@
 namespace App\Actions\Content;
 
 use App\Enums\ArticleStatus;
+use App\Models\AppInstallation;
 use App\Models\Article;
 use App\Models\ArticleRevision;
 use App\Models\ArticleSuggestion;
@@ -66,7 +67,7 @@ class ArticleEditor
      *
      * @param  array{title: string, description: string|null, body: array<string, mixed>, cover_media_id: string|null}  $content
      */
-    public function saveDraft(Article $article, User $user, array $content, bool $coalesce = false): ArticleRevision
+    public function saveDraft(Article $article, User|AppInstallation $user, array $content, bool $coalesce = false): ArticleRevision
     {
         return DB::transaction(function () use ($article, $user, $content, $coalesce) {
             $article = Article::query()->lockForUpdate()->findOrFail($article->id);
@@ -76,7 +77,7 @@ class ArticleEditor
                 return $current;
             }
 
-            $replace = $coalesce && $current !== null && $this->canReplace($article, $current, $user);
+            $replace = $coalesce && $user instanceof User && $current !== null && $this->canReplace($article, $current, $user);
 
             if ($replace) {
                 $number = $current->number;
@@ -305,12 +306,13 @@ class ArticleEditor
     /**
      * @param  array{title: string, description: string|null, body: array<string, mixed>, cover_media_id: string|null}  $content
      */
-    private function newRevision(Article $article, User $user, array $content, ?int $number = null): ArticleRevision
+    private function newRevision(Article $article, User|AppInstallation $user, array $content, ?int $number = null): ArticleRevision
     {
         $revision = $article->revisions()->create([
             ...$content,
             'number' => $number ?? (int) $article->revisions()->max('number') + 1,
-            'created_by_user_id' => $user->id,
+            'created_by_user_id' => $user instanceof User ? $user->id : null,
+            'created_by_app_installation_id' => $user instanceof AppInstallation ? $user->id : null,
         ]);
 
         $article->forceFill(['current_revision_id' => $revision->id])->save();
