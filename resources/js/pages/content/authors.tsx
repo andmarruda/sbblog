@@ -106,7 +106,7 @@ function AuthorDialog({
                                     {avatar && (
                                         <AvatarImage src={avatar.url} alt="" />
                                     )}
-                                    <AvatarFallback>
+                                    <AvatarFallback className="text-foreground">
                                         {initials(name || '?')}
                                     </AvatarFallback>
                                 </Avatar>
@@ -283,7 +283,7 @@ export default function Authors({ authors, members, networks }: Props) {
                                         alt=""
                                     />
                                 )}
-                                <AvatarFallback>
+                                <AvatarFallback className="text-foreground">
                                     {initials(author.display_name)}
                                 </AvatarFallback>
                             </Avatar>

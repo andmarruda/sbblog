@@ -698,7 +698,10 @@ export default function Integrations(props: Props) {
                         )
                     }
                 >
-                    <SelectTrigger className="w-full sm:w-96">
+                    <SelectTrigger
+                        aria-label={t('Preview a page')}
+                        className="w-full sm:w-96"
+                    >
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>

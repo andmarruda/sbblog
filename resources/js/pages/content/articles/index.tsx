@@ -28,10 +28,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useBlogRoute } from '@/hooks/use-blog-route';
 import { useCan } from '@/hooks/use-can';
 import { useTranslation } from '@/hooks/use-translation';
+import { cn } from '@/lib/utils';
 import { bulk, edit, index, store } from '@/routes/articles';
 import type { ArticleStatus, Paginated } from '@/types';
 
@@ -346,21 +346,38 @@ export default function Articles({ articles, query, filters }: Props) {
                     )
                 }
             />
-            <Tabs
-                value={trashed ? 'trash' : 'all'}
-                onValueChange={(value) =>
-                    router.get(
-                        index(args).url,
-                        value === 'trash' ? { trashed: 1 } : {},
-                        { preserveState: false },
-                    )
-                }
+            {/* Two views of the list, so plain links rather than tabs. */}
+            <nav
+                className="inline-flex w-fit gap-1 rounded-lg bg-muted p-1 text-sm"
+                aria-label={t('Articles')}
             >
-                <TabsList>
-                    <TabsTrigger value="all">{t('Articles')}</TabsTrigger>
-                    <TabsTrigger value="trash">{t('Trash')}</TabsTrigger>
-                </TabsList>
-            </Tabs>
+                {[
+                    { key: 'all', label: t('Articles'), href: index(args).url },
+                    {
+                        key: 'trash',
+                        label: t('Trash'),
+                        href: index(args, { query: { trashed: 1 } }).url,
+                    },
+                ].map((tab) => {
+                    const active = (tab.key === 'trash') === trashed;
+
+                    return (
+                        <Link
+                            key={tab.key}
+                            href={tab.href}
+                            aria-current={active ? 'page' : undefined}
+                            className={cn(
+                                'rounded-md px-3 py-1 transition-colors',
+                                active
+                                    ? 'bg-background font-medium shadow-xs'
+                                    : 'text-foreground/80 hover:text-foreground',
+                            )}
+                        >
+                            {tab.label}
+                        </Link>
+                    );
+                })}
+            </nav>
 
             {selected.length > 0 && (
                 <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-muted/50 p-2 text-sm">

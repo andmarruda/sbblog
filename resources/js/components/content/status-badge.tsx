@@ -16,7 +16,7 @@ export function useStatusLabels(): Record<ArticleStatus, string> {
 }
 
 const styles: Record<ArticleStatus, string> = {
-    draft: 'bg-muted text-muted-foreground',
+    draft: 'bg-muted text-foreground',
     in_review:
         'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200',
     scheduled: 'bg-sky-100 text-sky-900 dark:bg-sky-950 dark:text-sky-200',

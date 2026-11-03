@@ -61,6 +61,7 @@ export function RichTextEditor({
         content: initialContent,
         editorProps: {
             attributes: {
+                'aria-label': t('Article body'),
                 class: 'prose prose-neutral dark:prose-invert max-w-none min-h-[50vh] px-4 py-6 focus:outline-none',
             },
         },
