@@ -30,14 +30,16 @@ class SyncController extends Controller
         $after = (int) ($validated['after'] ?? 0);
         $limit = (int) ($validated['limit'] ?? 100);
 
+        // Events up to a snapshot may have been pruned — all of them, when nothing changed since.
+        // Then the frontend must load the snapshot first, or it would silently miss content.
         $oldest = DB::table('outbox_events')->where('blog_id', $frontend->blog_id)->min('sequence');
+        $firstAvailable = $oldest === null ? (int) $blog?->event_sequence + 1 : (int) $oldest;
 
-        // Events up to a snapshot may have been pruned: the frontend must load the snapshot first.
-        if ($oldest !== null && $after < (int) $oldest - 1) {
+        if ($after < $firstAvailable - 1) {
             return response()->json([
                 'message' => 'Events before this point were pruned. Load the latest snapshot first.',
                 'snapshot_required' => true,
-                'oldest_sequence' => (int) $oldest,
+                'oldest_sequence' => $firstAvailable,
             ], 410);
         }
 
@@ -51,7 +53,7 @@ class SyncController extends Controller
 
         $frontend->forceFill([
             'last_sync_at' => now(),
-            'core_version' => $request->header('X-SBBlog-Core', $frontend->core_version),
+            'core_version' => mb_substr((string) $request->header('X-SBBlog-Core', $frontend->core_version), 0, 32) ?: null,
         ])->saveQuietly();
 
         $events = $rows->take($limit)->map(fn (object $row) => [
@@ -93,8 +95,8 @@ class SyncController extends Controller
         $frontend = $this->frontend($request);
         $snapshot = Snapshot::query()->where('blog_id', $frontend->blog_id)->latest('up_to_sequence')->first();
 
-        if ($snapshot === null) {
-            return response()->json(['message' => 'No snapshot yet. Pull events from the start.'], 404);
+        if ($snapshot === null || ! Storage::disk('local')->exists($snapshot->storage_path)) {
+            return response()->json(['message' => 'No snapshot available. Ask the blog to build one.'], 404);
         }
 
         return Storage::disk('local')->download($snapshot->storage_path, "snapshot-{$snapshot->up_to_sequence}.json.gz", [

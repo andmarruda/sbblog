@@ -12,6 +12,7 @@ use App\Models\Blog;
 use App\Models\EventTransport;
 use App\Models\Frontend;
 use App\Models\Media;
+use App\Models\Snapshot;
 use App\Publishing\SchemaValidator;
 use App\Support\SyncToken;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -120,6 +121,36 @@ class PipelineTest extends TestCase
         $types = array_map(fn (object $event) => $event->type, $snapshot->events);
         $this->assertSame('blog.updated', $types[0]);
         $this->assertSame(2, count(array_keys($types, 'article.published')));
+    }
+
+    public function test_fully_pruned_history_still_requires_the_snapshot(): void
+    {
+        Storage::fake('local');
+        [, , $blog] = $this->tenant();
+        [, $token] = $this->frontendFor($blog);
+        $this->publishArticles($blog, 2);
+        BuildSnapshot::dispatchSync($blog);
+        $this->travel(40)->days();
+        $this->artisan('events:prune')->assertSuccessful();
+        $this->assertSame(0, $blog->outboxEvents()->count());
+
+        $this->withToken($token)->getJson('/api/sync?after=0')->assertStatus(410)->assertJsonPath('oldest_sequence', 3);
+        $this->withToken($token)->getJson('/api/sync?after=2')->assertOk()->assertJsonCount(0, 'events');
+    }
+
+    public function test_bad_input_is_rejected_cleanly(): void
+    {
+        Storage::fake('local');
+        [, , $blog] = $this->tenant();
+        [, $token] = $this->frontendFor($blog);
+
+        $this->withToken($token)->getJson('/api/sync?after=-1')->assertUnprocessable();
+        $this->withToken($token)->getJson('/api/sync?limit=9999')->assertUnprocessable();
+        $this->withToken($token)->withHeader('X-SBBlog-Core', str_repeat('9', 200))->getJson('/api/sync')->assertOk();
+        $this->assertSame(32, mb_strlen((string) Frontend::query()->sole()->core_version));
+
+        Snapshot::factory()->for($blog)->create(['storage_path' => 'snapshots/missing.json.gz']);
+        $this->withToken($token)->getJson('/api/sync/snapshot')->assertNotFound();
     }
 
     public function test_events_still_owed_to_a_transport_are_kept(): void
