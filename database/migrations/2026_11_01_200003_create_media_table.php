@@ -27,6 +27,7 @@ return new class extends Migration
             $table->timestampsTz();
 
             $table->index(['blog_id', 'checksum']);
+            $table->index(['blog_id', 'created_at']);
         });
 
         Schema::table('blogs', function (Blueprint $table) {

@@ -10,6 +10,7 @@ use App\Models;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -73,6 +74,9 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function configureModels(): void
     {
+        // Lazy loading in a loop is an N+1 query; make it fail loudly outside production.
+        Model::preventLazyLoading(! app()->isProduction());
+
         Relation::enforceMorphMap([
             'app' => Models\App::class,
             'app_installation' => Models\AppInstallation::class,

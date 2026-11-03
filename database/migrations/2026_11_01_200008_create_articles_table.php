@@ -34,6 +34,8 @@ return new class extends Migration
             $table->unique(['translation_group_id', 'language_id']);
             $table->index(['blog_id', 'status', 'published_at']);
             $table->index(['status', 'scheduled_at']);
+            // The article list sorts by last update.
+            $table->index(['blog_id', 'updated_at']);
         });
     }
 

@@ -47,6 +47,7 @@ return new class extends Migration
 
             $table->index(['workspace_id', 'created_at']);
             $table->index(['actor_user_id', 'created_at']);
+            $table->index(['blog_id', 'created_at']);
             $table->index(['subject_type', 'subject_id']);
         });
     }
