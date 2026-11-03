@@ -101,13 +101,16 @@ class Taxonomy
             $index = $siblings->search(fn (Category $sibling) => $sibling->id === $category->id);
             $target = $direction === 'up' ? $index - 1 : $index + 1;
 
-            if ($index === false || ! $siblings->has($target)) {
+            $current = $index === false ? null : $siblings->get($index);
+            $other = $index === false ? null : $siblings->get($target);
+
+            if ($current === null || $other === null) {
                 return;
             }
 
             // Renumber so positions are distinct, then swap.
             $siblings->each(fn (Category $sibling, int $position) => $sibling->position = $position);
-            [$siblings[$index]->position, $siblings[$target]->position] = [$siblings[$target]->position, $siblings[$index]->position];
+            [$current->position, $other->position] = [$other->position, $current->position];
 
             $siblings->each(function (Category $sibling) use ($blog) {
                 if ($sibling->isDirty('position')) {

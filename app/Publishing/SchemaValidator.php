@@ -31,11 +31,13 @@ class SchemaValidator
     {
         $result = $this->validator->validate(Helper::toJSON($data), self::BASE_URI.$schema);
 
-        if ($result->isValid()) {
+        $error = $result->error();
+
+        if ($error === null) {
             return [];
         }
 
-        $errors = (new ErrorFormatter)->formatFlat($result->error());
+        $errors = (new ErrorFormatter)->formatFlat($error);
 
         return array_values(array_map(strval(...), $errors));
     }

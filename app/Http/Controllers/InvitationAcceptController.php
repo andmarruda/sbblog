@@ -46,17 +46,19 @@ class InvitationAcceptController extends Controller
         $user = $request->user();
         $invitation = Invitation::findByToken($token);
 
-        abort_if($invitation === null || $invitation->workspace === null, 404);
+        $workspace = $invitation?->workspace;
+
+        abort_if($invitation === null || $workspace === null, 404);
 
         $accept->handle($invitation, $user);
         $request->session()->forget('invitation_email');
 
         $blog = $invitation->blog;
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Welcome to :workspace!', ['workspace' => $invitation->workspace->name])]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Welcome to :workspace!', ['workspace' => $workspace->name])]);
 
         return $blog !== null
-            ? to_route('blogs.dashboard', [$invitation->workspace->slug, $blog->slug])
+            ? to_route('blogs.dashboard', [$workspace->slug, $blog->slug])
             : to_route('dashboard');
     }
 }
