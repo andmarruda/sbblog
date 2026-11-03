@@ -33,7 +33,8 @@ return new class extends Migration
 
         Schema::create('audit_logs', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('workspace_id')->constrained()->cascadeOnDelete();
+            // Null for account-level events (login, password change…).
+            $table->foreignUuid('workspace_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignUuid('blog_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignUuid('actor_user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignUuid('actor_app_installation_id')->nullable()->constrained('app_installations')->nullOnDelete();
@@ -45,6 +46,7 @@ return new class extends Migration
             $table->timestampTz('created_at')->useCurrent();
 
             $table->index(['workspace_id', 'created_at']);
+            $table->index(['actor_user_id', 'created_at']);
             $table->index(['subject_type', 'subject_id']);
         });
     }

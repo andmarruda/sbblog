@@ -86,7 +86,7 @@ erDiagram
   }
   audit_logs {
     uuid id PK
-    uuid workspace_id FK
+    uuid workspace_id FK "nullable: account events"
     uuid blog_id FK "nullable"
     uuid actor_user_id FK "nullable"
     uuid actor_app_installation_id FK "nullable"

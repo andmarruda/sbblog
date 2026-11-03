@@ -1,11 +1,18 @@
-import { usePage } from '@inertiajs/react';
-import { ChevronsUpDown, Languages, Palette } from 'lucide-react';
+import { Link, router, usePage } from '@inertiajs/react';
+import {
+    ChevronsUpDown,
+    Languages,
+    LogOut,
+    Palette,
+    Settings,
+} from 'lucide-react';
 import { AppearanceMenuItems } from '@/components/app/appearance-menu';
 import { LocaleMenuItems } from '@/components/app/locale-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
     DropdownMenu,
     DropdownMenuContent,
+    DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuSub,
@@ -20,6 +27,8 @@ import {
     useSidebar,
 } from '@/components/ui/sidebar';
 import { useTranslation } from '@/hooks/use-translation';
+import { logout } from '@/routes';
+import { edit as editProfile } from '@/routes/profile';
 
 export function initials(name: string) {
     return name
@@ -81,6 +90,12 @@ export function NavUser() {
                                     </div>
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
+                                <DropdownMenuItem asChild>
+                                    <Link href={editProfile()} prefetch>
+                                        <Settings />
+                                        {t('Account settings')}
+                                    </Link>
+                                </DropdownMenuItem>
                             </>
                         )}
                         <DropdownMenuSub>
@@ -101,6 +116,20 @@ export function NavUser() {
                                 <AppearanceMenuItems />
                             </DropdownMenuSubContent>
                         </DropdownMenuSub>
+                        {user && (
+                            <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    onSelect={() => {
+                                        router.flushAll();
+                                        router.post(logout());
+                                    }}
+                                >
+                                    <LogOut />
+                                    {t('Log out')}
+                                </DropdownMenuItem>
+                            </>
+                        )}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>

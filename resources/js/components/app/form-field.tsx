@@ -1,4 +1,9 @@
-import type { ReactNode } from 'react';
+import {
+    cloneElement,
+    isValidElement,
+    type ReactElement,
+    type ReactNode,
+} from 'react';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
@@ -33,7 +38,15 @@ export function FormField({
                     </span>
                 )}
             </Label>
-            {children}
+            {isValidElement(children)
+                ? cloneElement(
+                      children as ReactElement<Record<string, unknown>>,
+                      {
+                          'aria-invalid': error ? true : undefined,
+                          'aria-describedby': error ? `${id}-error` : undefined,
+                      },
+                  )
+                : children}
             {error ? (
                 <p id={`${id}-error`} className="text-sm text-destructive">
                     {error}

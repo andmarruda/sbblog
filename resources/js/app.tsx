@@ -2,6 +2,7 @@ import { createInertiaApp } from '@inertiajs/react';
 import { initializeTheme } from '@/hooks/use-appearance';
 import AuthLayout from '@/layouts/auth-layout';
 import ConsoleLayout from '@/layouts/console-layout';
+import SettingsLayout from '@/layouts/settings-layout';
 
 const appName = import.meta.env.VITE_APP_NAME || 'SBBlog';
 
@@ -13,8 +14,12 @@ void createInertiaApp({
             return AuthLayout;
         }
 
-        if (name === 'welcome' || name.startsWith('errors/')) {
+        if (name.startsWith('errors/')) {
             return null;
+        }
+
+        if (name.startsWith('settings/')) {
+            return [ConsoleLayout, SettingsLayout];
         }
 
         return ConsoleLayout;
