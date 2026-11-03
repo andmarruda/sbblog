@@ -56,6 +56,13 @@ these files in CI, so a schema change is always a visible diff.
 | `comment.approved` / `comment.removed` | `{ comment }` / `{ id, article_id }` | Show / hide a comment |
 | `integrations.updated` | `{ scope, author_profile_id, article_id, integrations }` | Replace the integration list of that scope |
 
+**Integrations.** Combine blog, author and article lists for a page, keep the most specific scope
+when two entries have the same provider and ID, and load GA4 and Google Ads through one gtag
+loader. On article pages, send `article_id`, `author_profile_id` and `category_id` as gtag config
+parameters (custom dimensions). Every snippet carries a consent category (`analytics`, `ads`,
+`functional`): load it only after the reader consents to that category. The console's integrations
+page previews the exact HTML.
+
 Translations of an article share `translation_group_id`; build `hreflang` links from the articles
 you hold with the same group. Media appear inside the payloads that use them (cover, body images,
 avatars, brand), with absolute URLs and their variants (`webp`, `thumb`).

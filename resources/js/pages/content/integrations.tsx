@@ -546,6 +546,11 @@ export default function Integrations(props: Props) {
         author: t('Authors'),
         article: t('Articles'),
     };
+    const consentLabels = {
+        analytics: t('Analytics'),
+        ads: t('Advertising'),
+        functional: t('Functional'),
+    };
 
     const list = (scope: Scope) => {
         const items = props.integrations.filter(
@@ -584,7 +589,7 @@ export default function Integrations(props: Props) {
                             </p>
                         </div>
                         <Badge variant="outline">
-                            {integration.consent_category}
+                            {consentLabels[integration.consent_category]}
                         </Badge>
                         {integration.provider !== 'custom' && (
                             <Switch
