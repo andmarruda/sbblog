@@ -5,10 +5,7 @@
     "description": "The article left the public site: unpublished, archived, rescheduled or deleted.",
     "type": "object",
     "additionalProperties": false,
-    "required": [
-        "id",
-        "translation_group_id"
-    ],
+    "required": ["id", "translation_group_id"],
     "properties": {
         "id": {
             "type": "string",

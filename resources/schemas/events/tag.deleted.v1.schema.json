@@ -5,9 +5,7 @@
     "description": "A tag was deleted.",
     "type": "object",
     "additionalProperties": false,
-    "required": [
-        "id"
-    ],
+    "required": ["id"],
     "properties": {
         "id": {
             "type": "string",

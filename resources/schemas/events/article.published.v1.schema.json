@@ -5,9 +5,7 @@
     "description": "A revision went live (first publish or an update). Replace the whole article.",
     "type": "object",
     "additionalProperties": false,
-    "required": [
-        "article"
-    ],
+    "required": ["article"],
     "properties": {
         "article": {
             "$ref": "https://schemas.sbblog.dev/events/common.schema.json#/$defs/article"

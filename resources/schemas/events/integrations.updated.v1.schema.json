@@ -5,32 +5,17 @@
     "description": "The full list of enabled integrations of one scope. Replace the scope's list.",
     "type": "object",
     "additionalProperties": false,
-    "required": [
-        "scope",
-        "author_profile_id",
-        "article_id",
-        "integrations"
-    ],
+    "required": ["scope", "author_profile_id", "article_id", "integrations"],
     "properties": {
         "scope": {
-            "enum": [
-                "blog",
-                "author",
-                "article"
-            ]
+            "enum": ["blog", "author", "article"]
         },
         "author_profile_id": {
-            "type": [
-                "string",
-                "null"
-            ],
+            "type": ["string", "null"],
             "format": "uuid"
         },
         "article_id": {
-            "type": [
-                "string",
-                "null"
-            ],
+            "type": ["string", "null"],
             "format": "uuid"
         },
         "integrations": {

@@ -5,9 +5,7 @@
     "description": "A tag was created or changed.",
     "type": "object",
     "additionalProperties": false,
-    "required": [
-        "tag"
-    ],
+    "required": ["tag"],
     "properties": {
         "tag": {
             "$ref": "https://schemas.sbblog.dev/events/common.schema.json#/$defs/tag"

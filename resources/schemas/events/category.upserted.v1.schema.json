@@ -5,9 +5,7 @@
     "description": "A category was created or changed.",
     "type": "object",
     "additionalProperties": false,
-    "required": [
-        "category"
-    ],
+    "required": ["category"],
     "properties": {
         "category": {
             "$ref": "https://schemas.sbblog.dev/events/common.schema.json#/$defs/category"

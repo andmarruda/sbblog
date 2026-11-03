@@ -5,10 +5,7 @@
     "description": "A public comment was hidden, rejected, marked as spam or deleted.",
     "type": "object",
     "additionalProperties": false,
-    "required": [
-        "id",
-        "article_id"
-    ],
+    "required": ["id", "article_id"],
     "properties": {
         "id": {
             "type": "string",

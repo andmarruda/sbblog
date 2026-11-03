@@ -5,9 +5,7 @@
     "description": "An author profile was deleted.",
     "type": "object",
     "additionalProperties": false,
-    "required": [
-        "id"
-    ],
+    "required": ["id"],
     "properties": {
         "id": {
             "type": "string",

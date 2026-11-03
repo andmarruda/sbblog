@@ -5,9 +5,7 @@
     "description": "A comment became public.",
     "type": "object",
     "additionalProperties": false,
-    "required": [
-        "comment"
-    ],
+    "required": ["comment"],
     "properties": {
         "comment": {
             "$ref": "https://schemas.sbblog.dev/events/common.schema.json#/$defs/comment"

@@ -5,9 +5,7 @@
     "description": "An author profile was created or changed.",
     "type": "object",
     "additionalProperties": false,
-    "required": [
-        "author"
-    ],
+    "required": ["author"],
     "properties": {
         "author": {
             "$ref": "https://schemas.sbblog.dev/events/common.schema.json#/$defs/author"

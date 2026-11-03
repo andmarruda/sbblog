@@ -5,9 +5,7 @@
     "description": "Blog-level settings changed.",
     "type": "object",
     "additionalProperties": false,
-    "required": [
-        "blog"
-    ],
+    "required": ["blog"],
     "properties": {
         "blog": {
             "$ref": "https://schemas.sbblog.dev/events/common.schema.json#/$defs/blog"

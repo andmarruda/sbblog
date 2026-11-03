@@ -27,22 +27,13 @@
                     "type": "string"
                 },
                 "width": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ]
+                    "type": ["integer", "null"]
                 },
                 "height": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ]
+                    "type": ["integer", "null"]
                 },
                 "alt": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": ["string", "null"]
                 },
                 "variants": {
                     "type": "object",
@@ -75,10 +66,7 @@
                     "type": "string"
                 },
                 "bio": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": ["string", "null"]
                 },
                 "avatar": {
                     "oneOf": [
@@ -95,16 +83,10 @@
                     "items": {
                         "type": "object",
                         "additionalProperties": false,
-                        "required": [
-                            "network",
-                            "url"
-                        ],
+                        "required": ["network", "url"],
                         "properties": {
                             "network": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
+                                "type": ["string", "null"]
                             },
                             "url": {
                                 "type": "string"
@@ -137,17 +119,11 @@
                     "type": "string"
                 },
                 "parent_id": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "uuid"
                 },
                 "bgcolor": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": ["string", "null"]
                 },
                 "position": {
                     "type": "integer"
@@ -157,11 +133,7 @@
         "tag": {
             "type": "object",
             "additionalProperties": false,
-            "required": [
-                "id",
-                "name",
-                "slug"
-            ],
+            "required": ["id", "name", "slug"],
             "properties": {
                 "id": {
                     "type": "string",
@@ -213,10 +185,7 @@
                     "format": "uuid"
                 },
                 "language": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": ["string", "null"]
                 },
                 "slug": {
                     "type": "string"
@@ -225,10 +194,7 @@
                     "type": "string"
                 },
                 "description": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": ["string", "null"]
                 },
                 "excerpt": {
                     "type": "string"
@@ -282,32 +248,20 @@
                     }
                 },
                 "bgcolor": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": ["string", "null"]
                 },
                 "published_at": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "date-time"
                 },
                 "updated_at": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "date-time"
                 },
                 "revision": {
                     "type": "object",
                     "additionalProperties": false,
-                    "required": [
-                        "id",
-                        "number"
-                    ],
+                    "required": ["id", "number"],
                     "properties": {
                         "id": {
                             "type": "string",
@@ -346,34 +300,19 @@
                     "type": "string"
                 },
                 "title": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": ["string", "null"]
                 },
                 "slogan": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": ["string", "null"]
                 },
                 "description": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": ["string", "null"]
                 },
                 "canonical_url": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": ["string", "null"]
                 },
                 "default_language": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
+                    "type": ["string", "null"]
                 },
                 "languages": {
                     "type": "array",
@@ -382,11 +321,7 @@
                     }
                 },
                 "comment_policy": {
-                    "enum": [
-                        "disabled",
-                        "moderated",
-                        "open"
-                    ]
+                    "enum": ["disabled", "moderated", "open"]
                 },
                 "brand": {
                     "oneOf": [
@@ -403,16 +338,10 @@
                     "items": {
                         "type": "object",
                         "additionalProperties": false,
-                        "required": [
-                            "network",
-                            "url"
-                        ],
+                        "required": ["network", "url"],
                         "properties": {
                             "network": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
+                                "type": ["string", "null"]
                             },
                             "url": {
                                 "type": "string"
@@ -443,10 +372,7 @@
                     "format": "uuid"
                 },
                 "parent_id": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "uuid"
                 },
                 "author_name": {
@@ -456,10 +382,7 @@
                     "type": "string"
                 },
                 "created_at": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "date-time"
                 }
             }
@@ -495,24 +418,13 @@
                     "type": "object"
                 },
                 "placement": {
-                    "enum": [
-                        "head",
-                        "body_start",
-                        "body_end"
-                    ]
+                    "enum": ["head", "body_start", "body_end"]
                 },
                 "consent_category": {
-                    "enum": [
-                        "analytics",
-                        "ads",
-                        "functional"
-                    ]
+                    "enum": ["analytics", "ads", "functional"]
                 },
                 "page_rule": {
-                    "type": [
-                        "object",
-                        "null"
-                    ]
+                    "type": ["object", "null"]
                 }
             }
         }
