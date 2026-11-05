@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title data-i18n="meta.title">SBBlog — the writing console for blogs that live anywhere</title>
+        <meta
+            name="description"
+            data-i18n="meta.description"
+            data-i18n-attr="content"
+            content="SBBlog keeps writing and editing in one console and sends every change as an event, so each blog's site serves its own data from Cloudflare D1, R2 or SQLite. Open source, by Sysborg."
+        />
+        <meta property="og:title" content="SBBlog" />
+        <meta property="og:type" content="website" />
+        <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="assets/site.css" />
+        <style>
+            /* Architecture flow (hero). */
+            .flow {
+                display: grid;
+                gap: 14px;
+                margin-top: 64px;
+            }
+            @media (min-width: 900px) {
+                .flow {
+                    grid-template-columns: 1fr auto 1fr auto 1.2fr auto 1.2fr;
+                    align-items: center;
+                }
+            }
+            .flow .arrow {
+                justify-self: center;
+                color: rgb(255 255 255 / 0.35);
+                font-size: 20px;
+                transform: rotate(90deg);
+            }
+            @media (min-width: 900px) {
+                .flow .arrow {
+                    transform: none;
+                }
+            }
+            .node {
+                padding: 16px 18px;
+                border: 1px solid rgb(255 255 255 / 0.12);
+                border-radius: 12px;
+                background: rgb(255 255 255 / 0.04);
+            }
+            .node .k {
+                font-size: 11px;
+                font-weight: 600;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: #a5b4fc;
+            }
+            .node .v {
+                margin-top: 4px;
+                font-weight: 600;
+            }
+            .node .d {
+                margin-top: 2px;
+                font-size: 13px;
+                color: rgb(255 255 255 / 0.55);
+            }
+            .stack {
+                display: grid;
+                gap: 8px;
+            }
+            .node.planned {
+                border-style: dashed;
+                background: transparent;
+            }
+            .node.planned .v {
+                color: rgb(255 255 255 / 0.6);
+            }
+        </style>
+    </head>
+    <body>
+        <header class="band">
+            <div class="grid-bg" aria-hidden="true"></div>
+            <div class="glow one" aria-hidden="true"></div>
+            <div class="glow two" aria-hidden="true"></div>
+
+            <div class="container">
+                <nav class="nav">
+                    <a class="brand" href="./">
+                        <img src="assets/favicon.svg" alt="" width="36" height="36" />
+                        SBBlog
+                    </a>
+                    <div class="nav-links">
+                        <a href="#features" data-i18n="nav.features">Features</a>
+                        <a href="#how" data-i18n="nav.how">How it works</a>
+                        <a href="#roadmap" data-i18n="nav.roadmap">Roadmap</a>
+                        <a href="about.html" data-i18n="nav.about">About</a>
+                    </div>
+                    <div class="nav-actions">
+                        <div class="lang-toggle" role="group" aria-label="Language">
+                            <button type="button" data-lang="pt" aria-pressed="false">PT</button>
+                            <button type="button" data-lang="en" aria-pressed="true">EN</button>
+                        </div>
+                        <a class="btn btn-light btn-sm" href="https://github.com/andmarruda/sbblog">GitHub</a>
+                    </div>
+                </nav>
+
+                <section class="hero">
+                    <span class="pill"><span class="dot"></span><span data-i18n="hero.pill">Open source · v2 in active development</span></span>
+                    <h1 data-i18n="hero.title">The writing console for blogs that live anywhere.</h1>
+                    <p class="lead" data-i18n="hero.lead">
+                        SBBlog keeps writing and editing in one place and sends every change as an event. Each blog's
+                        site keeps its own data on Cloudflare D1, R2 or a local SQLite, so no central server carries
+                        the weight of every blog.
+                    </p>
+                    <div class="ctas">
+                        <a class="btn btn-light" href="https://github.com/andmarruda/sbblog">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.19-3.08-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+                            <span data-i18n="hero.github">View on GitHub</span>
+                        </a>
+                        <a class="btn btn-ghost" href="about.html" data-i18n="hero.story">Read the story</a>
+                    </div>
+
+                    <div class="flow" aria-label="Architecture">
+                        <div class="node">
+                            <div class="k" data-i18n="flow.write.k">Write side</div>
+                            <div class="v" data-i18n="flow.write.v">SBBlog console</div>
+                            <div class="d" data-i18n="flow.write.d">Writing, review, publishing</div>
+                        </div>
+                        <div class="arrow" aria-hidden="true">→</div>
+                        <div class="node">
+                            <div class="k" data-i18n="flow.log.k">Per blog</div>
+                            <div class="v" data-i18n="flow.log.v">Event log</div>
+                            <div class="d" data-i18n="flow.log.d">Ordered, gap-free, full snapshots</div>
+                        </div>
+                        <div class="arrow" aria-hidden="true">→</div>
+                        <div class="stack">
+                            <div class="node">
+                                <div class="v" data-i18n="flow.pull">Sync API (pull)</div>
+                            </div>
+                            <div class="node">
+                                <div class="v" data-i18n="flow.push">Signed webhook (push)</div>
+                            </div>
+                            <div class="node planned">
+                                <div class="v" data-i18n="flow.planned">Kafka · NATS · Redis (planned)</div>
+                            </div>
+                        </div>
+                        <div class="arrow" aria-hidden="true">→</div>
+                        <div class="stack">
+                            <div class="node">
+                                <div class="k" data-i18n="flow.read.k">Read side</div>
+                                <div class="v" data-i18n="flow.cf">Cloudflare Worker + D1 / R2</div>
+                            </div>
+                            <div class="node">
+                                <div class="k" data-i18n="flow.read.k2">Read side</div>
+                                <div class="v" data-i18n="flow.sqlite">Your server + SQLite</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </header>
+
+        <main>
+            <section class="section" id="features">
+                <div class="container">
+                    <p class="eyebrow" data-i18n="features.eyebrow">Features</p>
+                    <h2 data-i18n="features.title">Everything a newsroom needs, nothing a reader has to wait for.</h2>
+                    <p class="intro" data-i18n="features.intro">
+                        One console for every blog you run, built on Laravel, React and PostgreSQL.
+                    </p>
+
+                    <div class="features">
+                        <article class="feature">
+                            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+                            <h3 data-i18n="f1.t">An editorial workflow</h3>
+                            <p data-i18n="f1.d">A rich editor, revision history with diffs, suggestions with inline comments, review, scheduling and translations.</p>
+                        </article>
+                        <article class="feature">
+                            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 10 5-10 5L2 7Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></div>
+                            <h3 data-i18n="f2.t">Many blogs, one workspace</h3>
+                            <p data-i18n="f2.d">Workspaces hold several blogs, with invitations and seven built-in roles, from owner to viewer.</p>
+                        </article>
+                        <article class="feature">
+                            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+                            <h3 data-i18n="f3.t">Every change is an event</h3>
+                            <p data-i18n="f3.d">An ordered log per blog with JSON Schemas, snapshots for new sites, and a viewer to inspect every payload.</p>
+                        </article>
+                        <article class="feature">
+                            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg></div>
+                            <h3 data-i18n="f4.t">Sites own their data</h3>
+                            <p data-i18n="f4.d">Register each site with its store, D1, R2 or SQLite. It pulls or receives events and never calls the console to read.</p>
+                        </article>
+                        <article class="feature">
+                            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2a10 10 0 0 0 0 20c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.3A5.7 5.7 0 0 0 22 9.7C22 5.4 17.5 2 12 2Z"/></svg></div>
+                            <h3 data-i18n="f5.t">Themes and integrations</h3>
+                            <p data-i18n="f5.d">Versioned themes with their own settings, and analytics or ads scripts that load only after the reader consents.</p>
+                        </article>
+                        <article class="feature">
+                            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.7 9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+                            <h3 data-i18n="f6.t">Security built in</h3>
+                            <p data-i18n="f6.d">Passkeys, two-factor authentication, trusted devices, a strict content security policy and a full audit log.</p>
+                        </article>
+                        <article class="feature">
+                            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg></div>
+                            <h3 data-i18n="f7.t">Apps and API</h3>
+                            <p data-i18n="f7.d">An OAuth install flow for apps, personal access tokens and a content API to create drafts and suggestions.</p>
+                        </article>
+                        <article class="feature">
+                            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></div>
+                            <h3 data-i18n="f8.t">Comments with moderation</h3>
+                            <p data-i18n="f8.d">Sites send reader comments to the console, which applies each blog's policy, rate limits and spam checks.</p>
+                        </article>
+                        <article class="feature">
+                            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></div>
+                            <h3 data-i18n="f9.t">Bilingual from day one</h3>
+                            <p data-i18n="f9.d">The console speaks Portuguese and English, and every blog can publish in several languages.</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section soft" id="how">
+                <div class="container">
+                    <p class="eyebrow" data-i18n="how.eyebrow">How it works</p>
+                    <h2 data-i18n="how.title">Write in one place. Serve from anywhere.</h2>
+                    <div class="steps">
+                        <div class="step">
+                            <h3 data-i18n="s1.t">Write and publish</h3>
+                            <p data-i18n="s1.d">Your team writes, reviews and schedules in the console. Publishing records an event in the same transaction as the content.</p>
+                        </div>
+                        <div class="step">
+                            <h3 data-i18n="s2.t">Events reach your sites</h3>
+                            <p data-i18n="s2.d">Each site pulls new events or receives them by signed webhook, applies them in order and resumes where it stopped.</p>
+                        </div>
+                        <div class="step">
+                            <h3 data-i18n="s3.t">Readers hit the edge</h3>
+                            <p data-i18n="s3.d">Pages are served from the site's own store, on Cloudflare or your server. The console never sits in the reader's path.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="roadmap">
+                <div class="container narrow">
+                    <p class="eyebrow" data-i18n="road.eyebrow">Roadmap</p>
+                    <h2 data-i18n="road.title">Where SBBlog is today.</h2>
+                    <ul class="roadmap">
+                        <li>
+                            <span class="status done" data-i18n="road.done">Done</span>
+                            <div>
+                                <strong data-i18n="r1.t">The console</strong>
+                                <span class="desc" data-i18n="r1.d">Content, workflow, tenancy, publishing pipeline, themes, apps, security and the v1 import.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="status next" data-i18n="road.next">Next</span>
+                            <div>
+                                <strong data-i18n="r2.t">Launch</strong>
+                                <span class="desc" data-i18n="r2.d">Production setup and moving the original SBBlog into v2.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="status next" data-i18n="road.next2">Next</span>
+                            <div>
+                                <strong data-i18n="r3.t">@sbblog/core</strong>
+                                <span class="desc" data-i18n="r3.d">The package sites use to apply events and store them on D1, R2 or SQLite.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="status next" data-i18n="road.planned">Planned</span>
+                            <div>
+                                <strong data-i18n="r4.t">More transports</strong>
+                                <span class="desc" data-i18n="r4.d">Kafka, NATS and Redis, next to the sync API and webhooks.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="band cta-band">
+                <div class="grid-bg" aria-hidden="true"></div>
+                <div class="glow one" aria-hidden="true"></div>
+                <div class="container">
+                    <h2 data-i18n="cta.title">Built by someone who has seen software meet reality.</h2>
+                    <p data-i18n="cta.lead">SBBlog is a Sysborg project by Anderson Arruda. Read how it came to be.</p>
+                    <div class="ctas">
+                        <a class="btn btn-light" href="about.html" data-i18n="cta.story">Read the story</a>
+                        <a class="btn btn-ghost" href="https://github.com/andmarruda/sbblog" data-i18n="cta.github">Star on GitHub</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <div class="container">
+            <footer class="footer">
+                <p>© 2026 SBBlog · <span data-i18n="footer.product">A Sysborg product</span></p>
+                <p><a href="about.html" data-i18n="footer.about">About</a> · <a href="https://github.com/andmarruda/sbblog">GitHub</a> · <a href="https://www.sysborg.com.br">sysborg.com.br</a></p>
+            </footer>
+        </div>
+
+        <script>
+            window.SBBLOG_PT = {
+                'meta.title': 'SBBlog — o console de escrita para blogs que vivem em qualquer lugar',
+                'meta.description': 'O SBBlog concentra a escrita e a edição num só console e envia cada mudança como um evento, para que o site de cada blog sirva os próprios dados a partir do Cloudflare D1, do R2 ou do SQLite. Open source, da Sysborg.',
+                'nav.features': 'Recursos',
+                'nav.how': 'Como funciona',
+                'nav.roadmap': 'Roadmap',
+                'nav.about': 'Sobre',
+                'hero.pill': 'Open source · v2 em desenvolvimento ativo',
+                'hero.title': 'O console de escrita para blogs que vivem em qualquer lugar.',
+                'hero.lead': 'O SBBlog concentra a escrita e a edição num só lugar e envia cada mudança como um evento. O site de cada blog guarda os próprios dados no Cloudflare D1, no R2 ou num SQLite local, e nenhum servidor central carrega o peso de todos os blogs.',
+                'hero.github': 'Ver no GitHub',
+                'hero.story': 'Conheça a história',
+                'flow.write.k': 'Escrita',
+                'flow.write.v': 'Console do SBBlog',
+                'flow.write.d': 'Escrita, revisão, publicação',
+                'flow.log.k': 'Por blog',
+                'flow.log.v': 'Log de eventos',
+                'flow.log.d': 'Em ordem, sem buracos, com dados completos',
+                'flow.pull': 'API de sync (pull)',
+                'flow.push': 'Webhook assinado (push)',
+                'flow.planned': 'Kafka · NATS · Redis (planejado)',
+                'flow.read.k': 'Leitura',
+                'flow.read.k2': 'Leitura',
+                'flow.cf': 'Cloudflare Worker + D1 / R2',
+                'flow.sqlite': 'Seu servidor + SQLite',
+                'features.eyebrow': 'Recursos',
+                'features.title': 'Tudo o que uma redação precisa, sem nada que faça o leitor esperar.',
+                'features.intro': 'Um só console para todos os seus blogs, construído com Laravel, React e PostgreSQL.',
+                'f1.t': 'Um fluxo editorial de verdade',
+                'f1.d': 'Editor completo, histórico de revisões com diff, sugestões com comentários no texto, revisão, agendamento e traduções.',
+                'f2.t': 'Vários blogs, um workspace',
+                'f2.d': 'Um workspace reúne vários blogs, com convites e sete papéis prontos, de dono a leitor.',
+                'f3.t': 'Cada mudança é um evento',
+                'f3.d': 'Um log ordenado por blog com JSON Schemas, snapshots para sites novos e uma tela para inspecionar cada payload.',
+                'f4.t': 'Cada site é dono dos seus dados',
+                'f4.d': 'Cadastre cada site com o seu banco, D1, R2 ou SQLite. Ele busca ou recebe os eventos e nunca consulta o console para ler.',
+                'f5.t': 'Temas e integrações',
+                'f5.d': 'Temas versionados com configurações próprias, e scripts de analytics ou anúncios que só carregam depois do consentimento do leitor.',
+                'f6.t': 'Segurança desde o início',
+                'f6.d': 'Passkeys, autenticação em dois fatores, dispositivos confiáveis, uma política de segurança de conteúdo rígida e log de auditoria completo.',
+                'f7.t': 'Apps e API',
+                'f7.d': 'Instalação de apps via OAuth, tokens de acesso pessoal e uma API de conteúdo para criar rascunhos e sugestões.',
+                'f8.t': 'Comentários com moderação',
+                'f8.d': 'Os sites enviam os comentários dos leitores ao console, que aplica a política de cada blog, limites de envio e checagem de spam.',
+                'f9.t': 'Bilíngue desde o primeiro dia',
+                'f9.d': 'O console fala português e inglês, e cada blog pode publicar em vários idiomas.',
+                'how.eyebrow': 'Como funciona',
+                'how.title': 'Escreva num só lugar. Sirva de qualquer lugar.',
+                's1.t': 'Escreva e publique',
+                's1.d': 'O time escreve, revisa e agenda no console. Publicar registra um evento na mesma transação que o conteúdo.',
+                's2.t': 'Os eventos chegam aos sites',
+                's2.d': 'Cada site busca os eventos novos ou os recebe por webhook assinado, aplica em ordem e retoma de onde parou.',
+                's3.t': 'O leitor fica na borda',
+                's3.d': 'As páginas saem do banco do próprio site, na Cloudflare ou no seu servidor. O console nunca fica no caminho do leitor.',
+                'road.eyebrow': 'Roadmap',
+                'road.title': 'Onde o SBBlog está hoje.',
+                'road.done': 'Pronto',
+                'road.next': 'Próximo',
+                'road.next2': 'Próximo',
+                'road.planned': 'Planejado',
+                'r1.t': 'O console',
+                'r1.d': 'Conteúdo, fluxo editorial, workspaces, pipeline de publicação, temas, apps, segurança e a importação do v1.',
+                'r2.t': 'Lançamento',
+                'r2.d': 'Configuração de produção e a migração do SBBlog original para a v2.',
+                'r3.t': '@sbblog/core',
+                'r3.d': 'O pacote que os sites usam para aplicar os eventos e guardá-los no D1, no R2 ou no SQLite.',
+                'r4.t': 'Mais transportes',
+                'r4.d': 'Kafka, NATS e Redis, ao lado da API de sync e dos webhooks.',
+                'cta.title': 'Feito por quem já viu muito software encontrar a realidade.',
+                'cta.lead': 'O SBBlog é um projeto da Sysborg, criado por Anderson Arruda. Conheça como ele surgiu.',
+                'cta.story': 'Conheça a história',
+                'cta.github': 'Dê uma estrela no GitHub',
+                'footer.product': 'Um produto Sysborg',
+                'footer.about': 'Sobre'
+            };
+        </script>
+        <script src="assets/i18n.js"></script>
+    </body>
+</html>

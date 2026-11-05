@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title data-i18n="meta.title">About SBBlog — Anderson Arruda and Sysborg</title>
+        <meta
+            name="description"
+            data-i18n="meta.description"
+            data-i18n-attr="content"
+            content="The story of Anderson Arruda, the developer from Ribeirão Preto behind SBBlog, and of Sysborg, the company he founded."
+        />
+        <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="assets/site.css" />
+    </head>
+    <body>
+        <header class="band">
+            <div class="grid-bg" aria-hidden="true"></div>
+            <div class="glow one" aria-hidden="true"></div>
+            <div class="glow two" aria-hidden="true"></div>
+
+            <div class="container">
+                <nav class="nav">
+                    <a class="brand" href="./">
+                        <img src="assets/favicon.svg" alt="" width="36" height="36" />
+                        SBBlog
+                    </a>
+                    <div class="nav-actions">
+                        <div class="lang-toggle" role="group" aria-label="Language">
+                            <button type="button" data-lang="pt" aria-pressed="false">PT</button>
+                            <button type="button" data-lang="en" aria-pressed="true">EN</button>
+                        </div>
+                        <a class="btn btn-light btn-sm" href="./" data-i18n="nav.home">Home</a>
+                    </div>
+                </nav>
+
+                <section class="hero">
+                    <span class="pill"><span class="dot"></span><span data-i18n="hero.pill">About SBBlog</span></span>
+                    <h1 data-i18n="hero.title">SBBlog was born from years of watching software meet reality.</h1>
+                    <p class="lead" data-i18n="hero.lead">
+                        This is the story of Anderson Arruda, the developer from Ribeirão Preto behind SBBlog, and of
+                        Sysborg, the company he founded to put what he learned to work.
+                    </p>
+                </section>
+            </div>
+        </header>
+
+        <main>
+            <article class="section">
+                <div class="container narrow">
+                    <div class="author">
+                        <div class="avatar" aria-hidden="true">AA</div>
+                        <div>
+                            <p class="eyebrow" data-i18n="story.eyebrow">The story</p>
+                            <h2>Anderson Arruda</h2>
+                            <ul class="links">
+                                <li><a href="https://www.linkedin.com/in/anderson-a-sborg/">LinkedIn ↗</a></li>
+                                <li><a href="https://github.com/andmarruda">GitHub ↗</a></li>
+                                <li><a href="https://www.andersonarruda.com.br">Blog ↗</a></li>
+                                <li><a href="https://www.sysborg.com.br">Sysborg ↗</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <section class="chapter">
+                        <p class="num">01</p>
+                        <h3 data-i18n="c1.t">It started with work done by hand</h3>
+                        <p data-i18n="c1.p1">
+                            In 2009, in Ribeirão Preto, Anderson joined MC Administradora, a company that still ran much
+                            of its work by hand. He designed and built its first custom ERP and brought those scattered
+                            workflows into a single system.
+                        </p>
+                        <p data-i18n="c1.p2">
+                            To help the team deliver faster, he wrote his own PHP framework. It was the first sign of a
+                            habit that still defines his work: when the tools get in the way, build better tools.
+                        </p>
+                    </section>
+
+                    <section class="chapter">
+                        <p class="num">02</p>
+                        <h3 data-i18n="c2.t">When the system is the business</h3>
+                        <p data-i18n="c2.p1">
+                            In 2013 he moved to Grand Credit Cursos and took the lead on the ERP behind finance, sales
+                            and academic operations. There, a slow report or a failed payment was not just a bug. It
+                            was the business standing still.
+                        </p>
+                        <p data-i18n="c2.p2">
+                            He rebuilt his framework, and new features started shipping an estimated 40 to 50% faster.
+                            He tuned PostgreSQL until the bottlenecks were gone. When attackers tried to brute-force
+                            their way in, he wrote Python scripts that read the logs and blocked them in real time.
+                        </p>
+                        <figure class="pull">
+                            <blockquote data-i18n="c2.quote">Every architecture looks good until it meets operational reality.</blockquote>
+                            <figcaption data-i18n="c2.caption">The conviction those years left behind, and later the line that defines Sysborg.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="chapter">
+                        <p class="num">03</p>
+                        <h3 data-i18n="c3.t">Building something of his own</h3>
+                        <p data-i18n="c3.p1">
+                            In 2018 he founded Sysborg to turn that experience into products of his own. The first was
+                            Econorg Personal, a personal finance app built to help Brazilians organize their budget, get
+                            out of debt and reach their goals.
+                        </p>
+                        <p data-i18n="c3.p2">
+                            He also started teaching. His flagship course is on event-driven architecture, with Laravel,
+                            React and Vue.js courses built on the same foundation, the same foundation that would later
+                            shape SBBlog.
+                        </p>
+                    </section>
+
+                    <section class="chapter">
+                        <p class="num">04</p>
+                        <h3 data-i18n="c4.t">Leading, and going back to school</h3>
+                        <p data-i18n="c4.p1">
+                            As tech lead at Fairy, he built an e-commerce builder from scratch, reviewed code,
+                            interviewed candidates and mentored the team. He also assessed customer projects before
+                            they were built, pointing out risks while they were still cheap to fix. At Fahrenheit
+                            Marketing he worked on dynamic campaigns, Google Ads API integrations and AI that analyzes
+                            phone calls.
+                        </p>
+                        <p data-i18n="c4.p2">
+                            And after more than a decade of practice, he went back to school, finishing degrees in
+                            Systems Analysis and Development and in Data Science in 2025. Today he is a Senior Full
+                            Stack Engineer at Tough Leaf, and he is still building Sysborg.
+                        </p>
+                    </section>
+
+                    <section class="why">
+                        <div class="title">
+                            <img src="assets/favicon.svg" alt="" width="32" height="32" />
+                            <h3 data-i18n="why.t">Why SBBlog exists</h3>
+                        </div>
+                        <p data-i18n="why.p1">
+                            SBBlog was his first open-source Laravel project, written when there was still a lot to
+                            learn. Its first README says so, with the excitement of someone just getting started.
+                        </p>
+                        <p data-i18n="why.p2">
+                            Version 2 is what happens when the same person comes back years later. It was rewritten from
+                            scratch around the ideas he teaches: the console only writes, every change becomes an event,
+                            and each blog keeps its own data on Cloudflare D1, R2 or a local SQLite. No single server has
+                            to carry the weight of every blog.
+                        </p>
+                        <p class="strong" data-i18n="why.p3">
+                            It is not a demo of event-driven architecture. It is that architecture, built to carry real
+                            blogs.
+                        </p>
+                    </section>
+                </div>
+            </article>
+
+            <section class="sysborg section">
+                <div class="shard" aria-hidden="true"></div>
+                <div class="container">
+                    <p class="wordmark">SYS<span>B</span>ORG</p>
+                    <p class="legal">Sysborg Soluções Tecnológicas</p>
+
+                    <blockquote data-i18n="sb.quote">Every architecture looks good until it meets operational reality.</blockquote>
+
+                    <p class="story" data-i18n="sb.story">
+                        Sysborg began in 2018 building products. Over time, the work Anderson did best became its trade:
+                        looking at a project before the money is spent, finding the risks no one wants to see, and saying
+                        so clearly.
+                    </p>
+
+                    <div class="cols">
+                        <div>
+                            <h3 data-i18n="sb.who.t">Who we are</h3>
+                            <p data-i18n="sb.who.d">
+                                A technical consultancy specialized in software architecture, systems integration and
+                                reducing technology risk. We act as independent advisors for companies that need to make
+                                critical technical decisions with confidence and clarity.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 data-i18n="sb.mission.t">Mission</h3>
+                            <p data-i18n="sb.mission.d">
+                                Protect companies from poorly grounded technology investments, with independent, careful
+                                analysis based on real evidence, before the problem becomes irreversible.
+                            </p>
+                        </div>
+                    </div>
+
+                    <ul class="chips">
+                        <li data-i18n="sb.chip1">Technical risk consulting</li>
+                        <li data-i18n="sb.chip2">Technical due diligence</li>
+                        <li data-i18n="sb.chip3">Strategic advisory</li>
+                        <li data-i18n="sb.chip4">Architecture and delivery</li>
+                    </ul>
+
+                    <p style="margin-top: 48px">
+                        <a class="btn btn-red" href="https://www.sysborg.com.br" data-i18n="sb.cta">Visit sysborg.com.br ↗</a>
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <div class="container">
+            <footer class="footer">
+                <p>© 2026 SBBlog · <span data-i18n="footer.product">A Sysborg product</span></p>
+                <p data-i18n="footer.made">Made in Ribeirão Preto, Brazil.</p>
+            </footer>
+        </div>
+
+        <script>
+            window.SBBLOG_PT = {
+                'meta.title': 'Sobre o SBBlog — Anderson Arruda e a Sysborg',
+                'meta.description': 'A história de Anderson Arruda, o desenvolvedor de Ribeirão Preto por trás do SBBlog, e da Sysborg, a empresa que ele fundou.',
+                'nav.home': 'Início',
+                'hero.pill': 'Sobre o SBBlog',
+                'hero.title': 'O SBBlog nasceu de anos vendo software encontrar a realidade.',
+                'hero.lead': 'Esta é a história de Anderson Arruda, o desenvolvedor de Ribeirão Preto por trás do SBBlog, e da Sysborg, a empresa que ele fundou para colocar em prática tudo o que aprendeu.',
+                'story.eyebrow': 'A história',
+                'c1.t': 'Tudo começou com trabalho feito à mão',
+                'c1.p1': 'Em 2009, em Ribeirão Preto, Anderson entrou na MC Administradora, uma empresa que ainda tocava boa parte do trabalho à mão. Ele projetou e construiu o primeiro ERP próprio da empresa e reuniu num único sistema processos que viviam espalhados.',
+                'c1.p2': 'Para o time entregar mais rápido, escreveu o próprio framework PHP. Foi o primeiro sinal de um hábito que até hoje define o trabalho dele: quando a ferramenta atrapalha, construa uma ferramenta melhor.',
+                'c2.t': 'Quando o sistema é o negócio',
+                'c2.p1': 'Em 2013, foi para a Grand Credit Cursos e assumiu o ERP que sustentava o financeiro, as vendas e a operação acadêmica. Ali, um relatório lento ou um pagamento que falhava não era só um bug. Era a empresa parada.',
+                'c2.p2': 'Ele reconstruiu o framework, e as novas funcionalidades passaram a sair cerca de 40 a 50% mais rápido. Ajustou o PostgreSQL até os gargalos sumirem. Quando atacantes tentaram entrar por força bruta, escreveu scripts em Python que liam os logs e os bloqueavam em tempo real.',
+                'c2.quote': 'Toda arquitetura parece boa até encontrar a realidade operacional.',
+                'c2.caption': 'A convicção que esses anos deixaram, e que depois virou a frase que define a Sysborg.',
+                'c3.t': 'Construindo algo próprio',
+                'c3.p1': 'Em 2018, fundou a Sysborg para transformar essa experiência em produtos próprios. O primeiro foi o Econorg Personal, um app de finanças pessoais criado para ajudar brasileiros a organizar o orçamento, sair das dívidas e alcançar seus objetivos.',
+                'c3.p2': 'Também começou a ensinar. O curso principal é de arquitetura orientada a eventos, e os cursos de Laravel, React e Vue.js partem da mesma base, a mesma que mais tarde daria forma ao SBBlog.',
+                'c4.t': 'Liderar, e voltar a estudar',
+                'c4.p1': 'Como tech lead na Fairy, construiu do zero um construtor de e-commerce, revisou código, entrevistou candidatos e orientou o time. Também avaliava projetos de clientes antes de serem construídos, apontando riscos enquanto ainda era barato corrigi-los. Na Fahrenheit Marketing, trabalhou com campanhas dinâmicas, integrações com a Google Ads API e inteligência artificial que analisa ligações.',
+                'c4.p2': 'E, depois de mais de uma década de prática, voltou a estudar: em 2025 concluiu as graduações em Análise e Desenvolvimento de Sistemas e em Ciência de Dados. Hoje é Senior Full Stack Engineer na Tough Leaf, e segue construindo a Sysborg.',
+                'why.t': 'Por que o SBBlog existe',
+                'why.p1': 'O SBBlog foi o primeiro projeto open source dele em Laravel, escrito quando ainda havia muito a aprender. O primeiro README diz exatamente isso, com a empolgação de quem está começando.',
+                'why.p2': 'A versão 2 é o que acontece quando a mesma pessoa volta anos depois. Ela foi reescrita do zero em torno das ideias que ele ensina: o console só escreve, cada mudança vira um evento e cada blog guarda os próprios dados no Cloudflare D1, no R2 ou num SQLite local. Nenhum servidor precisa carregar o peso de todos os blogs.',
+                'why.p3': 'Não é uma demonstração de arquitetura orientada a eventos. É essa arquitetura, feita para sustentar blogs de verdade.',
+                'sb.quote': 'Toda arquitetura parece boa até encontrar a realidade operacional.',
+                'sb.story': 'A Sysborg começou em 2018 criando produtos. Com o tempo, o que Anderson fazia de melhor virou o ofício dela: olhar um projeto antes de o dinheiro ser gasto, encontrar os riscos que ninguém quer ver e dizer isso com clareza.',
+                'sb.who.t': 'Quem somos',
+                'sb.who.d': 'A Sysborg Soluções Tecnológicas é uma consultoria técnica especializada em arquitetura de software, integração de sistemas e redução de risco tecnológico. Atuamos como advisors independentes para empresas que precisam tomar decisões técnicas críticas com segurança e clareza.',
+                'sb.mission.t': 'Missão',
+                'sb.mission.d': 'Proteger empresas de investimentos tecnológicos mal fundamentados, entregando análises independentes, criteriosas e baseadas em evidências reais, antes que o problema se torne irreversível.',
+                'sb.chip1': 'Consultoria de risco técnico',
+                'sb.chip2': 'Technical Due Diligence',
+                'sb.chip3': 'Advisory estratégico',
+                'sb.chip4': 'Arquitetura e delivery',
+                'sb.cta': 'Conheça sysborg.com.br ↗',
+                'footer.product': 'Um produto Sysborg',
+                'footer.made': 'Feito em Ribeirão Preto, Brasil.'
+            };
+        </script>
+        <script src="assets/i18n.js"></script>
+    </body>
+</html>
