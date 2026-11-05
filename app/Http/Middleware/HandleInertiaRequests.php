@@ -44,7 +44,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $user?->only(['id', 'name', 'email', 'email_verified_at']),
+                'user' => $user?->only(['id', 'name', 'email', 'email_verified_at', 'is_admin']),
             ],
             'locale' => App::getLocale(),
             'locales' => config('app.supported_locales'),

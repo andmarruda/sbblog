@@ -145,3 +145,12 @@
     border: 0;
     border-radius: var(--radius);
 }
+
+/* Faint grid behind the auth brand panel, fading out from the top left. */
+.auth-grid {
+    background-image:
+        linear-gradient(to right, oklch(1 0 0 / 6%) 1px, transparent 1px),
+        linear-gradient(to bottom, oklch(1 0 0 / 6%) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at 30% 20%, black 20%, transparent 75%);
+}

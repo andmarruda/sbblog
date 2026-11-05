@@ -7,7 +7,7 @@ docker compose logs -f app       # wait for "SBBlog is ready on http://localhost
 
 | What | Where |
 |---|---|
-| Console | http://localhost:8000 (`test@example.com` / `password`; also `editor@example.com`) |
+| Console | http://localhost:8000 (`test@example.com` / `password`, instance admin; also `editor@example.com`) |
 | Vite (hot reload) | http://localhost:5173. Edits in `resources/js` show up at once |
 | Mailpit (password resets, invitations) | http://localhost:8025 |
 | Postgres | `localhost:5434`, database, user `sbblog`, password `secret` |

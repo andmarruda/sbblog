@@ -69,9 +69,9 @@ return [
     */
 
     'reserved_slugs' => [
-        'account', 'admin', 'api', 'app', 'assets', 'build', 'confirm-password', 'dashboard',
+        'about', 'account', 'admin', 'api', 'app', 'assets', 'build', 'confirm-password', 'dashboard',
         'email', 'forgot-password', 'help', 'invitations', 'locale', 'login', 'logout', 'oauth',
-        'onboarding', 'register', 'reset-password', 'sanctum', 'settings', 'storage',
+        'onboarding', 'register', 'reset-password', 'sanctum', 'settings', 'setup', 'storage',
         'support', 'sync', 'up', 'verify-email', 'www',
     ],
 

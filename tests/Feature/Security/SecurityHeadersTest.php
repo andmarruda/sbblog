@@ -11,7 +11,7 @@ class SecurityHeadersTest extends TestCase
 
     public function test_pages_send_a_nonce_based_csp(): void
     {
-        $response = $this->get('/login')->assertOk();
+        $response = $this->get('/forgot-password')->assertOk();
         $policy = (string) $response->headers->get('Content-Security-Policy');
 
         $this->assertMatchesRegularExpression("/script-src 'self' 'nonce-([A-Za-z0-9]+)'/", $policy);
@@ -27,7 +27,7 @@ class SecurityHeadersTest extends TestCase
 
     public function test_session_cookie_is_http_only(): void
     {
-        $cookie = $this->get('/login')->getCookie((string) config('session.cookie'), false);
+        $cookie = $this->get('/forgot-password')->getCookie((string) config('session.cookie'), false);
 
         $this->assertNotNull($cookie);
         $this->assertTrue($cookie->isHttpOnly());

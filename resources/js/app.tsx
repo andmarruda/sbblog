@@ -21,7 +21,7 @@ void createInertiaApp({
             return AuthLayout;
         }
 
-        if (name.startsWith('errors/')) {
+        if (name.startsWith('errors/') || name === 'about') {
             return null;
         }
 

@@ -27,7 +27,7 @@ class DemoSeeder extends Seeder
      */
     public function run(): void
     {
-        $owner = User::factory()->create([
+        $owner = User::factory()->admin()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
             'language_id' => Language::query()->where('code', 'pt-BR')->value('id'),

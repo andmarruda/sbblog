@@ -108,6 +108,9 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function configureAuthorization(): void
     {
+        // Instance administrators manage accounts across every workspace.
+        Gate::define('admin', fn (Models\User $user) => $user->is_admin);
+
         Gate::before(function (Models\User $user, string $ability, array $arguments) {
             if (! Permissions::exists($ability)) {
                 return null;

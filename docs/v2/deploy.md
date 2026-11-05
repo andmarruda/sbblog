@@ -38,6 +38,21 @@ nginx vhost and certificate. Then:
 Migrations must stay backward compatible (expand, then contract), because a rollback only
 restores the previous image.
 
+## First administrator
+
+A fresh install (no accounts yet) sends visitors to `/setup`, which creates the instance
+administrator and then closes for good. After that, people join only through invitations.
+
+An install that already has accounts (for example after the v1 import below) never shows
+`/setup`. Promote an existing account instead:
+
+```
+php artisan sbblog:admin you@example.com            # grant
+php artisan sbblog:admin someone@example.com --revoke
+```
+
+Administrators manage accounts at `/admin/users`.
+
 ## Moving the v1 blog (M-01, M-02)
 
 1. Add the v1 database to the console's `.env`:

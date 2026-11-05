@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Auth\InstanceSetup;
 use App\Auth\PendingLogin;
+use App\Auth\RegistrationInvitation;
 use App\Auth\TrustedDevices;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
@@ -14,10 +16,16 @@ use Inertia\Response;
 
 class AuthenticatedSessionController extends Controller
 {
-    public function create(Request $request): Response
+    public function create(Request $request, InstanceSetup $setup, RegistrationInvitation $invitations): Response|RedirectResponse
     {
+        if ($setup->isPending()) {
+            return to_route('setup');
+        }
+
         return Inertia::render('auth/login', [
             'status' => $request->session()->get('status'),
+            // Sign-up is invite-only, so the link shows only after opening an invitation.
+            'canRegister' => $invitations->current($request) !== null,
         ]);
     }
 

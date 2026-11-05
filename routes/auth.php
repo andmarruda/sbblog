@@ -7,10 +7,17 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasskeyLoginController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\SetupController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
+    // First run only: creates the first administrator, then answers 404.
+    Route::get('setup', [SetupController::class, 'create'])->name('setup');
+    Route::post('setup', [SetupController::class, 'store'])
+        ->middleware('throttle:6,1')
+        ->name('setup.store');
+
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('register', [RegisteredUserController::class, 'store'])
         ->middleware('throttle:6,1')

@@ -15,7 +15,11 @@ class AuthenticationTest extends TestCase
 
     public function test_login_screen_renders(): void
     {
-        $this->get('/login')->assertOk()->assertInertia(fn (Assert $page) => $page->component('auth/login'));
+        User::factory()->create();
+
+        $this->get('/login')->assertOk()->assertInertia(fn (Assert $page) => $page
+            ->component('auth/login')
+            ->where('canRegister', false));
     }
 
     public function test_guests_are_sent_to_login(): void

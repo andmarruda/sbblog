@@ -9,7 +9,7 @@ import { useTranslation } from '@/hooks/use-translation';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
 
-export default function Register({ email }: { email?: string | null }) {
+export default function Register({ email }: { email: string }) {
     const { t } = useTranslation();
 
     return (
@@ -45,8 +45,10 @@ export default function Register({ email }: { email?: string | null }) {
                                     id="email"
                                     name="email"
                                     type="email"
-                                    defaultValue={email ?? undefined}
+                                    defaultValue={email}
                                     autoComplete="email"
+                                    readOnly
+                                    className="bg-muted"
                                     required
                                 />
                             </FormField>
@@ -91,5 +93,5 @@ export default function Register({ email }: { email?: string | null }) {
 
 Register.layout = {
     title: 'Create your account',
-    description: 'Start writing in a few seconds.',
+    description: 'You were invited to SBBlog. Choose a password to join.',
 };

@@ -17,7 +17,7 @@ class LocaleTest extends TestCase
     {
         // Symfony's test requests send "Accept-Language: en-us" unless told otherwise.
         $this->withHeader('Accept-Language', '')
-            ->get('/login')
+            ->get('/forgot-password')
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
                 ->where('locale', 'pt-BR')
@@ -27,28 +27,28 @@ class LocaleTest extends TestCase
     public function test_uses_the_browser_language_when_supported(): void
     {
         $this->withHeader('Accept-Language', 'en-US,en;q=0.9')
-            ->get('/login')
+            ->get('/forgot-password')
             ->assertInertia(fn (Assert $page) => $page->where('locale', 'en-US'));
     }
 
     public function test_ignores_unsupported_browser_languages(): void
     {
         $this->withHeader('Accept-Language', 'de-DE')
-            ->get('/login')
+            ->get('/forgot-password')
             ->assertInertia(fn (Assert $page) => $page->where('locale', 'pt-BR'));
     }
 
     public function test_guest_can_switch_language_with_a_cookie(): void
     {
         $this->withHeader('Accept-Language', 'pt-BR')
-            ->from('/login')
+            ->from('/forgot-password')
             ->put('/locale', ['locale' => 'en-US'])
-            ->assertRedirect('/login')
+            ->assertRedirect('/forgot-password')
             ->assertCookie('locale', 'en-US', encrypted: false);
 
         $this->withUnencryptedCookie('locale', 'en-US')
             ->withHeader('Accept-Language', 'pt-BR')
-            ->get('/login')
+            ->get('/forgot-password')
             ->assertInertia(fn (Assert $page) => $page->where('locale', 'en-US'));
     }
 

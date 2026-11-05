@@ -1,10 +1,12 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import {
     ChevronsUpDown,
+    Info,
     Languages,
     LogOut,
     Palette,
     Settings,
+    ShieldCheck,
 } from 'lucide-react';
 import { AppearanceMenuItems } from '@/components/app/appearance-menu';
 import { LocaleMenuItems } from '@/components/app/locale-menu';
@@ -27,7 +29,8 @@ import {
     useSidebar,
 } from '@/components/ui/sidebar';
 import { useTranslation } from '@/hooks/use-translation';
-import { logout } from '@/routes';
+import { about, logout } from '@/routes';
+import { index as adminUsers } from '@/routes/admin/users';
 import { edit as editProfile } from '@/routes/profile';
 
 export function initials(name: string) {
@@ -96,8 +99,22 @@ export function NavUser() {
                                         {t('Account settings')}
                                     </Link>
                                 </DropdownMenuItem>
+                                {user.is_admin && (
+                                    <DropdownMenuItem asChild>
+                                        <Link href={adminUsers()}>
+                                            <ShieldCheck />
+                                            {t('Administration')}
+                                        </Link>
+                                    </DropdownMenuItem>
+                                )}
                             </>
                         )}
+                        <DropdownMenuItem asChild>
+                            <Link href={about()}>
+                                <Info />
+                                {t('About SBBlog')}
+                            </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuSub>
                             <DropdownMenuSubTrigger>
                                 <Languages />

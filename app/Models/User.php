@@ -23,6 +23,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $name
  * @property string $email
  * @property string $password
+ * @property bool $is_admin
  * @property string|null $language_id
  * @property string|null $two_factor_secret
  * @property list<string>|null $two_factor_recovery_codes
@@ -58,6 +59,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
             'last_login_at' => 'datetime',
             'preferences' => 'array',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
     }
 

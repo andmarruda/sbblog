@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Members\AcceptInvitation;
+use App\Auth\RegistrationInvitation;
 use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -16,14 +17,17 @@ class InvitationAcceptController extends Controller
      * Public landing page for the emailed link. Guests are sent back here after logging in or
      * signing up.
      */
-    public function show(Request $request, string $token): Response
+    public function show(Request $request, string $token, RegistrationInvitation $invitations): Response
     {
         $invitation = Invitation::findByToken($token);
         $user = $request->user();
 
         if ($user === null) {
             $request->session()->put('url.intended', $request->fullUrl());
-            $request->session()->put('invitation_email', $invitation?->email);
+
+            if ($invitation !== null) {
+                $invitations->remember($request, $invitation);
+            }
         }
 
         return Inertia::render('invitations/show', [
@@ -40,7 +44,7 @@ class InvitationAcceptController extends Controller
         ]);
     }
 
-    public function accept(Request $request, string $token, AcceptInvitation $accept): RedirectResponse
+    public function accept(Request $request, string $token, AcceptInvitation $accept, RegistrationInvitation $invitations): RedirectResponse
     {
         /** @var User $user */
         $user = $request->user();
@@ -51,7 +55,7 @@ class InvitationAcceptController extends Controller
         abort_if($invitation === null || $workspace === null, 404);
 
         $accept->handle($invitation, $user);
-        $request->session()->forget('invitation_email');
+        $invitations->forget($request);
 
         $blog = $invitation->blog;
 
