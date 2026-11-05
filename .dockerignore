@@ -23,6 +23,7 @@ tests
 docker-compose
 docker-compose.yml
 docker
+!docker/dev-entrypoint.sh
 *.log
 .idea
 .vscode

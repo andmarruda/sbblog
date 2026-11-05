@@ -29,6 +29,12 @@ export default defineConfig({
         }),
     ]),
     server: {
+        // In Docker (docker-compose.yml) Vite listens on all interfaces and the browser
+        // reaches it on localhost.
+        host: process.env.VITE_HOST,
+        hmr: process.env.VITE_HMR_HOST
+            ? { host: process.env.VITE_HMR_HOST }
+            : undefined,
         watch: {
             ignored: [
                 '**/.agents/**',
